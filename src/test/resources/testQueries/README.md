@@ -1,0 +1,1 @@
+The query files in this directory are exclusively used for test purposes and are not productive files.

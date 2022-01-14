@@ -9,6 +9,8 @@ import org.slf4j.LoggerFactory;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -38,52 +40,115 @@ public class Generator {
         this(new File(queryDirectoryPath), new File(directoryToGeneratePath));
     }
 
-    public Generator(File queryDirectory, File directoryToGenerate){
+    /**
+     * Constructor
+     *
+     * @param queryDirectory      Directory containing query files.
+     * @param directoryToGenerate Directory that shall be generated (must not exist yet).
+     */
+    public Generator(File queryDirectory, File directoryToGenerate) {
         this.queryDirectory = queryDirectory;
         this.generatedDirectory = directoryToGenerate;
 
-        if(!sanityChecks()){
+        if (!sanityChecks()) {
             System.exit(1);
         }
 
-        generatedDirectory.mkdirs();
+        // must be initialized here since used in multiple methods
         connection = RDFConnection.connect(DATASET_URL);
-
-        for(File tcFile : queryDirectory.listFiles()){
-            if(!tcFile.isDirectory()){
-                LOGGER.info("Skipping file: " + tcFile.getAbsolutePath());
-            }
-            File[] tcFiles = tcFile.listFiles();
-            if(tcFiles == null || tcFiles.length == 0){
-                LOGGER.info("Skipping empty directory: " + tcFile.getAbsolutePath());
-                continue;
-            }
-
-            Set<String> fileNames = Arrays.stream(tcFiles).map(File::getName).collect(Collectors.toSet());
-            if(!fileNames.contains(POSITIVE_FILE_NAME)){
-                LOGGER.info("Directory (" + tcFile.getAbsolutePath() + ") is missing file '" + POSITIVE_FILE_NAME +
-                        "'. Skipping directory.");
-                continue;
-            }
-            if(!fileNames.contains(NEGATIVE_FILE_NAME)){
-                LOGGER.info("Directory (" + tcFile.getAbsolutePath() + ") is missing file '" + NEGATIVE_FILE_NAME +
-                        "'. Skipping directory.");
-                continue;
-            }
-
-            // for writing later
-            /*
-            try (BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(fileToWrite), StandardCharsets.UTF_8))) {
-
-            }
-
-             */
-
-        }
-
     }
 
-    public List<String> getQueryResults(File file, int size){
+    public void generateTestCases() {
+        generatedDirectory.mkdirs();
+
+        for (File tcCollectionDirectory : queryDirectory.listFiles()) {
+            if (!tcCollectionDirectory.isDirectory()) {
+                LOGGER.info("Skipping file: " + tcCollectionDirectory.getAbsolutePath());
+                continue;
+            }
+
+            File[] collectionDirectoryFiles = tcCollectionDirectory.listFiles();
+            if(collectionDirectoryFiles == null || collectionDirectoryFiles.length == 0){
+                LOGGER.info("Skipping empty directory: " + tcCollectionDirectory.getAbsolutePath());
+                continue;
+            }
+
+            for (File tcDirectory : collectionDirectoryFiles) {
+                if (!tcDirectory.isDirectory()) {
+                    LOGGER.info("Skipping file: " + tcDirectory.getAbsolutePath());
+                }
+                File[] tcFiles = tcDirectory.listFiles();
+                if (tcFiles == null || tcFiles.length == 0) {
+                    LOGGER.info("Skipping empty directory: " + tcDirectory.getAbsolutePath());
+                    continue;
+                }
+
+                Set<String> fileNames = Arrays.stream(tcFiles).map(File::getName).collect(Collectors.toSet());
+                if (!fileNames.contains(POSITIVE_FILE_NAME)) {
+                    LOGGER.info("Directory (" + tcDirectory.getAbsolutePath() + ") is missing file '" + POSITIVE_FILE_NAME +
+                            "'. Skipping directory.");
+                    continue;
+                }
+                if (!fileNames.contains(NEGATIVE_FILE_NAME)) {
+                    LOGGER.info("Directory (" + tcDirectory.getAbsolutePath() + ") is missing file '" + NEGATIVE_FILE_NAME +
+                            "'. Skipping directory.");
+                    continue;
+                }
+
+                // now let's persist the positives
+                File positiveQueryFile = new File(tcDirectory, POSITIVE_FILE_NAME);
+                for (int size : sizes) {
+                    List<String> queryResults = getQueryResults(positiveQueryFile, size);
+
+                    Path resultsDir = Paths.get(generatedDirectory.getAbsolutePath(),
+                            tcCollectionDirectory.getName(),
+                            tcDirectory.getName(),
+                            "" + size);
+                    Path pathToWrite = Paths.get(resultsDir.toString(), "positives.txt");
+
+                    if(!resultsDir.toFile().exists()){
+                        resultsDir.toFile().mkdirs();
+                    }
+
+                    File fileToWrite = pathToWrite.toFile();
+                    writeListToFile(fileToWrite, queryResults);
+                }
+            }
+        }
+    }
+
+    /**
+     * Persisted in UTF-8.
+     *
+     * @param fileToWrite File that shall be written.
+     * @param listToWrite List that shall be written.
+     */
+    public static void writeListToFile(File fileToWrite, List<String> listToWrite) {
+        try (BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(fileToWrite), StandardCharsets.UTF_8))) {
+            for (String line : listToWrite) {
+                writer.write(line);
+                writer.write("\n");
+            }
+        } catch (FileNotFoundException fnfe) {
+            LOGGER.error(
+                    "An error occurred while trying to persist file '" + fileToWrite.getAbsolutePath() + "'.",
+                    fnfe);
+        } catch (IOException e) {
+            LOGGER.error("An IO exception occurred while trying to write file '" + fileToWrite.getAbsolutePath() +
+                    "'.", e);
+        }
+    }
+
+
+    /**
+     * Run a query given a file.
+     *
+     * @param file The .sparql file that contains the query (with an optional {@code <number>} placeholder). The file
+     *             must be utf-8 encoded.
+     * @param size The number of desired results.
+     * @return A list of URIs.
+     */
+    public List<String> getQueryResults(File file, int size) {
         String query = readUtf8(file);
         query = query.replace("<number>", "" + size);
         List<String> result = new ArrayList<>();
@@ -91,7 +156,7 @@ public class Generator {
         QueryExecution qe = connection.query(query);
         ResultSet rs = qe.execSelect();
 
-        while(rs.hasNext()){
+        while (rs.hasNext()) {
             QuerySolution qs = rs.next();
             result.add(qs.getResource("?x").getURI());
         }
@@ -102,15 +167,16 @@ public class Generator {
 
     /**
      * Reads the contents of an UTF-8 encoded file.
+     *
      * @param fileToRead The file that shall be read.
      * @return File contents.
      */
-    static String readUtf8(File fileToRead){
+    static String readUtf8(File fileToRead) {
         StringBuilder sb = new StringBuilder();
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(fileToRead),
-                StandardCharsets.UTF_8))){
+                StandardCharsets.UTF_8))) {
             String readLine;
-            while((readLine = reader.readLine()) != null){
+            while ((readLine = reader.readLine()) != null) {
                 sb.append(readLine);
                 sb.append("\n");
             }
@@ -123,20 +189,20 @@ public class Generator {
     }
 
 
-    private boolean sanityChecks(){
-        if(!queryDirectory.exists()){
+    private boolean sanityChecks() {
+        if (!queryDirectory.exists()) {
             LOGGER.error("The provided query directory does not exist. ABORTING program.");
             return false;
         }
-        if(!queryDirectory.isDirectory()){
+        if (!queryDirectory.isDirectory()) {
             LOGGER.error("The provided query directory is not a directory. ABORTING program.");
             return false;
         }
-        if(queryDirectory.listFiles() == null || queryDirectory.listFiles().length == 0){
+        if (queryDirectory.listFiles() == null || queryDirectory.listFiles().length == 0) {
             LOGGER.error("The provided query directory is empty. ABORTING program.");
             return false;
         }
-        if(generatedDirectory.exists()){
+        if (generatedDirectory.exists()) {
             LOGGER.error("The directoryToGenerate must not yet exist. ABORTING program.");
             return false;
         }
@@ -146,6 +212,7 @@ public class Generator {
 
     /**
      * Returns the number of triples in the graph.
+     *
      * @return Returns the number of triples in the graph. In case of an error, a negative number is returned.
      */
     public int getNumberOfStatements() {
