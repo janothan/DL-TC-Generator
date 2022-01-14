@@ -252,4 +252,11 @@ public class Generator {
         }
     }
 
+    public int[] getSizes() {
+        return sizes;
+    }
+
+    public void setSizes(int[] sizes) {
+        this.sizes = sizes;
+    }
 }

@@ -1,0 +1,7 @@
+PREFIX dbo: <http://dbpedia.org/ontology/>
+
+SELECT DISTINCT ?x WHERE {
+  ?x a dbo:Person .
+  ?y dbo:child ?x .
+}
+LIMIT <number>
