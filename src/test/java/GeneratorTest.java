@@ -31,6 +31,8 @@ class GeneratorTest {
             assertTrue(resultFile.exists());
             String content = Generator.readUtf8(resultFile);
             assertTrue(content.contains("\n"));
+            resultFile = new File(resultDir, "tc2/cities/500/positives.txt");
+            assertTrue(resultFile.exists());
         } catch (Exception e){
             fail(e);
         }

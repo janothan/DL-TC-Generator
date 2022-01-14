@@ -58,6 +58,9 @@ public class Generator {
         connection = RDFConnection.connect(DATASET_URL);
     }
 
+    /**
+     * Generate the actual test cases.
+     */
     public void generateTestCases() {
         generatedDirectory.mkdirs();
 
@@ -95,24 +98,40 @@ public class Generator {
                     continue;
                 }
 
-                // now let's persist the positives
                 File positiveQueryFile = new File(tcDirectory, POSITIVE_FILE_NAME);
+                File negativeQueryFile = new File(tcDirectory, NEGATIVE_FILE_NAME);
+                File negativeHardQueryFile = new File(tcDirectory, NEGATIVE_HARD_FILE_NAME);
                 for (int size : sizes) {
-                    List<String> queryResults = getQueryResults(positiveQueryFile, size);
-
                     Path resultsDir = Paths.get(generatedDirectory.getAbsolutePath(),
                             tcCollectionDirectory.getName(),
                             tcDirectory.getName(),
                             "" + size);
-                    Path pathToWrite = Paths.get(resultsDir.toString(), "positives.txt");
 
                     if(!resultsDir.toFile().exists()){
                         resultsDir.toFile().mkdirs();
                     }
 
+                    // positives
+                    List<String> queryResults = getQueryResults(positiveQueryFile, size);
+                    Path pathToWrite = Paths.get(resultsDir.toString(), "positives.txt");
                     File fileToWrite = pathToWrite.toFile();
                     writeListToFile(fileToWrite, queryResults);
+
+                    // negatives
+                    queryResults = getQueryResults(negativeQueryFile, size);
+                    pathToWrite = Paths.get(resultsDir.toString(), "negatives.txt");
+                    fileToWrite = pathToWrite.toFile();
+                    writeListToFile(fileToWrite, queryResults);
+
+                    // hard negatives
+                    if(negativeHardQueryFile.exists()) {
+                        queryResults = getQueryResults(negativeHardQueryFile, size);
+                        pathToWrite = Paths.get(resultsDir.toString(), "negatives_hard.txt");
+                        fileToWrite = pathToWrite.toFile();
+                        writeListToFile(fileToWrite, queryResults);
+                    }
                 }
+
             }
         }
     }

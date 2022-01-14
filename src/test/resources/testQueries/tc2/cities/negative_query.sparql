@@ -1,0 +1,8 @@
+PREFIX dbo: <http://dbpedia.org/ontology/>
+
+SELECT DISTINCT ?x WHERE {
+  ?x a dbo:Person .
+  FILTER(NOT EXISTS {
+    ?x dbo:child ?y}
+    )
+} LIMIT <number>
