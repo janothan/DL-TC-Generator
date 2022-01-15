@@ -1,0 +1,6 @@
+PREFIX dbo: <http://dbpedia.org/ontology/>
+
+SELECT DISTINCT ?x WHERE {
+    ?x a dbo:City .
+    ?x dbo:subdivision ?y .
+} LIMIT <number>

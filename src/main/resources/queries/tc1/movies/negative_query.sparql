@@ -1,0 +1,12 @@
+PREFIX dbo: <http://dbpedia.org/ontology/>
+
+SELECT DISTINCT ?x WHERE {
+    ?x a dbo:Film .
+    FILTER
+    (
+        NOT EXISTS
+        {
+            ?x dbo:musicComposer ?y .
+        }
+    ) .
+} LIMIT <number>

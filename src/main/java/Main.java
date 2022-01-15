@@ -10,7 +10,7 @@ public class Main {
         FileUtils.deleteDirectory(new File(resultDir));
         String queriesPath = Main.class.getResource("queries").getPath();
         Generator generator = new Generator(queriesPath,resultDir);
-        generator.setSizes(new int[]{5, 10});
+        generator.setSizes(new int[]{50, 500, 5000});
         generator.generateTestCases();
     }
 }

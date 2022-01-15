@@ -102,6 +102,9 @@ public class Generator {
                 File negativeQueryFile = new File(tcDirectory, NEGATIVE_FILE_NAME);
                 File negativeHardQueryFile = new File(tcDirectory, NEGATIVE_HARD_FILE_NAME);
                 for (int size : sizes) {
+                    LOGGER.info("Processing " + tcCollectionDirectory.getName() + "-" + tcDirectory.getName()
+                            + " (" + size + ")");
+
                     Path resultsDir = Paths.get(generatedDirectory.getAbsolutePath(),
                             tcCollectionDirectory.getName(),
                             tcDirectory.getName(),
