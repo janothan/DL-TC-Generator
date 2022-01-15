@@ -1,0 +1,2 @@
+dbo:Person was replaced with dbo:MusicalArtist
+Evaluate this later.

@@ -1,0 +1,20 @@
+PREFIX dbo: <http://dbpedia.org/ontology/>
+PREFIX dbr: <http://dbpedia.org/resource/>
+
+SELECT DISTINCT ?x WHERE
+{
+    {
+        ?x a dbo:Person .
+        ?z1 dbo:starring ?x .
+        ?z2 ?r ?x .
+        ?z2 a dbo:TelevisionShow
+    }
+    FILTER
+    (
+        NOT EXISTS
+       {
+            ?y dbo:starring ?x .
+            ?y a dbo:TelevisionShow .
+       }
+    )
+} LIMIT <number>

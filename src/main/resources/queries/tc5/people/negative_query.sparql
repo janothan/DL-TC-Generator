@@ -19,7 +19,7 @@ SELECT DISTINCT ?x WHERE
             {
                 dbr:New_York_City ?y3 ?z .
             }
-        )
+        ) .
     }
     UNION
     {
@@ -38,7 +38,6 @@ SELECT DISTINCT ?x WHERE
                 {
                     dbr:New_York_City ?y3 ?z .
                 }
-            )
+            ) .
         }
-
 } LIMIT <number>
