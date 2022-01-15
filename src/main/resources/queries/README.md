@@ -1,4 +1,4 @@
-# Directory 'test-cases'
+# Directory 'queries'
 This directory is parsed automatically. Therefore, some boundary conditions must hold:
 - Each test case collection is placed in its own folder.
 - Each test case collection directory contains one or more directories (test case folders) for each test case.  

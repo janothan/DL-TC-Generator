@@ -5,19 +5,12 @@ SELECT DISTINCT ?x WHERE
 {
     {
         ?x a dbo:Person .
-
     }
     FILTER
     (
         NOT EXISTS
         {
-            ?x ?y dbr:New_York_City .
-        }
-        &&
-        NOT EXISTS
-        {
-            dbr:New_York_City ?y ?x .
+            ?x dbo:birthPlace dbr:New_York_City .
         }
     )
-
 } LIMIT <number>
