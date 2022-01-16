@@ -1,0 +1,17 @@
+PREFIX dbo: <http://dbpedia.org/ontology/>
+
+SELECT DISTINCT ?x WHERE {
+    ?x a dbo:City .
+  	FILTER
+  	(
+  	    NOT EXISTS
+  	    {
+  	        ?y dbo:namedAfter ?x .
+  	    }
+  	    &&
+  	    NOT EXISTS
+  	    {
+  	        ?x dbo:namedAfter ?y .
+  	    }
+  	) .
+} LIMIT <number>
