@@ -6,7 +6,7 @@ SELECT DISTINCT ?x WHERE {
   	(
   	    NOT EXISTS
   	    {
-  	        ?x dbo:namedAfter ?y .
+  	        ?y dbo:namedAfter ?x .
   	    }
   	) .
 } LIMIT <number>

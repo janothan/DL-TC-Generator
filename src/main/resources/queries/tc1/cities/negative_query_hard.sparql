@@ -2,6 +2,7 @@ PREFIX dbo: <http://dbpedia.org/ontology/>
 
 SELECT DISTINCT ?x WHERE {
     ?x a dbo:City .
+    ?y dbo:namedAfter ?x .
   	FILTER
   	(
   	    NOT EXISTS

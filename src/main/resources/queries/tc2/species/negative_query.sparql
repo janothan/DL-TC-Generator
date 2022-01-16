@@ -1,0 +1,13 @@
+PREFIX dbo: <http://dbpedia.org/ontology/>
+
+SELECT DISTINCT ?x WHERE {
+    ?x a dbo:Eukaryote .
+    FILTER
+    (
+        NOT EXISTS
+        {
+            ?y dbo:kingdom ?x .
+        }
+    ) .
+
+} LIMIT <number>

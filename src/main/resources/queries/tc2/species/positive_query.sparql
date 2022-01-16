@@ -1,6 +1,6 @@
 PREFIX dbo: <http://dbpedia.org/ontology/>
 
 SELECT DISTINCT ?x WHERE {
-    ?x a dbo:City .
-    ?x dbo:namedAfter ?y .
+    ?x a dbo:Eukaryote .
+    ?y dbo:kingdom ?x .
 } LIMIT <number>
