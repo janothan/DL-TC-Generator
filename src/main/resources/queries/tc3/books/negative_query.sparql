@@ -1,0 +1,17 @@
+PREFIX dbo: <http://dbpedia.org/ontology/>
+
+SELECT DISTINCT ?x WHERE {
+    ?x a dbo:Book .
+  	FILTER
+  	(
+  	    NOT EXISTS
+  	    {
+  	        ?y dbo:previousWork ?x .
+  	    }
+  	    &&
+  	    NOT EXISTS
+  	    {
+  	        ?x dbo:previousWork ?y .
+  	    }
+  	) .
+} LIMIT <number>

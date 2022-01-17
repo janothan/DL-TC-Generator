@@ -1,7 +1,7 @@
 PREFIX dbo: <http://dbpedia.org/ontology/>
 
 SELECT DISTINCT ?x WHERE {
-    ?x a dbo:Eukaryote .
+    ?x a dbo:Species .
     FILTER
     (
         NOT EXISTS

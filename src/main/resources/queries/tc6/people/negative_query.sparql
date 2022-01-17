@@ -12,5 +12,5 @@ SELECT DISTINCT ?x WHERE
         {
             ?x dbo:birthPlace dbr:New_York_City .
         }
-    )
+    ) .
 } LIMIT <number>
