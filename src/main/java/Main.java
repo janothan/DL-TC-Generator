@@ -12,7 +12,7 @@ public class Main {
         Generator generator = new Generator(queriesPath,resultDir);
         generator.setSizes(new int[]{50, 500, 5000});
         generator.setIncludeOnlyCollection("tc5");
-        generator.setIncludeOnlyTestCase("books");
+        //generator.setIncludeOnlyTestCase("books");
         generator.generateTestCases();
     }
 }

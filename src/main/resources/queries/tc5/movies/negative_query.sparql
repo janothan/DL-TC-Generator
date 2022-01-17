@@ -3,41 +3,19 @@ PREFIX dbr: <http://dbpedia.org/resource/>
 
 SELECT DISTINCT ?x WHERE
 {
+  ?x a dbo:Film .
+  MINUS
+  {
     {
-        {
-            ?x a dbo:Film .
-            ?x ?r1 ?z .
-        }
-        FILTER
-        (
-            NOT EXISTS
-            {
-                ?z ?r2 dbr:New_York_City .
-            }
-            &&
-            NOT EXISTS
-            {
-                dbr:New_York_City ?r3 ?z .
-            }
-        ) .
+        ?x a dbo:Film .
+        ?x ?r1 ?z .
+        ?z ?r2 dbr:New_York_City .
     }
-    MINUS
+    UNION
     {
-            {
-                ?x a dbo:Film .
-                ?z ?r1 ?x .
-            }
-            FILTER
-            (
-                 NOT EXISTS
-                {
-                    ?z ?r2 dbr:New_York_City .
-                }
-                &&
-                NOT EXISTS
-                {
-                    dbr:New_York_City ?r3 ?z .
-                }
-            ) .
-        }
+        ?x a dbo:Film .
+        ?z ?r3 ?x .
+        dbr:New_York_City ?r4 ?z .
+    }
+  }
 } LIMIT <number>
