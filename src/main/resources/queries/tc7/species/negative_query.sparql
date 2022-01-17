@@ -1,0 +1,15 @@
+PREFIX dbo: <http://dbpedia.org/ontology/>
+PREFIX dbr: <http://dbpedia.org/resource/>
+
+SELECT DISTINCT ?x WHERE
+{
+    ?x a dbo:Species .
+    FILTER
+    (
+        NOT EXISTS
+        {
+            ?x dbo:family ?y .
+            ?y a dbo:Insect .
+        }
+    )
+} LIMIT <number>

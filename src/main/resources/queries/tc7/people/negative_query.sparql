@@ -8,7 +8,7 @@ PREFIX dbr: <http://dbpedia.org/resource/>
 SELECT DISTINCT ?x WHERE
 {
     {
-        ?x a dbo:BasketballPlayer .
+        ?x a dbo:Person .
     }
   	FILTER
   	(

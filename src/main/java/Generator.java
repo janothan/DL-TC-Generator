@@ -17,6 +17,12 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+/**
+ * The following DBpedia files are required at the SPARQL endpoint:
+ * <ul>
+ *     <li></li>
+ * </ul>
+ */
 public class Generator {
 
 

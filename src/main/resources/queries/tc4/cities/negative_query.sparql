@@ -1,0 +1,20 @@
+PREFIX dbo: <http://dbpedia.org/ontology/>
+PREFIX dbr: <http://dbpedia.org/resource/>
+
+SELECT DISTINCT ?x WHERE
+{
+    ?x a dbo:City .
+
+    FILTER
+    (
+        NOT EXISTS
+        {
+            ?x ?y dbr:Germany .
+        }
+        &&
+        NOT EXISTS
+        {
+            dbr:Germany ?z ?x .
+        }
+    ) .
+} LIMIT <number>

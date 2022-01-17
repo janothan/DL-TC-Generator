@@ -1,0 +1,2 @@
+This TC has a severe problem: Typically there is only one directionality.
+There are more people who have a relation to NYC than vice versa.

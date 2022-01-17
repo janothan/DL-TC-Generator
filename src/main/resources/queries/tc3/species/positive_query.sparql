@@ -1,0 +1,13 @@
+PREFIX dbo: <http://dbpedia.org/ontology/>
+
+SELECT DISTINCT ?x WHERE {
+    {
+        ?x a dbo:Species .
+        ?y dbo:kingdom ?x .
+    }
+    UNION
+    {
+        ?y a dbo:Species .
+        ?x dbo:kingdom ?y .
+    }
+} LIMIT <number>

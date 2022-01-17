@@ -1,2 +1,0 @@
-dbo:Person was replaced with dbo:BasketballPlayer
-Evaluate this later.
