@@ -11,10 +11,7 @@ import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -34,6 +31,20 @@ public class Generator {
     private static final String NEGATIVE_HARD_FILE_NAME = "negative_query_hard.sparql";
 
     private File queryDirectory;
+
+    /**
+     * If this set contains entries, the {@link Generator#generateTestCases()} method will only consider test case
+     * collections (i.e., directories) with that name - for example, if there are tc1, tc2, ... and the set contains
+     * tc1 and tc2, then only the latter two will be generated.
+     */
+    private Set<String> includeOnlyCollection;
+
+    /**
+     * If this set contains entries, the {@link Generator#generateTestCases()} method will only consider test cases
+     * with that name - for example, if there are cities, movies, people, ... and the set contains only "movies",
+     * only the test cases named "movies" will be generated.
+     */
+    private Set<String> includeOnlyTestCase;
 
     /**
      * The generated directory must not exist yet.
@@ -71,6 +82,13 @@ public class Generator {
         generatedDirectory.mkdirs();
 
         for (File tcCollectionDirectory : queryDirectory.listFiles()) {
+
+            if(includeOnlyCollection != null && includeOnlyCollection.size() > 0) {
+                if (!includeOnlyCollection.contains(tcCollectionDirectory.getName())){
+                    continue;
+                }
+            }
+
             if (!tcCollectionDirectory.isDirectory()) {
                 LOGGER.info("Skipping file: " + tcCollectionDirectory.getAbsolutePath());
                 continue;
@@ -83,6 +101,13 @@ public class Generator {
             }
 
             for (File tcDirectory : collectionDirectoryFiles) {
+
+                if(includeOnlyTestCase != null && includeOnlyTestCase.size() > 0){
+                    if(!includeOnlyTestCase.contains(tcDirectory.getName())){
+                        continue;
+                    }
+                }
+
                 if (!tcDirectory.isDirectory()) {
                     LOGGER.info("Skipping file: " + tcDirectory.getAbsolutePath());
                 }
@@ -121,12 +146,14 @@ public class Generator {
                     }
 
                     // positives
+                    LOGGER.info("Generating positives.");
                     List<String> queryResults = getQueryResults(positiveQueryFile, size);
                     Path pathToWrite = Paths.get(resultsDir.toString(), "positives.txt");
                     File fileToWrite = pathToWrite.toFile();
                     writeListToFile(fileToWrite, queryResults);
 
                     // negatives
+                    LOGGER.info("Generating negatives.");
                     queryResults = getQueryResults(negativeQueryFile, size);
                     pathToWrite = Paths.get(resultsDir.toString(), "negatives.txt");
                     fileToWrite = pathToWrite.toFile();
@@ -134,6 +161,7 @@ public class Generator {
 
                     // hard negatives
                     if(negativeHardQueryFile.exists()) {
+                        LOGGER.info("Generating hard negatives.");
                         queryResults = getQueryResults(negativeHardQueryFile, size);
                         pathToWrite = Paths.get(resultsDir.toString(), "negatives_hard.txt");
                         fileToWrite = pathToWrite.toFile();
@@ -177,7 +205,7 @@ public class Generator {
      * @return A list of URIs.
      */
     public List<String> getQueryResults(File file, int size) {
-        String query = readUtf8(file);
+        String query = Util.readUtf8(file);
         query = query.replace("<number>", "" + size);
         List<String> result = new ArrayList<>();
 
@@ -193,28 +221,7 @@ public class Generator {
         return result;
     }
 
-    /**
-     * Reads the contents of an UTF-8 encoded file.
-     *
-     * @param fileToRead The file that shall be read.
-     * @return File contents.
-     */
-    static String readUtf8(File fileToRead) {
-        StringBuilder sb = new StringBuilder();
-        try (BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(fileToRead),
-                StandardCharsets.UTF_8))) {
-            String readLine;
-            while ((readLine = reader.readLine()) != null) {
-                sb.append(readLine);
-                sb.append("\n");
-            }
-        } catch (FileNotFoundException e) {
-            LOGGER.info("File not found.", e);
-        } catch (IOException e) {
-            LOGGER.info("IOException occurred.", e);
-        }
-        return sb.toString();
-    }
+
 
 
     private boolean sanityChecks() {
@@ -267,5 +274,40 @@ public class Generator {
 
     public void setSizes(int[] sizes) {
         this.sizes = sizes;
+    }
+
+    public Set<String> getIncludeOnlyCollection() {
+        return includeOnlyCollection;
+    }
+
+    public void setIncludeOnlyCollection(Set<String> includeOnlyCollection) {
+        this.includeOnlyCollection = includeOnlyCollection;
+    }
+
+    /**
+     * This method will override the current set.
+     * @param includeOnlyCollection Values for the set.
+     */
+    public void setIncludeOnlyCollection(String... includeOnlyCollection) {
+        this.includeOnlyCollection = new HashSet<>();
+        this.includeOnlyCollection.addAll(Arrays.stream(includeOnlyCollection).toList());
+    }
+
+
+    public Set<String> getIncludeOnlyTestCase() {
+        return includeOnlyTestCase;
+    }
+
+    public void setIncludeOnlyTestCase(Set<String> includeOnlyTestCase) {
+        this.includeOnlyTestCase = includeOnlyTestCase;
+    }
+
+    /**
+     * This method will override the current set.
+     * @return Values for set.
+     */
+    public void setIncludeOnlyTestCase(String... includeOnlyTestCase) {
+        this.includeOnlyTestCase = new HashSet<>();
+        this.includeOnlyTestCase.addAll(Arrays.stream(includeOnlyTestCase).toList());
     }
 }

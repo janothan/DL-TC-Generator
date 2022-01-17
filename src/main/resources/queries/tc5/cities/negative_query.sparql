@@ -5,38 +5,38 @@ SELECT DISTINCT ?x WHERE
 {
     {
         {
-            ?x a dbo:Person .
-            ?x ?y1 ?z .
+            ?x a dbo:City .
+            ?x ?r1 ?z .
         }
         FILTER
         (
             NOT EXISTS
             {
-                ?z ?y2 dbr:New_York_City .
+                ?z ?r2 dbr:New_York_City .
             }
             &&
             NOT EXISTS
             {
-                dbr:New_York_City ?y3 ?z .
+                dbr:New_York_City ?r3 ?z .
             }
         ) .
     }
     MINUS
     {
             {
-                ?x a dbo:Person .
-                ?z ?y1 ?x .
+                ?x a dbo:City .
+                ?z ?r1 ?x .
             }
             FILTER
             (
-                NOT EXISTS
+                 NOT EXISTS
                 {
-                    ?z ?y2 dbr:New_York_City .
+                    ?z ?r2 dbr:New_York_City .
                 }
                 &&
                 NOT EXISTS
                 {
-                    dbr:New_York_City ?y3 ?z .
+                    dbr:New_York_City ?r3 ?z .
                 }
             ) .
         }

@@ -1,0 +1,17 @@
+PREFIX dbr: <http://dbpedia.org/resource/>
+PREFIX dbo: <http://dbpedia.org/ontology/>
+
+SELECT DISTINCT ?x ?r1 ?z ?r2 WHERE
+{
+    {
+        ?x a dbo:Film .
+        ?x ?r1 ?z .
+        ?z ?r2 dbr:New_York_City .
+    }
+    UNION
+    {
+        ?x a dbo:Film .
+        ?z ?y1 ?x .
+        dbr:New_York_City ?y2 ?z .
+    }
+} LIMIT <number>
