@@ -3,9 +3,7 @@ PREFIX dbr: <http://dbpedia.org/resource/>
 
 SELECT DISTINCT ?x WHERE
 {
-    {
-        ?x a dbo:Person .
-        ?y dbo:starring ?x .
-        ?y a dbo:TelevisionShow .
-    }
+    ?x a dbo:Person .
+    ?y dbo:starring ?x .
+    ?y a dbo:TelevisionShow .
 } LIMIT <number>
