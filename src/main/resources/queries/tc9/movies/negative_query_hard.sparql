@@ -4,19 +4,18 @@ PREFIX dbr: <http://dbpedia.org/resource/>
 SELECT DISTINCT ?x WHERE
 {
     {
-        ?x a dbo:City .
-        ?x dbo:subdivision ?y .
+        ?x a dbo:Film .
+        ?x dbo:director ?y .
     }
     FILTER
     (
         NOT EXISTS
         {
-            ?x dbo:subdivision ?z .
+            ?x dbo:director ?z .
             FILTER
             (
                 ?y != ?z
             )
         }
     ) .
-
 } LIMIT <number>

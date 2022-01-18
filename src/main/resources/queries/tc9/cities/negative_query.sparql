@@ -5,18 +5,17 @@ SELECT DISTINCT ?x WHERE
 {
     {
         ?x a dbo:City .
-        ?x dbo:subdivision ?y .
     }
     FILTER
     (
         NOT EXISTS
         {
-            ?x dbo:subdivision ?z .
+            ?x dbo:subdivision ?y1 .
+            ?x dbo:subdivision ?y2 .
             FILTER
             (
-                ?y != ?z
-            )
+                ?y1 != ?y2
+            ) .
         }
     ) .
-
 } LIMIT <number>
