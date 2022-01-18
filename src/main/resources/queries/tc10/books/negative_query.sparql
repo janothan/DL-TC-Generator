@@ -1,0 +1,21 @@
+PREFIX dbo: <http://dbpedia.org/ontology/>
+PREFIX dbr: <http://dbpedia.org/resource/>
+
+SELECT DISTINCT ?x WHERE
+{
+    {
+        ?x a dbo:Book .
+    }
+    FILTER
+    (
+        NOT EXISTS
+        {
+            ?y1 dbo:series ?x .
+            ?y2 dbo:series ?x .
+            FILTER
+            (
+                ?y1 != ?y2
+            ) .
+        }
+    )
+} LIMIT <number>

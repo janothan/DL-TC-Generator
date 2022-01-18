@@ -1,0 +1,15 @@
+PREFIX dbo: <http://dbpedia.org/ontology/>
+PREFIX dbr: <http://dbpedia.org/resource/>
+
+SELECT DISTINCT ?x WHERE
+{
+    {
+        ?x a dbo:Album .
+        ?y1 dbo:album ?x .
+        ?y2 dbo:album ?x .
+    }
+    FILTER
+    (
+        ?y1 != ?y2
+    )
+} LIMIT <number>
