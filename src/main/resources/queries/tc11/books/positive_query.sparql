@@ -1,0 +1,12 @@
+PREFIX dbo: <http://dbpedia.org/ontology/>
+PREFIX dbr: <http://dbpedia.org/resource/>
+
+SELECT DISTINCT ?x WHERE
+{
+    ?x a dbo:Film .
+    ?x dbo:starring ?a1 .
+  	?a1 a dbo:Artist .
+  	?x dbo:starring ?a2 .
+  	?a2 a dbo:Artist .
+  	FILTER ( ?a1 != ?a2 ) .
+}

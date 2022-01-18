@@ -4,16 +4,16 @@ PREFIX dbr: <http://dbpedia.org/resource/>
 SELECT DISTINCT ?x WHERE
 {
     {
-    	?x a dbo:Person .
-    	?x dbo:recordLabel ?y1 .
-    	?y1 a dbo:RecordLabel .
+    	?x a dbo:City .
     }
     FILTER
     (
         NOT EXISTS
         {
-            ?x dbo:recordLabel ?y2 .
-            ?y2 a dbo:RecordLabel .
+            ?x dbo:namedAfter ?y1 .
+            ?y1 a dbo:Place .
+            ?x dbo:namedAfter ?y2 .
+            ?y2 a dbo:Place .
             FILTER
             (
                 ?y1 != ?y2

@@ -4,7 +4,7 @@ import org.slf4j.LoggerFactory;
 import java.io.File;
 import java.util.Set;
 
-public class Validator {
+public class ResultValidator {
 
 
     /**
@@ -12,16 +12,16 @@ public class Validator {
      *
      * @param resultDirectory The directory that is to be checked.
      */
-    public Validator(File resultDirectory) {
+    public ResultValidator(File resultDirectory) {
         this.resultDirectory = resultDirectory;
     }
 
-    public Validator(String resultDirectory){
+    public ResultValidator(String resultDirectory){
         this(new File(resultDirectory));
     }
 
     private File resultDirectory;
-    private static Logger LOGGER = LoggerFactory.getLogger(Validator.class);
+    private static Logger LOGGER = LoggerFactory.getLogger(ResultValidator.class);
 
     public boolean validate() {
         for (File testCaseCollection : resultDirectory.listFiles()) {
@@ -68,7 +68,7 @@ public class Validator {
     }
 
     public static void main(String[] args) {
-        Validator validator = new Validator("./resultTC5");
+        ResultValidator validator = new ResultValidator("./resultTC5");
         if(validator.validate()){
             System.out.println("Validation completed. No errors.");
         } else {
