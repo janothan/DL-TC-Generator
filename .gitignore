@@ -92,7 +92,7 @@ nb-configuration.xml
 ##############################
 ## Project-specific
 ##############################
-/result
+#/result
 notes.txt
 /resultTC1
 /resultTC2

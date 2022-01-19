@@ -7,7 +7,7 @@ SELECT DISTINCT ?x WHERE
         ?x a dbo:Person .
         ?z1 dbo:starring ?x .
         ?z2 ?r ?x .
-        ?z2 a dbo:TelevisionShow
+        ?z2 a dbo:TelevisionShow .
     }
     FILTER
     (
@@ -16,5 +16,5 @@ SELECT DISTINCT ?x WHERE
             ?y dbo:starring ?x .
             ?y a dbo:TelevisionShow .
        }
-    )
+    ) .
 } LIMIT <number>

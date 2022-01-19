@@ -11,8 +11,10 @@ public class Main {
         String queriesPath = Main.class.getResource("queries").getPath();
         Generator generator = new Generator(queriesPath,resultDir);
         generator.setSizes(new int[]{50, 500, 5000});
-        //generator.setIncludeOnlyCollection("tc5");
-        //generator.setIncludeOnlyTestCase("books");
+        //generator.setIncludeOnlyCollection("tc8");
+        //generator.setIncludeOnlyTestCase("people");
+        generator.setTimeoutInSeconds(300);
         generator.generateTestCases();
+        System.out.println("DONE");
     }
 }

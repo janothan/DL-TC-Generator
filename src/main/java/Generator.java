@@ -1,17 +1,18 @@
-import org.apache.jena.query.QueryExecution;
-import org.apache.jena.query.QueryFactory;
-import org.apache.jena.query.QuerySolution;
-import org.apache.jena.query.ResultSet;
+import org.apache.http.HttpException;
+import org.apache.jena.query.*;
 import org.apache.jena.rdf.model.Literal;
 import org.apache.jena.rdfconnection.RDFConnection;
+import org.apache.jena.sparql.engine.http.QueryExceptionHTTP;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.*;
+import java.net.http.HttpTimeoutException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 /**
@@ -52,6 +53,7 @@ public class Generator {
     private File generatedDirectory;
     private RDFConnection connection;
     private int[] sizes = {50, 500, 5000};
+    private int timeoutInSeconds = 300;
 
     public Generator(String queryDirectoryPath, String directoryToGeneratePath) {
         this(new File(queryDirectoryPath), new File(directoryToGeneratePath));
@@ -209,20 +211,31 @@ public class Generator {
         query = query.replace("<number>", "" + size);
         List<String> result = new ArrayList<>();
 
-        QueryExecution qe = connection.query(query);
-        ResultSet rs = qe.execSelect();
-
-        while (rs.hasNext()) {
-            QuerySolution qs = rs.next();
-            result.add(qs.getResource("?x").getURI());
+        QueryExecution qe;
+        try {
+             qe = connection.query(query);
+        } catch (QueryParseException qpe){
+            LOGGER.error("The following query could not be parsed: \n" + query);
+            LOGGER.error("The problematic query file: " + file.getAbsolutePath());
+            return result;
         }
 
-        qe.close();
+        qe.setTimeout(timeoutInSeconds, TimeUnit.SECONDS);
+
+        try {
+            ResultSet rs = qe.execSelect();
+
+            while (rs.hasNext()) {
+                QuerySolution qs = rs.next();
+                result.add(qs.getResource("?x").getURI());
+            }
+
+            qe.close();
+        } catch (QueryExceptionHTTP hte){
+            LOGGER.error("There was a query exception when running the query. Returning an empty list.");
+        }
         return result;
     }
-
-
-
 
     private boolean sanityChecks() {
         if (!queryDirectory.exists()) {
@@ -309,5 +322,13 @@ public class Generator {
     public void setIncludeOnlyTestCase(String... includeOnlyTestCase) {
         this.includeOnlyTestCase = new HashSet<>();
         this.includeOnlyTestCase.addAll(Arrays.stream(includeOnlyTestCase).toList());
+    }
+
+    public int getTimeoutInSeconds() {
+        return timeoutInSeconds;
+    }
+
+    public void setTimeoutInSeconds(int timeoutInSeconds) {
+        this.timeoutInSeconds = timeoutInSeconds;
     }
 }
