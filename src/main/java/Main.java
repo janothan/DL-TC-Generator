@@ -13,7 +13,7 @@ public class Main {
         generator.setSizes(new int[]{50, 500, 5000});
         //generator.setIncludeOnlyCollection("tc8");
         //generator.setIncludeOnlyTestCase("people");
-        generator.setTimeoutInSeconds(300);
+        generator.setTimeoutInSeconds(500);
         generator.generateTestCases();
         System.out.println("DONE");
     }

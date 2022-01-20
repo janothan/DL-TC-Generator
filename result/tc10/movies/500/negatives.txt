@@ -81,7 +81,6 @@ http://dbpedia.org/resource/2.0_(film)
 http://dbpedia.org/resource/20,000_Leagues_Under_the_Sea_(1916_film)
 http://dbpedia.org/resource/20,000_Leagues_Under_the_Sea_(1954_film)
 http://dbpedia.org/resource/20,000_Leagues_Under_the_Sea_(1985_film)
-http://dbpedia.org/resource/2001:_A_Space_Odyssey_(film)
 http://dbpedia.org/resource/2002_(film)
 http://dbpedia.org/resource/2010:_The_Year_We_Make_Contact
 http://dbpedia.org/resource/2012:_Kurse_a_di_Xtabai
@@ -498,3 +497,4 @@ http://dbpedia.org/resource/A_Tale_of_Two_Cities_(1958_film)
 http://dbpedia.org/resource/A_Tale_of_Two_Sisters
 http://dbpedia.org/resource/A_Taste_of_Honey_(film)
 http://dbpedia.org/resource/A_Terrible_Beauty_(film)
+http://dbpedia.org/resource/A_Thief_Has_Arrived_(1940_film)
