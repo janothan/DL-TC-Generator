@@ -4,6 +4,9 @@ import org.slf4j.LoggerFactory;
 import java.io.File;
 import java.util.Set;
 
+/**
+ * A class to check the generated result (inconsistencies etc.).
+ */
 public class ResultValidator {
 
 

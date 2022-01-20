@@ -25,11 +25,11 @@ public class Generator {
 
 
     private static final Logger LOGGER = LoggerFactory.getLogger(Generator.class);
-    private static final String DATASET_URL = "http://dws-04.informatik.uni-mannheim.de:3030/dbpedia-all-2021-09";
+    static final String DATASET_URL = "http://dws-04.informatik.uni-mannheim.de:3030/dbpedia-all-2021-09";
 
-    private static final String POSITIVE_FILE_NAME = "positive_query.sparql";
-    private static final String NEGATIVE_FILE_NAME = "negative_query.sparql";
-    private static final String NEGATIVE_HARD_FILE_NAME = "negative_query_hard.sparql";
+    static final String POSITIVE_FILE_NAME = "positive_query.sparql";
+    static final String NEGATIVE_FILE_NAME = "negative_query.sparql";
+    static final String NEGATIVE_HARD_FILE_NAME = "negative_query_hard.sparql";
 
     private File queryDirectory;
 

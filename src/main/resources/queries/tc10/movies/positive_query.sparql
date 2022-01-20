@@ -5,8 +5,8 @@ SELECT DISTINCT ?x WHERE
 {
     {
         ?x a dbo:Film .
-        ?y1 dbo:series ?x .
-        ?y2 dbo:series ?x .
+        ?y1 dbo:knownFor ?x .
+        ?y2 dbo:knownFor ?x .
     }
     FILTER
     (

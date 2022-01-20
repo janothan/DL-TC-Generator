@@ -8,12 +8,12 @@ SELECT DISTINCT ?x WHERE
     (
         NOT EXISTS
         {
-            ?x ?y dbr:Germany .
+            ?x ?y dbr:United_States .
         }
         &&
         NOT EXISTS
         {
-            dbr:Germany ?z ?x .
+            dbr:United_States ?z ?x .
         }
     ) .
 } LIMIT <number>

@@ -5,11 +5,11 @@ SELECT DISTINCT ?x WHERE
 {
     {
         ?x a dbo:City .
-        ?x ?y dbr:Germany .
+        ?x ?y dbr:United_States .
     }
     UNION
     {
         ?x a dbo:City .
-        dbr:Germany ?z  ?x .
+        dbr:United_States ?z  ?x .
     }
 } LIMIT <number>

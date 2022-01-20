@@ -10,8 +10,8 @@ SELECT DISTINCT ?x WHERE
     (
         NOT EXISTS
         {
-            ?y1 dbo:lastAppearance ?x .
-            ?y2 dbo:lastAppearance ?x .
+            ?y1 dbo:knownFor ?x .
+            ?y2 dbo:knownFor ?x .
             FILTER
             (
                 ?y1 != ?y2
