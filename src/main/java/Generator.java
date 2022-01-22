@@ -55,6 +55,12 @@ public class Generator {
     private int[] sizes = {50, 500, 5000};
     private int timeoutInSeconds = 300;
 
+    /**
+     * If true a random element is added to the queries so that there is some variation in the results
+     * (to avoid situations in which the query returns persons all starting with the letter 'A' etc.).
+     */
+    private boolean isRandomizeResults = true;
+
     public Generator(String queryDirectoryPath, String directoryToGeneratePath) {
         this(new File(queryDirectoryPath), new File(directoryToGeneratePath));
     }
@@ -197,7 +203,6 @@ public class Generator {
         }
     }
 
-
     /**
      * Run a query given a file.
      *
@@ -210,6 +215,9 @@ public class Generator {
         String query = Util.readUtf8(file);
         query = query.replace("<number>", "" + size);
         List<String> result = new ArrayList<>();
+
+        // bringing some randomness to the results
+        query = query.replace("LIMIT", "ORDER BY RAND() LIMIT");
 
         QueryExecution qe;
         try {
@@ -229,7 +237,6 @@ public class Generator {
                 QuerySolution qs = rs.next();
                 result.add(qs.getResource("?x").getURI());
             }
-
             qe.close();
         } catch (QueryExceptionHTTP hte){
             LOGGER.error("There was a query exception when running the query. Returning an empty list.");
@@ -330,5 +337,13 @@ public class Generator {
 
     public void setTimeoutInSeconds(int timeoutInSeconds) {
         this.timeoutInSeconds = timeoutInSeconds;
+    }
+
+    public boolean isRandomizeResults() {
+        return isRandomizeResults;
+    }
+
+    public void setRandomizeResults(boolean randomizeResults) {
+        isRandomizeResults = randomizeResults;
     }
 }
