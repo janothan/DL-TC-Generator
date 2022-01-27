@@ -1,4 +1,3 @@
-import org.apache.http.HttpException;
 import org.apache.jena.query.*;
 import org.apache.jena.rdf.model.Literal;
 import org.apache.jena.rdfconnection.RDFConnection;
@@ -30,6 +29,7 @@ public class Generator {
     static final String POSITIVE_FILE_NAME = "positive_query.sparql";
     static final String NEGATIVE_FILE_NAME = "negative_query.sparql";
     static final String NEGATIVE_HARD_FILE_NAME = "negative_query_hard.sparql";
+    private static final String DEFAULT_SEPARATOR = "\t";
 
     private File queryDirectory;
 
@@ -46,6 +46,13 @@ public class Generator {
      * only the test cases named "movies" will be generated.
      */
     private Set<String> includeOnlyTestCase;
+
+    /**
+     * The separator for the data files (e.g. train.txt).
+     */
+    private String separator = DEFAULT_SEPARATOR;
+
+    private TrainTestSplit trainTestSplit = new TrainTestSplit(0.2, 0.8);
 
     /**
      * The generated directory must not exist yet.
@@ -155,28 +162,84 @@ public class Generator {
 
                     // positives
                     LOGGER.info("Generating positives.");
-                    List<String> queryResults = getQueryResults(positiveQueryFile, size);
+                    List<String> positives = getQueryResults(positiveQueryFile, size);
                     Path pathToWrite = Paths.get(resultsDir.toString(), "positives.txt");
                     File fileToWrite = pathToWrite.toFile();
-                    writeListToFile(fileToWrite, queryResults);
+                    writeListToFile(fileToWrite, positives);
 
                     // negatives
                     LOGGER.info("Generating negatives.");
-                    queryResults = getQueryResults(negativeQueryFile, size);
+                    List<String> negatives = getQueryResults(negativeQueryFile, size);
                     pathToWrite = Paths.get(resultsDir.toString(), "negatives.txt");
                     fileToWrite = pathToWrite.toFile();
-                    writeListToFile(fileToWrite, queryResults);
+                    writeListToFile(fileToWrite, negatives);
 
                     // hard negatives
                     if(negativeHardQueryFile.exists()) {
                         LOGGER.info("Generating hard negatives.");
-                        queryResults = getQueryResults(negativeHardQueryFile, size);
+                        List<String> hardNegatives = getQueryResults(negativeHardQueryFile, size);
                         pathToWrite = Paths.get(resultsDir.toString(), "negatives_hard.txt");
                         fileToWrite = pathToWrite.toFile();
-                        writeListToFile(fileToWrite, queryResults);
+                        writeListToFile(fileToWrite, hardNegatives);
                     }
-                }
 
+                    // let's write the train/test split
+                    int positivesSize = positives.size();
+                    int negativesSize = negatives.size();
+                    int minNumber = Math.min(positivesSize, negativesSize);
+                    if(minNumber != positivesSize || minNumber != negativesSize){
+                        LOGGER.warn("There are " + positivesSize + " positives and " + negativesSize + " negatives. " +
+                                "In order to obtain a balanced data set, only " + minNumber + " of each will be " +
+                                "used.");
+                    }
+                    double trainShare =
+                            trainTestSplit.trainSplit() / (trainTestSplit.testSplit() + trainTestSplit.trainSplit());
+
+                    int position = 0;
+
+                    // if position < switchToTest -> write train file!
+                    int switchToTest = (int) Math.floor(minNumber * trainShare);
+
+                    File trainTestDirectory = Paths.get(resultsDir.toString(), "train_test").toFile();
+                    if(trainTestDirectory.mkdirs()){
+                        LOGGER.info("Created directory '" + trainTestDirectory.getAbsolutePath() + "'.");
+                    }
+                    File trainFile = Paths.get(trainTestDirectory.getAbsolutePath(),
+                            "train.txt").toFile();
+                    File testFile = Paths.get(trainTestDirectory.getAbsolutePath(),
+                            "test.txt").toFile();
+
+                    try(
+                            OutputStreamWriter testWriter = new OutputStreamWriter(
+                                    new FileOutputStream(testFile), StandardCharsets.UTF_8);
+                            OutputStreamWriter trainWriter = new OutputStreamWriter(
+                                    new FileOutputStream(trainFile), StandardCharsets.UTF_8);
+                            )
+                    {
+                        for(String uri : positives){
+                            if(position == minNumber){
+                                break;
+                            }
+                            if(position < switchToTest){
+                                // write to train file
+                                trainWriter.write(uri);
+                                trainWriter.write(separator);
+                                trainWriter.write("1\n");
+                            } else {
+                                // write to test file
+                                testWriter.write(uri);
+                                testWriter.write(separator);
+                                testWriter.write("1\n");
+                            }
+                            position++;
+                        }
+                    } catch (FileNotFoundException fnfe){
+                        LOGGER.error("File not found exception occurred.", fnfe);
+                    } catch (IOException e) {
+                        LOGGER.error("IOException occurred.", e);
+                    }
+
+                }
             }
         }
     }
@@ -239,7 +302,7 @@ public class Generator {
             }
             qe.close();
         } catch (QueryExceptionHTTP hte){
-            LOGGER.error("There was a query exception when running the query. Returning an empty list.");
+            LOGGER.error("There was a query exception when running the query. Returning an empty list.", hte);
         }
         return result;
     }
@@ -345,5 +408,21 @@ public class Generator {
 
     public void setRandomizeResults(boolean randomizeResults) {
         isRandomizeResults = randomizeResults;
+    }
+
+    public TrainTestSplit getTrainTestSplit() {
+        return trainTestSplit;
+    }
+
+    public void setTrainTestSplit(TrainTestSplit trainTestSplit) {
+        this.trainTestSplit = trainTestSplit;
+    }
+
+    public String getSeparator() {
+        return separator;
+    }
+
+    public void setSeparator(String separator) {
+        this.separator = separator;
     }
 }
