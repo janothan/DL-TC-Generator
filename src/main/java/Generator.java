@@ -216,20 +216,32 @@ public class Generator {
                                     new FileOutputStream(trainFile), StandardCharsets.UTF_8);
                             )
                     {
+                        // writing positives
                         for(String uri : positives){
                             if(position == minNumber){
                                 break;
                             }
                             if(position < switchToTest){
                                 // write to train file
-                                trainWriter.write(uri);
-                                trainWriter.write(separator);
-                                trainWriter.write("1\n");
+                                trainWriter.write(uri + separator + "1\n");
                             } else {
                                 // write to test file
-                                testWriter.write(uri);
-                                testWriter.write(separator);
-                                testWriter.write("1\n");
+                                testWriter.write(uri + separator + "1\n");
+                            }
+                            position++;
+                        }
+                        // writing negatives
+                        position = 0;
+                        for(String uri : negatives){
+                            if(position == minNumber){
+                                break;
+                            }
+                            if(position < switchToTest){
+                                // write to train file
+                                trainWriter.write(uri + separator + "0\n");
+                            } else {
+                                // write to test file
+                                testWriter.write(uri + separator + "0\n");
                             }
                             position++;
                         }
