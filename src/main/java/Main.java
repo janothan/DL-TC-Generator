@@ -78,10 +78,16 @@ public class Main {
                 if(sValues != null){
                     for(String sValue : sValues) {
                         try {
-                            sizeList.add(Integer.parseInt(sValue));
+                            int individualSize = Integer.parseInt(sValue);
+                            if(individualSize < 1){
+                                System.out.println("Sizes must be >=1. ABORTING program.");
+                                return;
+                            }
+                            sizeList.add(individualSize);
                         } catch (NumberFormatException nfe) {
                             System.out.println("A number format exception occurred while parsing the values for -s. " +
                                     "ABORTING program.");
+                            return;
                         }
                     }
                     int[] sizeArray = sizeList.stream().mapToInt(i->i).toArray();
@@ -96,6 +102,7 @@ public class Main {
                 } catch (NumberFormatException nfe){
                     System.out.println("A number format exception occurred while parsing the values for -t. " +
                             "ABORTING program.");
+                    return;
                 }
             }
 
