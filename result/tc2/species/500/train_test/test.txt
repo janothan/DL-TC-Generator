@@ -1,0 +1,10 @@
+http://dbpedia.org/resource/Euryarchaeota	1
+http://dbpedia.org/resource/Sphingobacteria_(phylum)	1
+http://dbpedia.org/resource/Gracilicutes	1
+http://dbpedia.org/resource/Chromista	1
+http://dbpedia.org/resource/Crenarchaeota	1
+http://dbpedia.org/resource/Ulivellia	0
+http://dbpedia.org/resource/Joculator_albordina	0
+http://dbpedia.org/resource/Xenorhabdus_koppenhoeferi	0
+http://dbpedia.org/resource/Spharagemon_collare	0
+http://dbpedia.org/resource/Xymehops	0

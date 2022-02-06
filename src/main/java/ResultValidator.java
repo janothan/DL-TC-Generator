@@ -23,8 +23,15 @@ public class ResultValidator {
         this(new File(resultDirectory));
     }
 
+    /**
+     * The result directory that shall be validated.
+     */
     private File resultDirectory;
-    private static Logger LOGGER = LoggerFactory.getLogger(ResultValidator.class);
+
+    /**
+     * Logger
+     */
+    private static final Logger LOGGER = LoggerFactory.getLogger(ResultValidator.class);
 
     public boolean validate() {
         for (File testCaseCollection : resultDirectory.listFiles()) {

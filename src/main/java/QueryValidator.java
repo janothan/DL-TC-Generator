@@ -29,6 +29,9 @@ public class QueryValidator {
         this(new File(queryDirectory));
     }
 
+    /**
+     * Logger
+     */
     private static final Logger LOGGER = LoggerFactory.getLogger(QueryValidator.class);
 
     private File queryDirectory;
@@ -214,12 +217,13 @@ public class QueryValidator {
 
     /**
      * This method will override the current set.
-     * @return Values for set.
+     * @param includeOnlyTestCase Values for set.
      */
     public void setIncludeOnlyTestCase(String... includeOnlyTestCase) {
         this.includeOnlyTestCase = new HashSet<>();
         this.includeOnlyTestCase.addAll(Arrays.stream(includeOnlyTestCase).toList());
     }
+
 
     public static void main(String[] args) throws Exception {
         QueryValidator validator = new QueryValidator(

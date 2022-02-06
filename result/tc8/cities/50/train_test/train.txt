@@ -1,0 +1,20 @@
+http://dbpedia.org/resource/Madaba	1
+http://dbpedia.org/resource/Yasuj	1
+http://dbpedia.org/resource/Xinxiang	1
+http://dbpedia.org/resource/Stillwater,_Oklahoma	1
+http://dbpedia.org/resource/Šiauliai	1
+http://dbpedia.org/resource/Vilonia,_Arkansas	1
+http://dbpedia.org/resource/Topeka,_Kansas	1
+http://dbpedia.org/resource/Cloquet,_Minnesota	1
+http://dbpedia.org/resource/Vienna	1
+http://dbpedia.org/resource/Cambridge	1
+http://dbpedia.org/resource/Waupun,_Wisconsin	0
+http://dbpedia.org/resource/Yichun,_Heilongjiang__Yichun__1	0
+http://dbpedia.org/resource/Tsuruga,_Fukui____1	0
+http://dbpedia.org/resource/Vabalninkas	0
+http://dbpedia.org/resource/Warba,_Minnesota	0
+http://dbpedia.org/resource/Yetter,_Iowa	0
+http://dbpedia.org/resource/Yreka,_California__Yreka,_California__1	0
+http://dbpedia.org/resource/Skikda	0
+http://dbpedia.org/resource/Sultan_Pur__Sultan_Pur__1	0
+http://dbpedia.org/resource/Centreville,_Illinois__Centreville,_Illinois__1	0

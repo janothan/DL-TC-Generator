@@ -1,0 +1,10 @@
+http://dbpedia.org/resource/Gracilicutes	1
+http://dbpedia.org/resource/Euryarchaeota	1
+http://dbpedia.org/resource/Vendobionta	1
+http://dbpedia.org/resource/Sphingobacteria_(phylum)	1
+http://dbpedia.org/resource/Crenarchaeota	1
+http://dbpedia.org/resource/Xastilia	0
+http://dbpedia.org/resource/×_Sophrolaelia	0
+http://dbpedia.org/resource/Napa_cabbage__Napa_cabbage__1	0
+http://dbpedia.org/resource/Zygonyx	0
+http://dbpedia.org/resource/Zorilispe_seriepunctata	0

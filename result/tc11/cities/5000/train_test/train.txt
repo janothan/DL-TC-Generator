@@ -1,0 +1,12 @@
+http://dbpedia.org/resource/Zion,_Illinois	1
+http://dbpedia.org/resource/Toronto,_Iowa	1
+http://dbpedia.org/resource/Ventnor_City,_New_Jersey	1
+http://dbpedia.org/resource/Sacramento,_Kentucky	1
+http://dbpedia.org/resource/Plevna,_Kansas	1
+http://dbpedia.org/resource/Scarborough,_Tobago	1
+http://dbpedia.org/resource/Zaria	0
+http://dbpedia.org/resource/Arab,_Alabama	0
+http://dbpedia.org/resource/Clifton,_Tennessee	0
+http://dbpedia.org/resource/Jamestown,_New_York	0
+http://dbpedia.org/resource/Jamshoro	0
+http://dbpedia.org/resource/Iğdır	0

@@ -1,0 +1,12 @@
+http://dbpedia.org/resource/Saltillo,_Mississippi	1
+http://dbpedia.org/resource/Ventnor_City,_New_Jersey	1
+http://dbpedia.org/resource/Trenton,_Georgia	1
+http://dbpedia.org/resource/Malvern,_Arkansas	1
+http://dbpedia.org/resource/Vienna,_Missouri	1
+http://dbpedia.org/resource/New_Bern,_North_Carolina	1
+http://dbpedia.org/resource/Yamagata,_Gifu____1	0
+http://dbpedia.org/resource/Montello,_Wisconsin__Montello__1	0
+http://dbpedia.org/resource/Sandusky,_Ohio__Sandusky,_Ohio__1	0
+http://dbpedia.org/resource/Wilson,_North_Carolina__Wilson,_North_Carolina__1	0
+http://dbpedia.org/resource/Żebbuġ	0
+http://dbpedia.org/resource/Pattran	0

@@ -1,0 +1,2 @@
+http://dbpedia.org/resource/Chromista	1
+http://dbpedia.org/resource/Streptomyces_griseocarneus	0

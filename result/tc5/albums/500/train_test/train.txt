@@ -1,0 +1,4 @@
+http://dbpedia.org/resource/Just_One_of_the_Guys__Just_One_of_the_Guys__1	1
+http://dbpedia.org/resource/Mona_Lisa_Smile__Mona_Lisa_Smile__1	1
+http://dbpedia.org/resource/The_Dirt_Band_(album)	0
+http://dbpedia.org/resource/Gigi_D'Agostino_(album)	0

@@ -1,0 +1,16 @@
+http://dbpedia.org/resource/New_York_(album)	1
+http://dbpedia.org/resource/The_Omen__The_Omen__1	1
+http://dbpedia.org/resource/New_York_EP	1
+http://dbpedia.org/resource/Batman:_Gotham_Knight__Batman:_Gotham_Knight__1	1
+http://dbpedia.org/resource/G-Force_(film)__G-Force__1	1
+http://dbpedia.org/resource/So_This_Is_Love_(film)__So_This_Is_Love__1	1
+http://dbpedia.org/resource/Twin_Peaks:_Fire_Walk_with_Me__Twin_Peaks:_Fire_Walk_with_Me__1	1
+http://dbpedia.org/resource/The_Stripes__The_Stripes__1	1
+http://dbpedia.org/resource/Blunted_in_the_Bomb_Shelter	0
+http://dbpedia.org/resource/Sweet_Beliefs	0
+http://dbpedia.org/resource/101_(album)	0
+http://dbpedia.org/resource/Agnez_Mo_(album)	0
+http://dbpedia.org/resource/Bulldozer_(EP)	0
+http://dbpedia.org/resource/Phil_Woods/Lew_Tabackin	0
+http://dbpedia.org/resource/Carousel_(Leila_K_album)	0
+http://dbpedia.org/resource/1995_(Screaming_Headless_Torsos_album)	0

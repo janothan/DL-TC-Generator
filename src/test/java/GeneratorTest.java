@@ -5,7 +5,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,6 +13,9 @@ import static org.junit.jupiter.api.Assertions.*;
 class GeneratorTest {
 
 
+    /**
+     * Logger
+     */
     private static final Logger LOGGER = LoggerFactory.getLogger(GeneratorTest.class);
 
     @Test
@@ -23,7 +25,6 @@ class GeneratorTest {
         try {
             Generator generator = new Generator(Util.loadFile("testQueries"), resultDir);
             generator.generateTestCases();
-            assertTrue(true);
             File resultFile = new File(resultDir, "tc1/cities/50/positives.txt");
             assertTrue(resultFile.exists());
             String content = Util.readUtf8(resultFile);
@@ -61,32 +62,11 @@ class GeneratorTest {
         assertTrue(content.contains("World!"));
     }
 
-
-
-
-
     @AfterAll
     static void cleanUp(){
-        delete("./result-dir");
-        delete("./result-dir2");
+        Util.delete("./result-dir");
+        Util.delete("./result-dir2");
     }
 
-    private static void delete(String filePath){
-        File file = new File(filePath);
-        if (!file.exists()){
-            return;
-        }
-        if (file.isFile()){
-            if(file.delete()){
-                LOGGER.info("Delete file: '" + file.getName() + "'");
-            }
-        }
-        try {
-            FileUtils.deleteDirectory(file);
-        } catch (IOException e) {
-            LOGGER.warn("An exception occurred while trying to remove directory: '" + file.getAbsolutePath() + "'");
-        }
-
-    }
 
 }

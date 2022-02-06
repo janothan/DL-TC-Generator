@@ -23,14 +23,39 @@ import java.util.stream.Collectors;
 public class Generator {
 
 
+    /**
+     * Logger
+     */
     private static final Logger LOGGER = LoggerFactory.getLogger(Generator.class);
+
+    /**
+     * URL of the dataset. By default, using the Uni Mannheim endpoint.
+     */
     static final String DATASET_URL = "http://dws-04.informatik.uni-mannheim.de:3030/dbpedia-all-2021-09";
 
+    /**
+     * Name of the positive query file.
+     */
     static final String POSITIVE_FILE_NAME = "positive_query.sparql";
+
+    /**
+     * Name of the negative query file.
+     */
     static final String NEGATIVE_FILE_NAME = "negative_query.sparql";
+
+    /**
+     * Name of the hard negative query file.
+     */
     static final String NEGATIVE_HARD_FILE_NAME = "negative_query_hard.sparql";
+
+    /**
+     * The default separator that is to be used.
+     */
     private static final String DEFAULT_SEPARATOR = "\t";
 
+    /**
+     * Directory where the queries reside.
+     */
     private File queryDirectory;
 
     /**
@@ -58,7 +83,12 @@ public class Generator {
      * The generated directory must not exist yet.
      */
     private File generatedDirectory;
+
+    /**
+     * SPARQL connection to be sued.
+     */
     private RDFConnection connection;
+
     private int[] sizes = {50, 500, 5000};
     private int timeoutInSeconds = 300;
 
@@ -399,7 +429,8 @@ public class Generator {
 
     /**
      * This method will override the current set.
-     * @return Values for set.
+     * @param includeOnlyTestCase List the (exclusive) test cases that shall be included in the evaluation, others
+     *                            will be discarded.
      */
     public void setIncludeOnlyTestCase(String... includeOnlyTestCase) {
         this.includeOnlyTestCase = new HashSet<>();
