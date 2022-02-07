@@ -1,5 +1,6 @@
 import org.apache.commons.cli.*;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,14 +15,21 @@ public class Main {
     public static void main(String[] args) {
         Options options = new Options();
         options.addOption("d", "directory", true,
-                "The test directory that shall be written. The directory must not exist yet.");
+                "The test directory that shall be written or analyzed (-a). " +
+                        "If the directory shall be written, it must not exist yet.");
+
         options.addOption(
                 Option.builder("q")
                         .longOpt("queries")
-                        .desc("Time out in seconds for queries.")
+                        .desc("The directory where the queries reside.")
                         .numberOfArgs(1)
                         .build()
         );
+
+        options.addOption(Option.builder("a")
+                .longOpt("analyze")
+                .hasArg(false)
+                .build());
 
         options.addOption("t", "timeout", true, "Time out in seconds for queries.");
         options.addOption(Option.builder("s")
@@ -58,6 +66,18 @@ public class Main {
             if (cmd.hasOption("h")) {
                 HelpFormatter formatter = new HelpFormatter();
                 formatter.printHelp("ant", options);
+                return;
+            }
+
+            if (cmd.hasOption("a")){
+                if(cmd.hasOption("d")){
+                    String directory = cmd.getOptionValue("d");
+                    ResultValidator rv = new ResultValidator(new File(directory));
+                    rv.validate();
+                } else {
+                    System.out.println("If you run the analyze function, you must also provide a directory " +
+                            "(-d <directory_to_be_analyzed>). ABORTING program.");
+                }
                 return;
             }
 
