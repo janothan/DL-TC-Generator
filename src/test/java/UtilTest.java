@@ -21,7 +21,7 @@ class UtilTest {
 
     @Test
     void readUtf8(){
-        File testfile = Util.loadFile("testfile.txt");
+        File testfile = Util.loadFile("testFile.txt");
         assertNotNull(testfile, "Test file 'testfile.txt' not found.");
         String result = Util.readUtf8(testfile);
         assertNotNull(result);
@@ -32,7 +32,7 @@ class UtilTest {
 
     @Test
     void readUtf8FileIntoSet(){
-        File testfile = Util.loadFile("testfile.txt");
+        File testfile = Util.loadFile("testFile.txt");
         assertNotNull(testfile, "Test file 'testfile.txt' not found.");
 
         Set<String> result = Util.readUtf8FileIntoSet(testfile);

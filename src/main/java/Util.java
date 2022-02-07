@@ -68,6 +68,10 @@ public class Util {
      * @return File in case of success, else null.
      */
     public static File loadFile(String fileName) {
+        if(fileName == null){
+            return null;
+        }
+
         try {
             URL resultUri = Util.class.getClassLoader().getResource(fileName);
             assertNotNull(resultUri);
