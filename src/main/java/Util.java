@@ -34,9 +34,17 @@ public class Util {
      * Reads the contents of a UTF-8 encoded file.
      *
      * @param fileToRead The file that shall be read.
-     * @return File contents.
+     * @return File contents. An empty string in case of an error.
      */
     static String readUtf8(File fileToRead) {
+        if (fileToRead == null){
+            LOGGER.error("The fileToRead is null. Returning an empty string.");
+            return "";
+        }
+        if(!fileToRead.exists()){
+            LOGGER.error("The provided fileToRead does not exist. Returning an empty string.");
+            return "";
+        }
         StringBuilder sb = new StringBuilder();
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(fileToRead),
                 StandardCharsets.UTF_8))) {
