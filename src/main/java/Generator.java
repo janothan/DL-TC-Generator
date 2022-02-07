@@ -56,7 +56,7 @@ public class Generator {
     /**
      * Directory where the queries reside.
      */
-    private File queryDirectory;
+    private final File queryDirectory;
 
     /**
      * If this set contains entries, the {@link Generator#generateTestCases()} method will only consider test case
@@ -77,19 +77,26 @@ public class Generator {
      */
     private String separator = DEFAULT_SEPARATOR;
 
+    /**
+     * Default train-test split ratio.
+     */
     private TrainTestSplit trainTestSplit = new TrainTestSplit(0.2, 0.8);
 
     /**
      * The generated directory must not exist yet.
      */
-    private File generatedDirectory;
+    private final File generatedDirectory;
 
     /**
      * SPARQL connection to be sued.
      */
-    private RDFConnection connection;
+    private final RDFConnection connection;
 
     private int[] sizes = {50, 500, 5000};
+
+    /**
+     * Default timeout in seconds
+     */
     private int timeoutInSeconds = 300;
 
     /**
@@ -124,6 +131,11 @@ public class Generator {
      * Generate the actual test cases.
      */
     public void generateTestCases() {
+        LOGGER.info("Starting test case generation.\nTimeout " + this.getTimeoutInSeconds() +
+                "\nTrain-Test Split: " + this.getTrainTestSplit().trainSplit() + "-" + this.getTrainTestSplit().testSplit() +
+                "\nQuery directory " + queryDirectory.getAbsolutePath() +
+                "\nDirectory to be written " + generatedDirectory.getAbsolutePath());
+
         generatedDirectory.mkdirs();
 
         for (File tcCollectionDirectory : queryDirectory.listFiles()) {

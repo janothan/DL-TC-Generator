@@ -15,6 +15,7 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * A class to check the queries and to calculate some statistics.
+ * Note that this class fires queries to the endpoint (must be accessible).
  */
 public class QueryValidator {
 
