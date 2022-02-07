@@ -69,10 +69,36 @@ public class Main {
                 return;
             }
 
+            int[] sizeArray = null;
+            if (cmd.hasOption("s")) {
+                String[] sValues = cmd.getOptionValues("s");
+                List<Integer> sizeList = new ArrayList<>();
+                if (sValues != null) {
+                    for (String sValue : sValues) {
+                        try {
+                            int individualSize = Integer.parseInt(sValue);
+                            if (individualSize < 1) {
+                                System.out.println("Sizes must be >=1. ABORTING program.");
+                                return;
+                            }
+                            sizeList.add(individualSize);
+                        } catch (NumberFormatException nfe) {
+                            System.out.println("A number format exception occurred while parsing the values for -s. " +
+                                    "ABORTING program.");
+                            return;
+                        }
+                    }
+                    sizeArray = sizeList.stream().mapToInt(i -> i).toArray();
+                }
+            }
+
             if (cmd.hasOption("a")){
                 if(cmd.hasOption("d")){
                     String directory = cmd.getOptionValue("d");
                     ResultValidator rv = new ResultValidator(new File(directory));
+                    if(sizeArray != null){
+                        rv.setSizeRestriction(sizeArray);
+                    }
                     rv.validate();
                 } else {
                     System.out.println("If you run the analyze function, you must also provide a directory " +
@@ -96,27 +122,8 @@ public class Main {
             }
             Generator generator = new Generator(queryDirectory, resultDirectory);
 
-            if (cmd.hasOption("s")) {
-                String[] sValues = cmd.getOptionValues("s");
-                List<Integer> sizeList = new ArrayList<>();
-                if (sValues != null) {
-                    for (String sValue : sValues) {
-                        try {
-                            int individualSize = Integer.parseInt(sValue);
-                            if (individualSize < 1) {
-                                System.out.println("Sizes must be >=1. ABORTING program.");
-                                return;
-                            }
-                            sizeList.add(individualSize);
-                        } catch (NumberFormatException nfe) {
-                            System.out.println("A number format exception occurred while parsing the values for -s. " +
-                                    "ABORTING program.");
-                            return;
-                        }
-                    }
-                    int[] sizeArray = sizeList.stream().mapToInt(i -> i).toArray();
-                    generator.setSizes(sizeArray);
-                }
+            if(sizeArray != null) {
+                generator.setSizes(sizeArray);
             }
 
             if (cmd.hasOption("t")) {

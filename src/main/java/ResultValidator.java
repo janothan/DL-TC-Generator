@@ -33,6 +33,8 @@ public class ResultValidator {
      */
     private static final Logger LOGGER = LoggerFactory.getLogger(ResultValidator.class);
 
+    private Set<Integer> sizeRestriction = null;
+
     public boolean validate() {
         Map<String, List<String>> warnings = new HashMap<>();
         Map<String, List<String>> errors = new HashMap<>();
@@ -65,6 +67,12 @@ public class ResultValidator {
                 for (File quantDirectory : quantDirectoryFiles) {
                     String quantName = quantDirectory.getName();
                     int idealSize = Integer.parseInt(quantName);
+
+                    if (sizeRestriction != null && sizeRestriction.size() > 0){
+                        if(!sizeRestriction.contains(idealSize)){
+                            continue;
+                        }
+                    }
 
                     String tcIdentifier = collectionName + "-" + testCaseName + "-" + quantName;
 
@@ -192,8 +200,25 @@ public class ResultValidator {
         }
     }
 
+    public Set<Integer> getSizeRestriction() {
+        return sizeRestriction;
+    }
+
+    public void setSizeRestriction(int... sizes){
+        Set<Integer> result = new HashSet<>();
+        for(int i : sizes){
+            result.add(i);
+        }
+        setSizeRestriction(result);
+    }
+
+    public void setSizeRestriction(Set<Integer> sizeRestriction) {
+        this.sizeRestriction = sizeRestriction;
+    }
+
     public static void main(String[] args) {
         ResultValidator validator = new ResultValidator("./result");
+        validator.setSizeRestriction(5000);
         if(validator.validate()){
             System.out.println("Validation completed. No errors.");
         } else {
