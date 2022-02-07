@@ -20,7 +20,6 @@ public class Main {
                         .longOpt("queries")
                         .desc("Time out in seconds for queries.")
                         .numberOfArgs(1)
-                        .required()
                         .build()
         );
 
@@ -42,6 +41,8 @@ public class Main {
         options.addOption(Option.builder("tc")
                 .longOpt("tc_group")
                 .desc("The test case group such as 'cities'; space separated.")
+                .hasArgs()
+                .valueSeparator(' ')
                 .build()
         );
         options.addOption(Option.builder("h")
@@ -70,16 +71,19 @@ public class Main {
             }
 
             String resultDirectory = cmd.getOptionValue("d", DEFAULT_RESULT_DIR);
+            if (resultDirectory.equals(DEFAULT_RESULT_DIR)) {
+                System.out.println("Using default result directory for the query results: " + DEFAULT_RESULT_DIR);
+            }
             Generator generator = new Generator(queryDirectory, resultDirectory);
 
-            if(cmd.hasOption("s")){
+            if (cmd.hasOption("s")) {
                 String[] sValues = cmd.getOptionValues("s");
                 List<Integer> sizeList = new ArrayList<>();
-                if(sValues != null){
-                    for(String sValue : sValues) {
+                if (sValues != null) {
+                    for (String sValue : sValues) {
                         try {
                             int individualSize = Integer.parseInt(sValue);
-                            if(individualSize < 1){
+                            if (individualSize < 1) {
                                 System.out.println("Sizes must be >=1. ABORTING program.");
                                 return;
                             }
@@ -90,22 +94,35 @@ public class Main {
                             return;
                         }
                     }
-                    int[] sizeArray = sizeList.stream().mapToInt(i->i).toArray();
+                    int[] sizeArray = sizeList.stream().mapToInt(i -> i).toArray();
                     generator.setSizes(sizeArray);
                 }
             }
 
-            if(cmd.hasOption("t")){
+            if (cmd.hasOption("t")) {
                 try {
                     int timeoutInSeconds = Integer.parseInt(cmd.getOptionValue("t"));
                     generator.setTimeoutInSeconds(timeoutInSeconds);
-                } catch (NumberFormatException nfe){
+                } catch (NumberFormatException nfe) {
                     System.out.println("A number format exception occurred while parsing the values for -t. " +
                             "ABORTING program.");
                     return;
                 }
             }
 
+            if (cmd.hasOption("tcc")){
+                String[] tccValues = cmd.getOptionValues("tcc");
+                if(tccValues != null && tccValues.length > 0){
+                    generator.setIncludeOnlyCollection(tccValues);
+                }
+            }
+
+            if (cmd.hasOption("tc")){
+                String [] tcgValues = cmd.getOptionValues("tc");
+                if(tcgValues != null && tcgValues.length > 0){
+                    generator.setIncludeOnlyTestCase(tcgValues);
+                }
+            }
 
             generator.generateTestCases();
             System.out.println("Generation completed.");
