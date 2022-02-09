@@ -36,6 +36,8 @@ public class ResultValidator {
     private Set<Integer> sizeRestriction = null;
 
     public boolean validate() {
+
+        boolean validationResult = true;
         Map<String, List<String>> warnings = new HashMap<>();
         Map<String, List<String>> errors = new HashMap<>();
 
@@ -115,7 +117,7 @@ public class ResultValidator {
                                     + negatives.getAbsolutePath();
                             LOGGER.error(errorMessage);
                             addItem(errors, tcIdentifier, errorMessage);
-                            return false;
+                            validationResult = false;
                         }
                     }
 
@@ -126,7 +128,7 @@ public class ResultValidator {
                                     + negatives.getAbsolutePath();
                             LOGGER.error(errorMessage);
                             addItem(errors, tcIdentifier, errorMessage);
-                            return false;
+                            validationResult = false;
                         }
                     }
 
@@ -135,6 +137,10 @@ public class ResultValidator {
                     String positivesMessage = "# Positives in " + tcIdentifier + ": " + positivesSize;
                     if (positivesSize >= idealSize) {
                         LOGGER.info(positivesMessage);
+                    } else if(positivesSize == 0) {
+                        validationResult = false;
+                        LOGGER.error(positivesMessage);
+                        addItem(errors, tcIdentifier, positivesMessage);
                     } else {
                         LOGGER.warn(positivesMessage);
                         addItem(warnings, tcIdentifier, positivesMessage);
@@ -145,6 +151,10 @@ public class ResultValidator {
                     String negativesMessage = "# Negatives in " + tcIdentifier + ": " + negativesSize;
                     if (negativesSize >= idealSize) {
                         LOGGER.info(negativesMessage);
+                    } else if (negativesSize == 0) {
+                        validationResult = false;
+                        LOGGER.error(negativesMessage);
+                        addItem(errors, tcIdentifier, negativesMessage);
                     } else {
                         LOGGER.warn(negativesMessage);
                         addItem(warnings, tcIdentifier, negativesMessage);
@@ -155,6 +165,10 @@ public class ResultValidator {
                         String hnMessage = "# Hard Negatives in " + tcIdentifier + ": " + hardNegativesSize;
                         if (hardNegativesSize >= idealSize) {
                             LOGGER.info(hnMessage);
+                        } else if (hardNegativesSize == 0){
+                            validationResult = false;
+                            LOGGER.error(hnMessage);
+                            addItem(errors, tcIdentifier, hnMessage);
                         } else {
                             LOGGER.warn(hnMessage);
                             addItem(warnings, tcIdentifier, hnMessage);
@@ -168,7 +182,7 @@ public class ResultValidator {
         if (warnings.size() > 0) {
             StringBuilder sb = new StringBuilder();
             for (Map.Entry<String, List<String>> entry : warnings.entrySet()) {
-                sb.append("⚠️").append(entry.getKey()).append("\n");
+                sb.append("⚠️ ").append(entry.getKey()).append("\n");
                 for (String value : entry.getValue()) {
                     sb.append("\t").append(value).append("\n");
                 }
@@ -179,7 +193,7 @@ public class ResultValidator {
         if (errors.size() > 0) {
             StringBuilder sb = new StringBuilder();
             for (Map.Entry<String, List<String>> entry : errors.entrySet()) {
-                sb.append("⛔️️").append(entry.getKey()).append("\n");
+                sb.append("⛔️️ ").append(entry.getKey()).append("\n");
                 for (String value : entry.getValue()) {
                     sb.append("\t").append(value).append("\n");
                 }
@@ -187,7 +201,7 @@ public class ResultValidator {
             LOGGER.error("The following errors occurred (" + errors.size() + "):\n" + sb);
         }
 
-        return true;
+        return validationResult;
     }
 
     private static void addItem(Map<String, List<String>> map, String key, String value){
@@ -218,7 +232,7 @@ public class ResultValidator {
 
     public static void main(String[] args) {
         ResultValidator validator = new ResultValidator("./result");
-        validator.setSizeRestriction(5000);
+        validator.setSizeRestriction(500);
         if(validator.validate()){
             System.out.println("Validation completed. No errors.");
         } else {

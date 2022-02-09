@@ -1,2 +1,2 @@
-http://dbpedia.org/resource/Chromista	1
-http://dbpedia.org/resource/Zhihengliuella	0
+http://dbpedia.org/resource/Vendobionta	1
+http://dbpedia.org/resource/Zonitoschema_krombeini	0

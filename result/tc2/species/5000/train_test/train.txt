@@ -1,2 +1,2 @@
-http://dbpedia.org/resource/Chromista	1
-http://dbpedia.org/resource/Streptomyces_griseocarneus	0
+http://dbpedia.org/resource/Vendobionta	1
+http://dbpedia.org/resource/Isochariesthes_furva	0

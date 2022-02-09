@@ -1,8 +1,8 @@
-http://dbpedia.org/resource/Big_Red_Car__Here_Comes_the_Big_Red_Car__1	1
 http://dbpedia.org/resource/G-Force_(film)__G-Force__1	1
 http://dbpedia.org/resource/Wiggly,_Wiggly_Christmas__!__1	1
 http://dbpedia.org/resource/Tubelight_(2017_Hindi_film)__Tubelight__1	1
-http://dbpedia.org/resource/Very_Young_Girls__Very_Young_Girls__1	0
-http://dbpedia.org/resource/Urban_Cowboy__Urban_Cowboy__1	0
-http://dbpedia.org/resource/The_Angry_Birds_Movie_2__The_Angry_Birds_Movie_2__1	0
-http://dbpedia.org/resource/Captain_Video_and_His_Video_Rangers__Captain_Video_3_Uploaded_By_Yugi_Moto__1	0
+http://dbpedia.org/resource/Big_Red_Car__Here_Comes_the_Big_Red_Car__1	1
+http://dbpedia.org/resource/Wehe,_wenn_er_losgelassen	0
+http://dbpedia.org/resource/Werewolf_of_London__Werewolf_of_London__1	0
+http://dbpedia.org/resource/A_Summer_Story__A_Summer_Story__1	0
+http://dbpedia.org/resource/Home_Along_Da_Riles__2__1	0

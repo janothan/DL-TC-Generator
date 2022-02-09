@@ -1,8 +1,0 @@
-http://dbpedia.org/resource/Luna_Sea_3D_in_Los_Angeles__Luna_Sea_3D_in_Los_Angeles__1	1
-http://dbpedia.org/resource/Tubelight_(2017_Hindi_film)__Tubelight__1	1
-http://dbpedia.org/resource/G-Force_(film)__G-Force__1	1
-http://dbpedia.org/resource/Wiggly,_Wiggly_Christmas__!__1	1
-http://dbpedia.org/resource/The_Voyage_(1974_film)	0
-http://dbpedia.org/resource/Cinema_16:_British_Short_Films	0
-http://dbpedia.org/resource/Autour_d'une_cabine	0
-http://dbpedia.org/resource/To_the_Limit_(2007_film)	0
