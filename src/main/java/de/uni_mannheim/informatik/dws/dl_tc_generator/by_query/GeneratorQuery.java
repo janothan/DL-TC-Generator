@@ -1,5 +1,6 @@
 package de.uni_mannheim.informatik.dws.dl_tc_generator.by_query;
 
+import de.uni_mannheim.informatik.dws.dl_tc_generator.Defaults;
 import de.uni_mannheim.informatik.dws.dl_tc_generator.IGenerator;
 import de.uni_mannheim.informatik.dws.dl_tc_generator.TrainTestSplit;
 import de.uni_mannheim.informatik.dws.dl_tc_generator.Util;
@@ -71,19 +72,14 @@ public class GeneratorQuery implements IGenerator {
     private Set<String> includeOnlyTestCase;
 
     /**
-     * The default separator that is to be used.
-     */
-    private static final String DEFAULT_SEPARATOR = "\t";
-
-    /**
      * The separator for the data files (e.g. train.txt).
      */
-    private String separator = DEFAULT_SEPARATOR;
+    private String separator = Defaults.CSV_SEPARATOR;
 
     /**
-     * Default train-test split ratio.
+     * Train-test split ratio.
      */
-    private TrainTestSplit trainTestSplit = new TrainTestSplit(0.2, 0.8);
+    private TrainTestSplit trainTestSplit = Defaults.TRAIN_TEST_SPLIT;
 
     /**
      * The generated directory must not exist yet.
@@ -98,7 +94,7 @@ public class GeneratorQuery implements IGenerator {
     /**
      * The sizes of the test cases.
      */
-    private int[] sizes = {50, 500, 5000};
+    private int[] sizes = Defaults.SIZES;
 
     /**
      * Default timeout in seconds
@@ -146,7 +142,13 @@ public class GeneratorQuery implements IGenerator {
             LOGGER.info("Created directory: " + generatedDirectory.getAbsolutePath());
         }
 
-        for (File tcCollectionDirectory : queryDirectory.listFiles()) {
+        File[] queryDirectoryFiles = queryDirectory.listFiles();
+        if(queryDirectoryFiles == null || queryDirectoryFiles.length == 0){
+            LOGGER.error("The provided query directory is empty. ABORTING generation.");
+            return;
+        }
+
+        for (File tcCollectionDirectory : queryDirectoryFiles) {
 
             if (includeOnlyCollection != null && includeOnlyCollection.size() > 0) {
                 if (!includeOnlyCollection.contains(tcCollectionDirectory.getName())) {
@@ -320,7 +322,8 @@ public class GeneratorQuery implements IGenerator {
             LOGGER.error("The provided query directory is not a directory. ABORTING program.");
             return false;
         }
-        if (queryDirectory.listFiles() == null || queryDirectory.listFiles().length == 0) {
+        File[] queryDirectoryFiles = queryDirectory.listFiles();
+        if (queryDirectoryFiles == null || queryDirectoryFiles.length == 0) {
             LOGGER.error("The provided query directory is empty. ABORTING program.");
             return false;
         }

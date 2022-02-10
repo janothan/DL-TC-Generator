@@ -1,5 +1,6 @@
 package de.uni_mannheim.informatik.dws.dl_tc_generator.synthetic;
 
+import de.uni_mannheim.informatik.dws.dl_tc_generator.Defaults;
 import de.uni_mannheim.informatik.dws.dl_tc_generator.TrainTestSplit;
 import de.uni_mannheim.informatik.dws.dl_tc_generator.Util;
 import de.uni_mannheim.informatik.dws.jrdf2vec.walk_generation.data_structures.Triple;
@@ -47,27 +48,41 @@ public class Tc01SyntheticGenerator implements ISyntheticTcGenerator {
     private final File directory;
 
     /**
-     * The default separator that is to be used.
-     */
-    private static final String DEFAULT_SEPARATOR = "\t";
-
-    /**
      * The separator for the data files (e.g. train.txt).
      */
-    String separator = DEFAULT_SEPARATOR;
+    String separator = Defaults.CSV_SEPARATOR;
 
-    int[] sizes = new int[]{50, 500, 5000};
+    public static final int[] DEFAULT_SIZES = new int[]{50, 500, 5000};
+
+    /**
+     * Size groups in which the synthetic test case shall appear.
+     */
+    int[] sizes;
 
     /**
      * Default train-test split ratio.
      */
-    private TrainTestSplit trainTestSplit = new TrainTestSplit(0.2, 0.8);
+    private TrainTestSplit trainTestSplit = Defaults.TRAIN_TEST_SPLIT;
 
-    public Tc01SyntheticGenerator(File directory){
+    /**
+     * Default Constructor
+     * @param directory The directory to be created. The directory must not exist yet.
+     * @param sizes The sizes to be evaluated.
+     */
+    public Tc01SyntheticGenerator(File directory, int[] sizes){
         positives = new HashSet<>();
         negatives = new HashSet<>();
         graph = new TripleDataSetMemory();
         this.directory = directory;
+        this.sizes = sizes;
+    }
+
+    /**
+     * Convenience Constructor.
+     * @param directory The directory to be created. The directory must not exist yet.
+     */
+    public Tc01SyntheticGenerator(File directory){
+        this(directory, DEFAULT_SIZES);
     }
 
     /**
@@ -195,7 +210,6 @@ public class Tc01SyntheticGenerator implements ISyntheticTcGenerator {
         } catch (IOException e) {
             LOGGER.error("An error occurred while writing the file.", e);
         }
-        return;
     }
 
 

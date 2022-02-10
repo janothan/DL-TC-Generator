@@ -40,8 +40,6 @@ class Tc01SyntheticGeneratorTest {
         assertTrue(testFile.exists() && testFile.isFile());
     }
 
-
-
     @AfterAll
     public static void cleanUp(){
         Util.delete(TC01_FILE_STR);
