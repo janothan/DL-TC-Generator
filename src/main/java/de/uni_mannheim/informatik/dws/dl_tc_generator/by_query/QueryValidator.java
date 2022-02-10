@@ -1,3 +1,6 @@
+package de.uni_mannheim.informatik.dws.dl_tc_generator.by_query;
+
+import de.uni_mannheim.informatik.dws.dl_tc_generator.Util;
 import org.apache.jena.query.QueryExecution;
 import org.apache.jena.query.QueryParseException;
 import org.apache.jena.query.QuerySolution;
@@ -23,7 +26,7 @@ public class QueryValidator {
     public QueryValidator(File queryDirectory){
         this.queryDirectory = queryDirectory;
         // must be initialized here since used in multiple methods
-        connection = RDFConnection.connect(Generator.DATASET_URL);
+        connection = RDFConnection.connect(GeneratorQuery.DATASET_URL);
     }
 
     public QueryValidator(String queryDirectory){
@@ -100,9 +103,9 @@ public class QueryValidator {
 
                 sb.append(collectionName).append("-").append(tcName).append("\n");
 
-                File positiveQueryFile = new File(tcDirectory, Generator.POSITIVE_FILE_NAME);
-                File negativeQueryFile = new File(tcDirectory, Generator.NEGATIVE_FILE_NAME);
-                File negativeHardQueryFile = new File(tcDirectory, Generator.NEGATIVE_HARD_FILE_NAME);
+                File positiveQueryFile = new File(tcDirectory, GeneratorQuery.POSITIVE_FILE_NAME);
+                File negativeQueryFile = new File(tcDirectory, GeneratorQuery.NEGATIVE_FILE_NAME);
+                File negativeHardQueryFile = new File(tcDirectory, GeneratorQuery.NEGATIVE_HARD_FILE_NAME);
 
                 if(positiveQueryFile.exists()){
                     int count = getQueryCounts(positiveQueryFile);

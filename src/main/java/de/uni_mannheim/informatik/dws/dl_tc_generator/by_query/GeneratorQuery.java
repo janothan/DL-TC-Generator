@@ -1,3 +1,8 @@
+package de.uni_mannheim.informatik.dws.dl_tc_generator.by_query;
+
+import de.uni_mannheim.informatik.dws.dl_tc_generator.IGenerator;
+import de.uni_mannheim.informatik.dws.dl_tc_generator.TrainTestSplit;
+import de.uni_mannheim.informatik.dws.dl_tc_generator.Util;
 import org.apache.jena.query.*;
 import org.apache.jena.rdf.model.Literal;
 import org.apache.jena.rdfconnection.RDFConnection;
@@ -6,8 +11,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.*;
-import java.net.http.HttpTimeoutException;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
@@ -20,13 +23,13 @@ import java.util.stream.Collectors;
  *     <li></li>
  * </ul>
  */
-public class Generator {
+public class GeneratorQuery implements IGenerator {
 
 
     /**
      * Logger
      */
-    private static final Logger LOGGER = LoggerFactory.getLogger(Generator.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(GeneratorQuery.class);
 
     /**
      * URL of the dataset. By default, using the Uni Mannheim endpoint.
@@ -49,28 +52,28 @@ public class Generator {
     static final String NEGATIVE_HARD_FILE_NAME = "negative_query_hard.sparql";
 
     /**
-     * The default separator that is to be used.
-     */
-    private static final String DEFAULT_SEPARATOR = "\t";
-
-    /**
      * Directory where the queries reside.
      */
     private final File queryDirectory;
 
     /**
-     * If this set contains entries, the {@link Generator#generateTestCases()} method will only consider test case
+     * If this set contains entries, the {@link GeneratorQuery#generateTestCases()} method will only consider test case
      * collections (i.e., directories) with that name - for example, if there are tc1, tc2, ... and the set contains
      * tc1 and tc2, then only the latter two will be generated.
      */
     private Set<String> includeOnlyCollection;
 
     /**
-     * If this set contains entries, the {@link Generator#generateTestCases()} method will only consider test cases
+     * If this set contains entries, the {@link GeneratorQuery#generateTestCases()} method will only consider test cases
      * with that name - for example, if there are cities, movies, people, ... and the set contains only "movies",
      * only the test cases named "movies" will be generated.
      */
     private Set<String> includeOnlyTestCase;
+
+    /**
+     * The default separator that is to be used.
+     */
+    private static final String DEFAULT_SEPARATOR = "\t";
 
     /**
      * The separator for the data files (e.g. train.txt).
@@ -92,6 +95,9 @@ public class Generator {
      */
     private final RDFConnection connection;
 
+    /**
+     * The sizes of the test cases.
+     */
     private int[] sizes = {50, 500, 5000};
 
     /**
@@ -105,7 +111,7 @@ public class Generator {
      */
     private boolean isRandomizeResults = true;
 
-    public Generator(String queryDirectoryPath, String directoryToGeneratePath) {
+    public GeneratorQuery(String queryDirectoryPath, String directoryToGeneratePath) {
         this(new File(queryDirectoryPath), new File(directoryToGeneratePath));
     }
 
@@ -115,7 +121,7 @@ public class Generator {
      * @param queryDirectory      Directory containing query files.
      * @param directoryToGenerate Directory that shall be generated (must not exist yet).
      */
-    public Generator(File queryDirectory, File directoryToGenerate) {
+    public GeneratorQuery(File queryDirectory, File directoryToGenerate) {
         this.queryDirectory = queryDirectory;
         this.generatedDirectory = directoryToGenerate;
 
@@ -136,12 +142,14 @@ public class Generator {
                 "\nQuery directory " + queryDirectory.getAbsolutePath() +
                 "\nDirectory to be written " + generatedDirectory.getAbsolutePath());
 
-        generatedDirectory.mkdirs();
+        if(generatedDirectory.mkdirs()){
+            LOGGER.info("Created directory: " + generatedDirectory.getAbsolutePath());
+        }
 
         for (File tcCollectionDirectory : queryDirectory.listFiles()) {
 
-            if(includeOnlyCollection != null && includeOnlyCollection.size() > 0) {
-                if (!includeOnlyCollection.contains(tcCollectionDirectory.getName())){
+            if (includeOnlyCollection != null && includeOnlyCollection.size() > 0) {
+                if (!includeOnlyCollection.contains(tcCollectionDirectory.getName())) {
                     continue;
                 }
             }
@@ -152,15 +160,15 @@ public class Generator {
             }
 
             File[] collectionDirectoryFiles = tcCollectionDirectory.listFiles();
-            if(collectionDirectoryFiles == null || collectionDirectoryFiles.length == 0){
+            if (collectionDirectoryFiles == null || collectionDirectoryFiles.length == 0) {
                 LOGGER.info("Skipping empty directory: " + tcCollectionDirectory.getAbsolutePath());
                 continue;
             }
 
             for (File tcDirectory : collectionDirectoryFiles) {
 
-                if(includeOnlyTestCase != null && includeOnlyTestCase.size() > 0){
-                    if(!includeOnlyTestCase.contains(tcDirectory.getName())){
+                if (includeOnlyTestCase != null && includeOnlyTestCase.size() > 0) {
+                    if (!includeOnlyTestCase.contains(tcDirectory.getName())) {
                         continue;
                     }
                 }
@@ -198,8 +206,10 @@ public class Generator {
                             tcDirectory.getName(),
                             "" + size);
 
-                    if(!resultsDir.toFile().exists()){
-                        resultsDir.toFile().mkdirs();
+                    if (!resultsDir.toFile().exists()) {
+                        if(resultsDir.toFile().mkdirs()){
+                            LOGGER.info("Created directory " + resultsDir);
+                        }
                     }
 
                     // positives
@@ -207,118 +217,36 @@ public class Generator {
                     List<String> positives = getQueryResults(positiveQueryFile, size);
                     Path pathToWrite = Paths.get(resultsDir.toString(), "positives.txt");
                     File fileToWrite = pathToWrite.toFile();
-                    writeListToFile(fileToWrite, positives);
+                    Util.writeListToFile(fileToWrite, positives);
 
                     // negatives
                     LOGGER.info("Generating negatives.");
                     List<String> negatives = getQueryResults(negativeQueryFile, size);
                     pathToWrite = Paths.get(resultsDir.toString(), "negatives.txt");
                     fileToWrite = pathToWrite.toFile();
-                    writeListToFile(fileToWrite, negatives);
+                    Util.writeListToFile(fileToWrite, negatives);
 
                     // hard negatives
-                    if(negativeHardQueryFile.exists()) {
+                    boolean hasHardNegatives = negativeHardQueryFile.exists();
+                    if (hasHardNegatives) {
                         LOGGER.info("Generating hard negatives.");
                         List<String> hardNegatives = getQueryResults(negativeHardQueryFile, size);
                         pathToWrite = Paths.get(resultsDir.toString(), "negatives_hard.txt");
                         fileToWrite = pathToWrite.toFile();
-                        writeListToFile(fileToWrite, hardNegatives);
+                        Util.writeListToFile(fileToWrite, hardNegatives);
+                        Util.writeTrainTestFiles(positives, hardNegatives, resultsDir, trainTestSplit, separator,
+                                true);
                     }
 
-                    // let's write the train/test split
-                    int positivesSize = positives.size();
-                    int negativesSize = negatives.size();
-                    int minNumber = Math.min(positivesSize, negativesSize);
-                    if(minNumber != positivesSize || minNumber != negativesSize){
-                        LOGGER.warn("There are " + positivesSize + " positives and " + negativesSize + " negatives. " +
-                                "In order to obtain a balanced data set, only " + minNumber + " of each will be " +
-                                "used.");
-                    }
-                    double trainShare =
-                            trainTestSplit.trainSplit() / (trainTestSplit.testSplit() + trainTestSplit.trainSplit());
+                    Util.writeTrainTestFiles(positives, negatives, resultsDir, trainTestSplit, separator, false);
 
-                    int position = 0;
-
-                    // if position < switchToTest -> write train file!
-                    int switchToTest = (int) Math.floor(minNumber * trainShare);
-
-                    File trainTestDirectory = Paths.get(resultsDir.toString(), "train_test").toFile();
-                    if(trainTestDirectory.mkdirs()){
-                        LOGGER.info("Created directory '" + trainTestDirectory.getAbsolutePath() + "'.");
-                    }
-                    File trainFile = Paths.get(trainTestDirectory.getAbsolutePath(),
-                            "train.txt").toFile();
-                    File testFile = Paths.get(trainTestDirectory.getAbsolutePath(),
-                            "test.txt").toFile();
-
-                    try(
-                            OutputStreamWriter testWriter = new OutputStreamWriter(
-                                    new FileOutputStream(testFile), StandardCharsets.UTF_8);
-                            OutputStreamWriter trainWriter = new OutputStreamWriter(
-                                    new FileOutputStream(trainFile), StandardCharsets.UTF_8);
-                            )
-                    {
-                        // writing positives
-                        for(String uri : positives){
-                            if(position == minNumber){
-                                break;
-                            }
-                            if(position < switchToTest){
-                                // write to train file
-                                trainWriter.write(uri + separator + "1\n");
-                            } else {
-                                // write to test file
-                                testWriter.write(uri + separator + "1\n");
-                            }
-                            position++;
-                        }
-                        // writing negatives
-                        position = 0;
-                        for(String uri : negatives){
-                            if(position == minNumber){
-                                break;
-                            }
-                            if(position < switchToTest){
-                                // write to train file
-                                trainWriter.write(uri + separator + "0\n");
-                            } else {
-                                // write to test file
-                                testWriter.write(uri + separator + "0\n");
-                            }
-                            position++;
-                        }
-                    } catch (FileNotFoundException fnfe){
-                        LOGGER.error("File not found exception occurred.", fnfe);
-                    } catch (IOException e) {
-                        LOGGER.error("IOException occurred.", e);
-                    }
-
-                }
+                } // end of size loop
             }
         }
     }
 
-    /**
-     * Persisted in UTF-8.
-     *
-     * @param fileToWrite File that shall be written.
-     * @param listToWrite List that shall be written.
-     */
-    public static void writeListToFile(File fileToWrite, List<String> listToWrite) {
-        try (BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(fileToWrite), StandardCharsets.UTF_8))) {
-            for (String line : listToWrite) {
-                writer.write(line);
-                writer.write("\n");
-            }
-        } catch (FileNotFoundException fnfe) {
-            LOGGER.error(
-                    "An error occurred while trying to persist file '" + fileToWrite.getAbsolutePath() + "'.",
-                    fnfe);
-        } catch (IOException e) {
-            LOGGER.error("An IO exception occurred while trying to write file '" + fileToWrite.getAbsolutePath() +
-                    "'.", e);
-        }
-    }
+
+
 
     /**
      * Run a query given a file.
@@ -331,18 +259,39 @@ public class Generator {
     public List<String> getQueryResults(File file, int size) {
         String query = Util.readUtf8(file);
         query = query.replace("<number>", "" + size);
-        List<String> result = new ArrayList<>();
 
         // bringing some randomness to the results
         query = query.replace("LIMIT", "ORDER BY RAND() LIMIT");
+        List<String> result = getUrisFromQuery(query, file);
 
+        if(result == null){
+            LOGGER.error(
+                    """
+                    The query failed. A likely reason is the randomness function. Trying again without
+                    the randomness function.
+                    """);
+            query = query.replace("ORDER BY RAND() LIMIT", "LIMIT");
+            result = getUrisFromQuery(query, file);
+        }
+        return result;
+    }
+
+    /**
+     *
+     * @param query The query to be executed with no placeholders.
+     *
+     * @param file File from which the query was derived. Merely required for logging.
+     * @return In the case of success a List of String URIs. In the case of error null.
+     */
+    private List<String> getUrisFromQuery(String query, File file){
+        List<String> result = new ArrayList<>();
         QueryExecution qe;
         try {
-             qe = connection.query(query);
-        } catch (QueryParseException qpe){
+            qe = connection.query(query);
+        } catch (QueryParseException qpe) {
             LOGGER.error("The following query could not be parsed: \n" + query);
             LOGGER.error("The problematic query file: " + file.getAbsolutePath());
-            return result;
+            return null;
         }
 
         qe.setTimeout(timeoutInSeconds, TimeUnit.SECONDS);
@@ -355,8 +304,9 @@ public class Generator {
                 result.add(qs.getResource("?x").getURI());
             }
             qe.close();
-        } catch (QueryExceptionHTTP hte){
-            LOGGER.error("There was a query exception when running the query. Returning an empty list.", hte);
+        } catch (QueryExceptionHTTP hte) {
+            LOGGER.error("There was a query exception when running the query. Returning null.", hte);
+            return null;
         }
         return result;
     }
@@ -423,6 +373,7 @@ public class Generator {
 
     /**
      * This method will override the current set.
+     *
      * @param includeOnlyCollection Values for the set.
      */
     public void setIncludeOnlyCollection(String... includeOnlyCollection) {
@@ -441,6 +392,7 @@ public class Generator {
 
     /**
      * This method will override the current set.
+     *
      * @param includeOnlyTestCase List the (exclusive) test cases that shall be included in the evaluation, others
      *                            will be discarded.
      */

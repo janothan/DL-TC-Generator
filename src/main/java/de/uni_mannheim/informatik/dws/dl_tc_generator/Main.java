@@ -1,3 +1,6 @@
+package de.uni_mannheim.informatik.dws.dl_tc_generator;
+
+import de.uni_mannheim.informatik.dws.dl_tc_generator.by_query.GeneratorQuery;
 import org.apache.commons.cli.*;
 
 import java.io.File;
@@ -5,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Main class for command line.
+ * de.uni_mannheim.informatik.dws.dl_tc_generator.Main class for command line.
  */
 public class Main {
 
@@ -120,7 +123,7 @@ public class Main {
             if (resultDirectory.equals(DEFAULT_RESULT_DIR)) {
                 System.out.println("Using default result directory for the query results: " + DEFAULT_RESULT_DIR);
             }
-            Generator generator = new Generator(queryDirectory, resultDirectory);
+            GeneratorQuery generator = new GeneratorQuery(queryDirectory, resultDirectory);
 
             if(sizeArray != null) {
                 generator.setSizes(sizeArray);

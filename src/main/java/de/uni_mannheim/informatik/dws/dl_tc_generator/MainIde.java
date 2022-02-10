@@ -1,3 +1,6 @@
+package de.uni_mannheim.informatik.dws.dl_tc_generator;
+
+import de.uni_mannheim.informatik.dws.dl_tc_generator.by_query.GeneratorQuery;
 import org.apache.commons.io.FileUtils;
 
 import java.io.File;
@@ -18,7 +21,7 @@ public class MainIde {
         final String resultDir = "./result_for_testing";
         FileUtils.deleteDirectory(new File(resultDir));
         String queriesPath = MainIde.class.getResource("queries").getPath();
-        Generator generator = new Generator(queriesPath,resultDir);
+        GeneratorQuery generator = new GeneratorQuery(queriesPath,resultDir);
         generator.setSizes(new int[]{25, 50});
         generator.setIncludeOnlyCollection("tc1", "tc2");
         generator.setIncludeOnlyTestCase("cities", "people");
