@@ -40,6 +40,7 @@ public class GeneratorSynthetic implements IGenerator {
     public GeneratorSynthetic(File directoryToGenerate){
         this.generatedDirectory = directoryToGenerate;
         generatorSet = new HashSet<>();
+        // todo: sizes, separator, ... - have a unit test that compares defaults... or even one default
         generatorSet.add(new Tc01SyntheticGenerator(new File(generatedDirectory, "tc01")));
 
     }

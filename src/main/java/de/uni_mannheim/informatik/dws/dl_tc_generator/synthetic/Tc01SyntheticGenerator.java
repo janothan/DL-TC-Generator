@@ -114,13 +114,11 @@ public class Tc01SyntheticGenerator implements ISyntheticTcGenerator {
     }
 
     public Set<String> getNegatives(int number){
-        int currentNegatives = 0;
         for(Triple triple : graph.getAllObjectTriples()){
             if(!positives.contains(triple.subject)){
                 negatives.add(triple.subject);
-                currentNegatives++;
             }
-            if(currentNegatives == number){
+            if(negatives.size() == number){
                 return negatives;
             }
         }
