@@ -1,7 +1,7 @@
 PREFIX dbr: <http://dbpedia.org/resource/>
 PREFIX dbo: <http://dbpedia.org/ontology/>
 
-SELECT DISTINCT ?x ?r1 ?z ?r2 WHERE
+SELECT DISTINCT ?x WHERE
 {
     {
         ?x a dbo:Film .

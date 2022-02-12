@@ -70,18 +70,12 @@ class UtilTest {
 
         for (int i = 0; i < 1000; i++) {
             String drawValue = Util.randomDrawFromSet(set);
+            assertNotNull(drawValue);
             switch (drawValue) {
-                case "A":
-                    aCount++;
-                    break;
-                case "B":
-                    bCount++;
-                    break;
-                case "C":
-                    cCount++;
-                    break;
-                default:
-                    fail("Invalid value: " + drawValue);
+                case "A" -> aCount++;
+                case "B" -> bCount++;
+                case "C" -> cCount++;
+                default -> fail("Invalid value: " + drawValue);
             }
         }
         assertTrue(aCount > 0, "A was never drawn.");

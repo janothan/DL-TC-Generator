@@ -5,6 +5,7 @@ package de.uni_mannheim.informatik.dws.dl_tc_generator;
  */
 public class Defaults {
 
+
     public static final TrainTestSplit TRAIN_TEST_SPLIT = new TrainTestSplit(0.2, 0.8);
 
     /**
@@ -17,4 +18,8 @@ public class Defaults {
      */
     public static final int[] SIZES = {50, 500, 5000};
 
+    /**
+     * The maximum number of edges a synthetic graph may have.
+     */
+    public static final int NUMBER_OF_EDGES = 50;
 }

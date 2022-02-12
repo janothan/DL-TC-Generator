@@ -153,7 +153,7 @@
         <dependency>
             <groupId>de.uni-mannheim.informatik.dws</groupId>
             <artifactId>jrdf2vec</artifactId>
-            <version>1.1</version>
+            <version>1.2-SNAPSHOT</version>
             <exclusions>
             <exclusion>
                 <groupId>org.slf4j</groupId>

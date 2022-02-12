@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
+import java.nio.file.Paths;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -32,28 +33,31 @@ public class GeneratorSynthetic implements IGenerator {
      */
     private int[] sizes = Defaults.SIZES;
 
-    Set<ISyntheticTcGenerator> generatorSet;
+    Set<SyntheticGenerator> generatorSet;
 
-    public GeneratorSynthetic(File directoryToGenerate){
+    public GeneratorSynthetic(File directoryToGenerate) {
         this.generatedDirectory = directoryToGenerate;
         generatorSet = new HashSet<>();
-        generatorSet.add(new Tc01SyntheticGenerator(new File(generatedDirectory, "tc01")));
+        generatorSet.add(new Tc01SyntheticGenerator(
+                        Paths.get(generatedDirectory.getAbsolutePath(), "tc01", "synthetic").toFile()
+                )
+        );
 
         generatorSet.forEach(x -> x.setSizes(sizes));
         generatorSet.forEach(x -> x.setSeparator(separator));
     }
 
-    public GeneratorSynthetic(String directoryToGeneratePath){
+    public GeneratorSynthetic(String directoryToGeneratePath) {
         this(new File(directoryToGeneratePath));
     }
 
     @Override
     public void generateTestCases() {
         LOGGER.info("Starting test case generation.");
-        if(generatedDirectory.mkdirs()){
+        if (generatedDirectory.mkdirs()) {
             LOGGER.info("Created directory: " + generatedDirectory.getAbsolutePath());
         }
-        for(ISyntheticTcGenerator g : generatorSet){
+        for (SyntheticGenerator g : generatorSet) {
             g.generate();
         }
 

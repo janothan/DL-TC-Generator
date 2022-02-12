@@ -9,4 +9,4 @@ SELECT DISTINCT ?x WHERE
   	?x dbo:starring ?a2 .
   	?a2 a dbo:Artist .
   	FILTER ( ?a1 != ?a2 ) .
-}
+} LIMIT <number>

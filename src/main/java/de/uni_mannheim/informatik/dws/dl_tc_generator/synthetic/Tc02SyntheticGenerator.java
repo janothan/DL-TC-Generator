@@ -25,10 +25,10 @@ import static de.uni_mannheim.informatik.dws.jrdf2vec.util.Util.randomDrawFromSe
  * Positive: X<br/>
  * Named Nodes: -<br/>
  * Named Edges: E<br/>
- * Pattern: X E Y<br/>
+ * Pattern: Y E X<br/>
  * }
  */
-public class Tc01SyntheticGenerator extends SyntheticGenerator {
+public class Tc02SyntheticGenerator extends SyntheticGenerator {
 
 
     /**
@@ -36,36 +36,33 @@ public class Tc01SyntheticGenerator extends SyntheticGenerator {
      */
     private static final Logger LOGGER = LoggerFactory.getLogger(Tc01SyntheticGenerator.class);
 
-
     /**
      * Default Constructor
-     *
      * @param directory The directory to be created. The directory must not exist yet.
-     * @param sizes     The sizes to be evaluated.
+     * @param sizes The sizes to be evaluated.
      */
-    public Tc01SyntheticGenerator(File directory, int[] sizes) {
+    public Tc02SyntheticGenerator(File directory, int[] sizes){
         super(directory, sizes);
     }
 
     /**
      * Convenience Constructor.
-     *
      * @param directory The directory to be created. The directory must not exist yet.
      */
-    public Tc01SyntheticGenerator(File directory) {
-        super(directory, Defaults.SIZES);
+    public Tc02SyntheticGenerator(File directory){
+        super(directory);
     }
 
     /**
-     * Write the graph to the fileToBeWritten. This method also fills the {@link Tc01SyntheticGenerator#positives}.
-     *
+     * Write the graph to the fileToBeWritten. This method also fills the {@link SyntheticGenerator#positives}.
      * @param fileToBeWritten The file that shall be written (must not exist yet).
-     * @param totalNodes      The total number of nodes. The actual graph may not contain the full number.
+     * @param totalNodes The total number of nodes. The actual graph may not contain the full number.
      * @param nodesOfInterest The number of desired positives.
-     * @param totalEdges      The number of edges. The actual graph may not contain the full number.
+     * @param totalEdges The number of edges. The actual graph may not contain the full number.
      */
-    public void writeGraphAndSetPositives(File fileToBeWritten, int totalNodes, int nodesOfInterest, int totalEdges) {
-        if (fileToBeWritten.exists()) {
+    public void writeGraphAndSetPositives(File fileToBeWritten, int totalNodes, int nodesOfInterest, int totalEdges){
+
+        if(fileToBeWritten.exists()){
             LOGGER.error("The file to be written exists already. Aborting generation.");
             return;
         }
@@ -76,25 +73,23 @@ public class Tc01SyntheticGenerator extends SyntheticGenerator {
 
         try (BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(fileToBeWritten), StandardCharsets.UTF_8))) {
             while (positives.size() < nodesOfInterest) {
-                String s = randomDrawFromSet(nodeIds);
-                String p = randomDrawFromSet(edgeIds);
-                String o = randomDrawFromSet(nodeIds);
-                if (p.equals(targetEdge)) {
-                    positives.add(s);
+                Triple triple = generateTriple(nodeIds, edgeIds);
+                if(triple.predicate.equals(targetEdge)) {
+                    positives.add(triple.object);
                 }
-                writer.write(s + " " + p + " " + o + ". \n");
-                graph.addObjectTriple(new Triple(s, p, o));
+                writer.write(triple.subject + " " + triple.predicate + " " + triple.object + ". \n");
+                graph.addObjectTriple(triple);
             }
 
             // in some cases we end up with too few negatives, we generate additional negatives in this case
             int currentNegativesSize = getNegatives().size();
-            if (currentNegativesSize < nodesOfInterest) {
+            if(currentNegativesSize < nodesOfInterest){
                 LOGGER.warn("Insufficient amount of negatives. Creating negatives artificially.");
                 final int delta = nodesOfInterest - currentNegativesSize;
                 Set<String> newNodeIds = addAdditionalNodeIds(nodeIds, delta);
-                while (getNegatives().size() < nodesOfInterest) {
+                while(getNegatives().size() < nodesOfInterest){
                     String p = randomDrawFromSet(edgeIds);
-                    if (p.equals(targetEdge)) {
+                    if(p.equals(targetEdge)) {
                         continue;
                     }
                     String s = randomDrawFromSet(newNodeIds);
@@ -109,7 +104,6 @@ public class Tc01SyntheticGenerator extends SyntheticGenerator {
                     graph.addObjectTriple(new Triple(s2, p2, o));
                 }
             }
-
         } catch (IOException e) {
             LOGGER.error("An error occurred while writing the file.", e);
         }
@@ -117,7 +111,6 @@ public class Tc01SyntheticGenerator extends SyntheticGenerator {
 
     @Override
     String getTcId() {
-        return "TC01";
+        return "TC02";
     }
-
 }

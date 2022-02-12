@@ -13,4 +13,4 @@ SELECT DISTINCT ?x WHERE
     (
         ?y1 != ?y2
     )
-}
+} LIMIT <number>

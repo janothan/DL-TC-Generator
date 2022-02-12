@@ -1,6 +1,7 @@
 package de.uni_mannheim.informatik.dws.dl_tc_generator;
 
 import de.uni_mannheim.informatik.dws.dl_tc_generator.by_query.GeneratorQuery;
+import de.uni_mannheim.informatik.dws.dl_tc_generator.synthetic.GeneratorSynthetic;
 import org.apache.commons.io.FileUtils;
 
 import java.io.File;
@@ -17,14 +18,25 @@ public class MainIde {
      * @throws Exception Some exception.
      */
     public static void main(String[] args) throws Exception {
+        generateByQuery();
+        //generateSynthetic();
+    }
 
-        final String resultDir = "./result_for_testing";
+
+    private static void generateSynthetic() throws Exception {
+        GeneratorSynthetic generator = new GeneratorSynthetic("synthetic_results");
+        generator.generateTestCases();
+    }
+
+    private static void generateByQuery() throws Exception {
+        final String resultDir = "./result";
         FileUtils.deleteDirectory(new File(resultDir));
-        String queriesPath = MainIde.class.getResource("queries").getPath();
+        final String queriesPath = "/Users/janportisch/IdeaProjects/DL-TC-Generator/src/main/resources/queries";
+        //String queriesPath = MainIde.class.getResource("queries").getPath();
         GeneratorQuery generator = new GeneratorQuery(queriesPath,resultDir);
-        generator.setSizes(new int[]{25, 50});
-        generator.setIncludeOnlyCollection("tc1", "tc2");
-        generator.setIncludeOnlyTestCase("cities", "people");
+        generator.setSizes(Defaults.SIZES);
+        //generator.setIncludeOnlyCollection("tc1", "tc2");
+        //generator.setIncludeOnlyTestCase("cities", "people");
         generator.setTimeoutInSeconds(6000);
         generator.generateTestCases();
         System.out.println("DONE");

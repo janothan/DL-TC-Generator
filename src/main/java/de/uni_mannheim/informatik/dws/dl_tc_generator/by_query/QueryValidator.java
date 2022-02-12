@@ -23,13 +23,13 @@ import java.util.concurrent.TimeUnit;
 public class QueryValidator {
 
 
-    public QueryValidator(File queryDirectory){
+    public QueryValidator(File queryDirectory) {
         this.queryDirectory = queryDirectory;
         // must be initialized here since used in multiple methods
         connection = RDFConnection.connect(GeneratorQuery.DATASET_URL);
     }
 
-    public QueryValidator(String queryDirectory){
+    public QueryValidator(String queryDirectory) {
         this(new File(queryDirectory));
     }
 
@@ -38,8 +38,8 @@ public class QueryValidator {
      */
     private static final Logger LOGGER = LoggerFactory.getLogger(QueryValidator.class);
 
-    private File queryDirectory;
-    private RDFConnection connection;
+    private final File queryDirectory;
+    private final RDFConnection connection;
     private int timeoutInSeconds = 60;
 
     /**
@@ -56,11 +56,15 @@ public class QueryValidator {
      */
     private Set<String> includeOnlyTestCase;
 
-    public String calculateCountReport() {
-        StringBuffer sb = new StringBuffer();
+    public String calculateCountReport(boolean isRunCountQueries) {
+        StringBuilder sb = new StringBuilder();
 
-        for (File tcCollectionDirectory : queryDirectory.listFiles()) {
+        File[] queryDirectoryFiles = queryDirectory.listFiles();
+        if (queryDirectoryFiles == null) {
+            return "ERROR: The query directory does not contain anything.";
+        }
 
+        for (File tcCollectionDirectory : queryDirectoryFiles) {
             if (includeOnlyCollection != null && includeOnlyCollection.size() > 0) {
                 if (!includeOnlyCollection.contains(tcCollectionDirectory.getName())) {
                     continue;
@@ -107,34 +111,49 @@ public class QueryValidator {
                 File negativeQueryFile = new File(tcDirectory, GeneratorQuery.NEGATIVE_FILE_NAME);
                 File negativeHardQueryFile = new File(tcDirectory, GeneratorQuery.NEGATIVE_HARD_FILE_NAME);
 
-                if(positiveQueryFile.exists()){
-                    int count = getQueryCounts(positiveQueryFile);
-                    if(count >= 0) {
-                        sb.append("\t").append("# Positives: ").append(count).append("\n");
-                    } else {
-                        sb.append("\t").append("ERROR: Problem with positive query.").append("\n");
+                if (positiveQueryFile.exists()) {
+                    if(isRunCountQueries) {
+                        int count = getQueryCounts(positiveQueryFile);
+                        if (count >= 0) {
+                            sb.append("\t").append("# Positives: ").append(count).append("\n");
+                        } else {
+                            sb.append("\t").append("ERROR: Problem with positive query.").append("\n");
+                        }
+                    }
+                    if(!isLimitNumberOk(positiveQueryFile)){
+                        sb.append("\t").append("ERROR: LIMIT <number> missing in positive query.").append("\n");
                     }
                 } else {
                     sb.append("\t").append("ERROR: Positive query file not found.").append("\n");
                 }
 
-                if(negativeQueryFile.exists()){
-                    int count = getQueryCounts(negativeQueryFile);
-                    if(count >= 0) {
-                        sb.append("\t").append("# Negatives: ").append(count).append("\n");
-                    } else {
-                        sb.append("\t").append("ERROR: Problem with negative query.").append("\n");
+                if (negativeQueryFile.exists()) {
+                    if(isRunCountQueries) {
+                        int count = getQueryCounts(negativeQueryFile);
+                        if (count >= 0) {
+                            sb.append("\t").append("# Negatives: ").append(count).append("\n");
+                        } else {
+                            sb.append("\t").append("ERROR: Problem with negative query.").append("\n");
+                        }
+                    }
+                    if(!isLimitNumberOk(negativeQueryFile)){
+                        sb.append("\t").append("ERROR: LIMIT <number> missing in negative query.").append("\n");
                     }
                 } else {
                     sb.append("\t").append("ERROR: Negative query file not found.").append("\n");
                 }
 
-                if(negativeHardQueryFile.exists()){
-                    int count = getQueryCounts(negativeHardQueryFile);
-                    if(count >= 0) {
-                        sb.append("\t").append("# Hard Negatives: ").append(count).append("\n");
-                    } else {
-                        sb.append("\t").append("ERROR: Problem with hard negative query.").append("\n");
+                if (negativeHardQueryFile.exists()) {
+                    if(isRunCountQueries) {
+                        int count = getQueryCounts(negativeHardQueryFile);
+                        if (count >= 0) {
+                            sb.append("\t").append("# Hard Negatives: ").append(count).append("\n");
+                        } else {
+                            sb.append("\t").append("ERROR: Problem with hard negative query.").append("\n");
+                        }
+                    }
+                    if(!isLimitNumberOk(negativeHardQueryFile)){
+                        sb.append("\t").append("ERROR: LIMIT <number> missing in hard negative query.").append("\n");
                     }
                 } else {
                     sb.append("\t").append("WARN: Hard negative query file not found.").append("\n");
@@ -142,34 +161,57 @@ public class QueryValidator {
 
             }
         }
-
         return sb.toString();
     }
 
+    /**
+     * Checks whether the limit number statement appears in the query.
+     * @param file The query file to be checked.
+     * @return True if everything is ok, false if {@code LIMIT <number>} statement is missing.
+     */
+    static boolean isLimitNumberOk(File file){
+        String query = Util.readUtf8(file);
+        final String limitRegex = "LIMIT[\\s\\n\\r]*<number>";
+        String queryOld = query;
+        query = query.replaceAll(limitRegex, "");
+        if (query.equals(queryOld)) {
+            LOGGER.error("Missing 'LIMIT <number>' part in file: " + file.getAbsolutePath());
+            return false;
+        }
+        return true;
+    }
 
-    public int getQueryCounts(File file){
+    /**
+     * The method obtains the number of results of the provided query (whereby the query is provided via file).
+     *
+     * @param file The file containing the query.
+     * @return The number of results of the SPARQL query.
+     */
+    public int getQueryCounts(File file) {
         String query = Util.readUtf8(file);
         int result = -1;
 
-        final String limitPart = "LIMIT <number>";
-        if(query.contains(limitPart)){
-            query = query.replace(limitPart, "");
-        } else {
-            LOGGER.error("Missing " + limitPart + " in file: " + file.getAbsolutePath());
+        final String limitRegex = "LIMIT[\\s\\n\\r]*<number>";
+        String queryOld = query;
+        query = query.replaceAll(limitRegex, "");
+        if (query.equals(queryOld)) {
+            LOGGER.error("Missing 'LIMIT <number>' part in file: " + file.getAbsolutePath());
+            return result;
         }
 
-        final String selectPart = "DISTINCT ?x";
-        if(query.contains(selectPart)){
-            query = query.replace(selectPart, "(COUNT(?x) AS ?num)");
-        } else {
-            LOGGER.error("Missing " + selectPart + " in file: " + file.getAbsolutePath());
+        final String selectRegex = "DISTINCT[\\s\\r\\n]*\\?x";
+        queryOld = query;
+        query = query.replaceAll(selectRegex, "(COUNT(?x) AS ?num)");
+
+        if (queryOld.equals(query)) {
+            LOGGER.error("Missing 'DISTINCT ?x' part in file: " + file.getAbsolutePath());
             return result;
         }
 
         QueryExecution qe;
         try {
             qe = connection.query(query);
-        } catch (QueryParseException qpe){
+        } catch (QueryParseException qpe) {
             LOGGER.error("The following query could not be parsed: \n" + query);
             LOGGER.error("The problematic query file: " + file.getAbsolutePath());
             return result;
@@ -184,7 +226,7 @@ public class QueryValidator {
                 result = qs.getLiteral("?num").getInt();
             }
             qe.close();
-        } catch (QueryExceptionHTTP hte){
+        } catch (QueryExceptionHTTP hte) {
             LOGGER.error("There was a query exception when running the query. Returning an empty list.");
         }
         return result;
@@ -221,6 +263,7 @@ public class QueryValidator {
 
     /**
      * This method will override the current set.
+     *
      * @param includeOnlyTestCase Values for set.
      */
     public void setIncludeOnlyTestCase(String... includeOnlyTestCase) {
@@ -231,11 +274,11 @@ public class QueryValidator {
 
     public static void main(String[] args) throws Exception {
         QueryValidator validator = new QueryValidator(
-                new File(QueryValidator.class.getResource("queries").toURI()));
+                new File("/Users/janportisch/IdeaProjects/DL-TC-Generator/src/main/resources/queries"));
         validator.setTimeoutInSeconds(350);
-        validator.setIncludeOnlyCollection("tc5");
+        //validator.setIncludeOnlyCollection("tc5");
         //validator.setIncludeOnlyTestCase("people");
-        String report = validator.calculateCountReport();
+        String report = validator.calculateCountReport(false);
         System.out.println(report);
     }
 

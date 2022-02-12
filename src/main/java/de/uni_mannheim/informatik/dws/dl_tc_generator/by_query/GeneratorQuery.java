@@ -35,7 +35,7 @@ public class GeneratorQuery implements IGenerator {
     /**
      * URL of the dataset. By default, using the Uni Mannheim endpoint.
      */
-    static final String DATASET_URL = "http://dws-04.informatik.uni-mannheim.de:3030/dbpedia-all-2021-09";
+    public static final String DATASET_URL = "http://dws-04.informatik.uni-mannheim.de:3030/dbpedia-all-2021-09";
 
     /**
      * Name of the positive query file.
@@ -263,7 +263,10 @@ public class GeneratorQuery implements IGenerator {
         query = query.replace("<number>", "" + size);
 
         // bringing some randomness to the results
-        query = query.replace("LIMIT", "ORDER BY RAND() LIMIT");
+        query = query.replaceAll("}(?=[\\n\\s]*LIMIT)", "BIND(RAND() AS ?sortKey)\n} ORDER BY ?sortKey ");
+        if(!query.contains("?sortKey")){
+            LOGGER.error("The injection of the randomness component failed.");
+        }
         List<String> result = getUrisFromQuery(query, file);
 
         if(result == null){
@@ -279,9 +282,8 @@ public class GeneratorQuery implements IGenerator {
     }
 
     /**
-     *
+     * Run the specified query.
      * @param query The query to be executed with no placeholders.
-     *
      * @param file File from which the query was derived. Merely required for logging.
      * @return In the case of success a List of String URIs. In the case of error null.
      */
@@ -307,6 +309,7 @@ public class GeneratorQuery implements IGenerator {
             }
             qe.close();
         } catch (QueryExceptionHTTP hte) {
+            LOGGER.error("The following query led to an error:\n" + query);
             LOGGER.error("There was a query exception when running the query. Returning null.", hte);
             return null;
         }

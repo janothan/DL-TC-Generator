@@ -7,7 +7,7 @@ import java.io.File;
 import java.util.*;
 
 /**
- * A class to check the generated result (inconsistencies etc.).
+ * A class to check the generated results (inconsistencies etc.).
  */
 public class ResultValidator {
 
@@ -86,6 +86,7 @@ public class ResultValidator {
                                 quantDirectory.getAbsolutePath();
                         LOGGER.error(errorMessage);
                         addItem(errors, tcIdentifier, errorMessage);
+                        validationResult = false;
                         continue;
                     }
 
@@ -95,6 +96,7 @@ public class ResultValidator {
                                 quantDirectory.getAbsolutePath();
                         LOGGER.error(errorMessage);
                         addItem(errors, tcIdentifier, errorMessage);
+                        validationResult = false;
                         continue;
                     }
 
@@ -133,7 +135,6 @@ public class ResultValidator {
                             validationResult = false;
                         }
                     }
-
 
                     int positivesSize = positiveUris.size();
                     String positivesMessage = "# Positives in " + tcIdentifier + ": " + positivesSize;
@@ -206,6 +207,44 @@ public class ResultValidator {
         return validationResult;
     }
 
+    /**
+     * Parses the provided files and checks if there are duplicates.
+     * If there are no duplicates, true is returned.
+     * @param positives Positives file.
+     * @param negatives Negatives file.
+     * @return True, if there are no duplicates else false.
+     */
+    public static boolean isOverlapFree(File positives, File negatives) {
+        boolean validationResult = true;
+
+        Set<String> positiveUris = Util.readUtf8FileIntoSet(positives);
+        positiveUris.remove("");
+        Set<String> negativeUris = Util.readUtf8FileIntoSet(negatives);
+        negativeUris.remove("");
+
+        for (String negUri : negativeUris) {
+            if (positiveUris.contains(negUri) && !negUri.trim().equals("")) {
+                String errorMessage = "'" + negUri + "' is contained in the positive and in the negative file:\n"
+                        + positives.getAbsolutePath() + "\n"
+                        + negatives.getAbsolutePath();
+                LOGGER.error(errorMessage);
+                validationResult = false;
+            }
+        }
+
+        for (String posUri : positiveUris) {
+            if (negativeUris.contains(posUri) && !posUri.trim().equals("")) {
+                String errorMessage = "'" + posUri + "' is contained in the positive and in the negative file:\n"
+                        + positives.getAbsolutePath() + "\n"
+                        + negatives.getAbsolutePath();
+                LOGGER.error(errorMessage);
+                validationResult = false;
+            }
+        }
+
+        return validationResult;
+    }
+
     private static void addItem(Map<String, List<String>> map, String key, String value){
         if(map.get(key) == null){
             List<String> list = new ArrayList<>();
@@ -233,7 +272,7 @@ public class ResultValidator {
     }
 
     public static void main(String[] args) {
-        ResultValidator validator = new ResultValidator("./result");
+        ResultValidator validator = new ResultValidator("./results/dbpedia");
         validator.setSizeRestriction(500);
         if(validator.validate()){
             System.out.println("Validation completed. No errors.");

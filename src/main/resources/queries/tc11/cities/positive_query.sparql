@@ -9,4 +9,4 @@ SELECT DISTINCT ?x WHERE
   	?x dbo:namedAfter ?y2 .
   	?y2 a dbo:Place .
   FILTER (?y1 != ?y2 ) .
-}
+} LIMIT <number>

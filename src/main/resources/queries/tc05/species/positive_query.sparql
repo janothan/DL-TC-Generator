@@ -1,7 +1,7 @@
 PREFIX dbo: <http://dbpedia.org/ontology/>
 PREFIX dbr: <http://dbpedia.org/resource/>
 
-SELECT DISTINCT ?x ?r1 ?z ?r2 WHERE
+SELECT DISTINCT ?x WHERE
 {
     {
         ?x a dbo:Species .
