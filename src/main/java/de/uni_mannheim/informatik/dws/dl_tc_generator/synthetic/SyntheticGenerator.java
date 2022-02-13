@@ -17,6 +17,10 @@ import java.util.Set;
 
 import static de.uni_mannheim.informatik.dws.jrdf2vec.util.Util.randomDrawFromSet;
 
+/**
+ * Abstract super class for each individual test case synthetic generator.
+ * The overall coordination of generation is performed through {@link GeneratorSynthetic}.
+ */
 public abstract class SyntheticGenerator {
 
 
@@ -209,6 +213,19 @@ public abstract class SyntheticGenerator {
         String p = randomDrawFromSet(edgeIds);
         String o = randomDrawFromSet(nodeIds);
         return new Triple(s, p, o);
+    }
+
+    /**
+     * Generates a random triple.
+     * @param startNode Starting node, must be part of {@code nodeIds}.
+     * @param nodeIds Node IDs to draw from.
+     * @param edgeIds Edge IDs to draw from.
+     * @return Random triple
+     */
+    public static Triple generateTripleWithStartNode(String startNode, Set<String> nodeIds, Set<String> edgeIds){
+        String p = randomDrawFromSet(edgeIds);
+        String o = randomDrawFromSet(nodeIds);
+        return new Triple(startNode, p, o);
     }
 
     /**

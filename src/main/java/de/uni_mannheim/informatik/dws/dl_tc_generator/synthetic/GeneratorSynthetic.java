@@ -10,6 +10,10 @@ import java.nio.file.Paths;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * Generator coordinating the generation of all synthetic test cases.
+ * For the individual test case generation, see {@link SyntheticGenerator} and its children.
+ */
 public class GeneratorSynthetic implements IGenerator {
 
 
@@ -40,6 +44,22 @@ public class GeneratorSynthetic implements IGenerator {
         generatorSet = new HashSet<>();
         generatorSet.add(new Tc01SyntheticGenerator(
                         Paths.get(generatedDirectory.getAbsolutePath(), "tc01", "synthetic").toFile()
+                )
+        );
+        generatorSet.add(new Tc02SyntheticGenerator(
+                        Paths.get(generatedDirectory.getAbsolutePath(), "tc02", "synthetic").toFile()
+                )
+        );
+        generatorSet.add(new Tc03SyntheticGenerator(
+                        Paths.get(generatedDirectory.getAbsolutePath(), "tc03", "synthetic").toFile()
+                )
+        );
+        generatorSet.add(new Tc04SyntheticGenerator(
+                        Paths.get(generatedDirectory.getAbsolutePath(), "tc04", "synthetic").toFile()
+                )
+        );
+        generatorSet.add(new Tc05SyntheticGenerator(
+                        Paths.get(generatedDirectory.getAbsolutePath(), "tc05", "synthetic").toFile()
                 )
         );
 

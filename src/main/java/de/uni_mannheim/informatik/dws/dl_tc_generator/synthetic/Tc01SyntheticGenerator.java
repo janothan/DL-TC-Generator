@@ -84,14 +84,12 @@ public class Tc01SyntheticGenerator extends SyntheticGenerator {
 
         try (BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(fileToBeWritten), StandardCharsets.UTF_8))) {
             while (positives.size() < nodesOfInterest) {
-                String s = randomDrawFromSet(nodeIds);
-                String p = randomDrawFromSet(edgeIds);
-                String o = randomDrawFromSet(nodeIds);
-                if (p.equals(targetEdge)) {
-                    positives.add(s);
+                Triple triple = generateTriple(nodeIds, edgeIds);
+                if (triple.predicate.equals(targetEdge)) {
+                    positives.add(triple.subject);
                 }
-                writer.write(s + " " + p + " " + o + ". \n");
-                graph.addObjectTriple(new Triple(s, p, o));
+                writer.write(triple.subject + " " + triple.predicate + " " + triple.object + ". \n");
+                graph.addObjectTriple(triple);
             }
 
             // in some cases we end up with too few negatives, we generate additional negatives in this case

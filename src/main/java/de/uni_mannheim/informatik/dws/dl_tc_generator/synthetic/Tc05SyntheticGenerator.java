@@ -8,26 +8,29 @@ import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.Set;
 
-
 /**
  * Test Case Form:
  * {@code
  * Positive: X<br/>
  * Named Nodes: N<br/>
  * Named Edges: -<br/>
- * Pattern: (X E N) OR (N E X) <br/>
+ * Pattern: (X E1 S E2 N) OR (N E1 S E2 X) <br/>
  * }
  */
-public class Tc04SyntheticGenerator extends SyntheticGenerator {
+public class Tc05SyntheticGenerator extends SyntheticGenerator {
 
 
     private static final Logger LOGGER = LoggerFactory.getLogger(Tc04SyntheticGenerator.class);
 
+    public Tc05SyntheticGenerator(File directory, int[] sizes) {
+        super(directory, sizes);
+    }
 
-    public Tc04SyntheticGenerator(File directory) {
+    public Tc05SyntheticGenerator(File directory) {
         super(directory);
     }
-    public Tc04SyntheticGenerator(String directory) {
+
+    public Tc05SyntheticGenerator(String directory) {
         super(directory);
     }
 
@@ -43,15 +46,20 @@ public class Tc04SyntheticGenerator extends SyntheticGenerator {
 
         try (BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(fileToBeWritten), StandardCharsets.UTF_8))) {
             while (positives.size() < nodesOfInterest) {
-                Triple triple = generateTriple(nodeIds, edgeIds);
-                if(triple.subject.equals(targetNode)) {
-                    positives.add(triple.object);
+                Triple triple1 = generateTriple(nodeIds, edgeIds);
+                Triple triple2 = generateTripleWithStartNode(triple1.object, nodeIds, edgeIds);
+
+                if(triple1.subject.equals(targetNode)){
+                    positives.add(triple2.object);
                 }
-                if(triple.object.equals(targetNode)){
-                    positives.add(triple.subject);
+                if(triple2.object.equals(targetNode)){
+                    positives.add(triple1.subject);
                 }
-                writer.write(triple.subject + " " + triple.predicate + " " + triple.object + ". \n");
-                graph.addObjectTriple(triple);
+
+                writer.write(triple1.subject + " " + triple1.predicate + " " + triple1.object + ". \n");
+                writer.write(triple2.subject + " " + triple2.predicate + " " + triple2.object + ". \n");
+                graph.addObjectTriple(triple1);
+                graph.addObjectTriple(triple2);
             }
         } catch (IOException e) {
             LOGGER.error("An error occurred while writing the file.", e);
@@ -60,6 +68,6 @@ public class Tc04SyntheticGenerator extends SyntheticGenerator {
 
     @Override
     String getTcId() {
-        return "TC04";
+        return "TC05";
     }
 }

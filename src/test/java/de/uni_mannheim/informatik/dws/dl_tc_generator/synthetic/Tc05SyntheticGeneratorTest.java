@@ -5,11 +5,12 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
+import static org.junit.jupiter.api.Assertions.*;
 
-class Tc04SyntheticGeneratorTest {
+class Tc05SyntheticGeneratorTest {
 
 
-    private static final String TC04_DIR = "./tc04-test-dir";
+    private static final String TC05_DIR = "./tc05-test-dir";
 
     @BeforeAll
     static void setUp(){
@@ -18,12 +19,18 @@ class Tc04SyntheticGeneratorTest {
 
     @Test
     void testGenerator(){
-        Tc04SyntheticGenerator generator = new Tc04SyntheticGenerator(TC04_DIR);
+        Tc05SyntheticGenerator generator = new Tc05SyntheticGenerator(TC05_DIR);
         SyntheticGeneratorTest.testGenerator(generator);
+    }
+
+    @Test
+    void getTcId() {
+        Tc05SyntheticGenerator generator = new Tc05SyntheticGenerator(TC05_DIR);
+        assertNotNull(generator.getTcId());
     }
 
     @AfterAll
     public static void tearDown(){
-        Util.delete(TC04_DIR);
+        Util.delete(TC05_DIR);
     }
 }
