@@ -46,32 +46,45 @@ class SyntheticGeneratorTest {
         }
     }
 
+    public static void testGenerator(SyntheticGenerator generator, int... sizes){
+        if(sizes == null || sizes.length == 0){
+            fail("Wrong sizes parameter. Must contain elements.");
+        }
+        generator.setSizes(sizes);
+        generator.generate();
+        File generatedDirectory = generator.getDirectory();
+        assertTrue(generatedDirectory.exists());
+        assertTrue(generatedDirectory.isDirectory());
+        File graphFile= new File(generatedDirectory, "graph.nt");
+        assertTrue(graphFile.exists());
+        assertTrue(graphFile.isFile());
+
+        for(int size : sizes) {
+            File posFile = Paths.get(generatedDirectory.getAbsolutePath(), "" + size, "positives.txt").toFile();
+            File negFile = Paths.get(generatedDirectory.getAbsolutePath(), "" + size, "negatives.txt").toFile();
+            assertTrue(isOverlapFree(posFile, negFile));
+
+            // test number of negative concepts:
+            List<String> negList = Util.readUtf8FileIntoList(negFile);
+            assertEquals(size, negList.size());
+
+            assertTrue(posFile.exists() && posFile.isFile());
+            assertTrue(negFile.exists() && negFile.isFile());
+            File ttFile = Paths.get(generatedDirectory.getAbsolutePath(), "" + size, "train_test").toFile();
+            assertTrue(ttFile.exists() && ttFile.isDirectory());
+            File trainFile = Paths.get(generatedDirectory.getAbsolutePath(), "" + size, "train_test", "train.txt").toFile();
+            assertTrue(trainFile.exists() && trainFile.isFile());
+            File testFile = Paths.get(generatedDirectory.getAbsolutePath(), "" + size, "train_test", "test.txt").toFile();
+            assertTrue(testFile.exists() && testFile.isFile());
+        }
+    }
+
     /**
      * Some assertions on the specified generator.
      * @param generator The generator to be tested.
      */
     public static void testGenerator(SyntheticGenerator generator){
-        generator.setSizes(new int[]{50, 100});
-        generator.generate();
-        File generatedDirectory = generator.getDirectory();
-        assertTrue(generatedDirectory.exists());
-        assertTrue(generatedDirectory.isDirectory());
-        File posFile = Paths.get(generatedDirectory.getAbsolutePath(), "100", "positives.txt").toFile();
-        File negFile = Paths.get(generatedDirectory.getAbsolutePath(), "100", "negatives.txt").toFile();
-        assertTrue(isOverlapFree(posFile, negFile));
-
-        // test number of negative concepts:
-        List<String> negList = Util.readUtf8FileIntoList(negFile);
-        assertEquals(100, negList.size());
-
-        assertTrue(posFile.exists() && posFile.isFile());
-        assertTrue(negFile.exists() && negFile.isFile());
-        File ttFile = Paths.get(generatedDirectory.getAbsolutePath(), "50", "train_test").toFile();
-        assertTrue(ttFile.exists() && ttFile.isDirectory());
-        File trainFile = Paths.get(generatedDirectory.getAbsolutePath(), "50", "train_test", "train.txt").toFile();
-        assertTrue(trainFile.exists() && trainFile.isFile());
-        File testFile = Paths.get(generatedDirectory.getAbsolutePath(), "100", "train_test", "test.txt").toFile();
-        assertTrue(testFile.exists() && testFile.isFile());
+        testGenerator(generator, 50, 100);
     }
 
     @Test

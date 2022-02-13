@@ -112,6 +112,11 @@ public abstract class SyntheticGenerator {
     int numberOfEdges = Defaults.NUMBER_OF_EDGES;
 
     /**
+     * The multiple of total nodes.
+     */
+    int totalNodesFactor = 5;
+
+    /**
      * Generate the test case.
      */
     public void generate(){
@@ -120,7 +125,9 @@ public abstract class SyntheticGenerator {
         }
 
         int nodesOfInterest = Arrays.stream(sizes).reduce(0, Integer::sum);
-        writeGraphAndSetPositives(new File(directory, "graph.nt"), 5 * nodesOfInterest, nodesOfInterest, numberOfEdges);
+
+        LOGGER.info("Writing graph for " + this.getTcId());
+        writeGraphAndSetPositives(new File(directory, "graph.nt"), totalNodesFactor * nodesOfInterest, nodesOfInterest, numberOfEdges);
 
         List<String> posList = positives.stream().toList();
         List<String> negList = getNegatives().stream().toList();
@@ -294,5 +301,17 @@ public abstract class SyntheticGenerator {
 
     public File getDirectory() {
         return directory;
+    }
+
+    public int getTotalNodesFactor() {
+        return totalNodesFactor;
+    }
+
+    public void setTotalNodesFactor(int totalNodesFactor) {
+        if(totalNodesFactor < 2){
+            LOGGER.error("The totalNodesFactor must be >= 2. Doing nothing.");
+            return;
+        }
+        this.totalNodesFactor = totalNodesFactor;
     }
 }
