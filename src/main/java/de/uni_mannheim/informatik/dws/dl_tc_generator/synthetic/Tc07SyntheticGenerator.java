@@ -21,7 +21,7 @@ import java.util.Set;
 public class Tc07SyntheticGenerator extends SyntheticGenerator{
 
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(Tc04SyntheticGenerator.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(Tc07SyntheticGenerator.class);
 
     public Tc07SyntheticGenerator(File directory, int[] sizes) {
         super(directory, sizes);

@@ -1,19 +1,12 @@
 package de.uni_mannheim.informatik.dws.dl_tc_generator.synthetic;
 
-import de.uni_mannheim.informatik.dws.dl_tc_generator.Defaults;
-import de.uni_mannheim.informatik.dws.dl_tc_generator.TrainTestSplit;
-import de.uni_mannheim.informatik.dws.dl_tc_generator.Util;
+
 import de.uni_mannheim.informatik.dws.jrdf2vec.walk_generation.data_structures.Triple;
-import de.uni_mannheim.informatik.dws.jrdf2vec.walk_generation.data_structures.TripleDataSetMemory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Paths;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import static de.uni_mannheim.informatik.dws.jrdf2vec.util.Util.randomDrawFromSet;

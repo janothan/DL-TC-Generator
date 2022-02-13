@@ -49,7 +49,6 @@ public abstract class SyntheticGenerator {
         this(new File(directory));
     }
 
-
     private static final Logger LOGGER = LoggerFactory.getLogger(SyntheticGenerator.class);
 
     /**
