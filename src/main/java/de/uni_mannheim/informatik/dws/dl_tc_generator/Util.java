@@ -97,6 +97,14 @@ public class Util {
      * @param listToWrite List that shall be written.
      */
     public static void writeListToFile(File fileToWrite, List<String> listToWrite) {
+        if(fileToWrite == null){
+            LOGGER.error("Cannot write file because the provided `fileToWrite` is null.");
+            return;
+        }
+        if(listToWrite == null){
+            LOGGER.error("Cannot write the file because the provided `listToWrite` is null.");
+            return;
+        }
         try (BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(fileToWrite), StandardCharsets.UTF_8))) {
             for (String line : listToWrite) {
                 writer.write(line);

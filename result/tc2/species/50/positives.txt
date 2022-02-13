@@ -1,6 +1,0 @@
-http://dbpedia.org/resource/Vendobionta
-http://dbpedia.org/resource/Euryarchaeota
-http://dbpedia.org/resource/Sphingobacteria_(phylum)
-http://dbpedia.org/resource/Gracilicutes
-http://dbpedia.org/resource/Chromista
-http://dbpedia.org/resource/Crenarchaeota

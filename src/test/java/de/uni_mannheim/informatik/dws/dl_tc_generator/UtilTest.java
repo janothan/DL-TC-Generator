@@ -12,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class UtilTest {
 
 
-    private static Logger LOGGER = LoggerFactory.getLogger(UtilTest.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(UtilTest.class);
 
     @Test
     void writeListToFile(){
@@ -25,6 +25,15 @@ class UtilTest {
         String content = Util.readUtf8(fileToWrite);
         assertTrue(content.contains("Hello\n"));
         assertTrue(content.contains("World!"));
+
+        // negative case: File null
+        Util.writeListToFile(null, myList);
+
+        // negative cases: List null
+        File fileNotToWrite = new File("./doNotWriteTest.txt");
+        fileNotToWrite.deleteOnExit();
+        Util.writeListToFile(fileNotToWrite, null);
+        assertFalse(fileNotToWrite.exists());
     }
 
     @Test

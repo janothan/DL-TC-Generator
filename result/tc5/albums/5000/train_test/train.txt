@@ -1,4 +1,0 @@
-http://dbpedia.org/resource/Mona_Lisa_Smile__Mona_Lisa_Smile__1	1
-http://dbpedia.org/resource/G-Force_(film)__G-Force__1	1
-http://dbpedia.org/resource/Live_from_the_Road	0
-http://dbpedia.org/resource/Restoration_(EP)	0

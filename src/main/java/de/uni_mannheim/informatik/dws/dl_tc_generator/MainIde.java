@@ -29,7 +29,7 @@ public class MainIde {
     }
 
     private static void generateByQuery() throws Exception {
-        final String resultDir = "./result";
+        final String resultDir = "./results/dbpedia";
         FileUtils.deleteDirectory(new File(resultDir));
         final String queriesPath = "/Users/janportisch/IdeaProjects/DL-TC-Generator/src/main/resources/queries";
         //String queriesPath = MainIde.class.getResource("queries").getPath();
