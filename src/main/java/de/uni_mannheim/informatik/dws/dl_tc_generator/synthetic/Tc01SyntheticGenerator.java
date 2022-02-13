@@ -53,7 +53,15 @@ public class Tc01SyntheticGenerator extends SyntheticGenerator {
      * @param directory The directory to be created. The directory must not exist yet.
      */
     public Tc01SyntheticGenerator(File directory) {
-        super(directory, Defaults.SIZES);
+        super(directory);
+    }
+
+    /**
+     * Convenience constructor.
+     * @param directory The directory to be created. The directory must not exist yet.
+     */
+    public Tc01SyntheticGenerator(String directory) {
+        super(directory);
     }
 
     /**

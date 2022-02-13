@@ -1,13 +1,11 @@
 package de.uni_mannheim.informatik.dws.dl_tc_generator.synthetic;
 
-import de.uni_mannheim.informatik.dws.dl_tc_generator.Defaults;
 import de.uni_mannheim.informatik.dws.jrdf2vec.walk_generation.data_structures.Triple;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
 import java.util.Set;
 
 /**
@@ -27,6 +25,14 @@ public class Tc03SyntheticGenerator extends SyntheticGenerator {
      * @param directory The directory to be created. The directory must not exist yet.
      */
     public Tc03SyntheticGenerator(File directory){
+        super(directory);
+    }
+
+    /**
+     * Convenience constructor.
+     * @param directory The directory to be created. The directory must not exist yet.
+     */
+    public Tc03SyntheticGenerator(String directory) {
         super(directory);
     }
 

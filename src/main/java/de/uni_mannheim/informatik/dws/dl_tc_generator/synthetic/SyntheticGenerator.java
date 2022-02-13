@@ -36,6 +36,16 @@ public abstract class SyntheticGenerator {
         this(directory, Defaults.SIZES);
     }
 
+    /**
+     * Convenience Constructor
+     *
+     * @param directory The directory to be created. The directory must not exist yet.
+     */
+    public SyntheticGenerator(String directory) {
+        this(new File(directory));
+    }
+
+
     private static final Logger LOGGER = LoggerFactory.getLogger(SyntheticGenerator.class);
 
     /**
@@ -263,5 +273,9 @@ public abstract class SyntheticGenerator {
             return;
         }
         this.numberOfEdges = numberOfEdges;
+    }
+
+    public File getDirectory() {
+        return directory;
     }
 }

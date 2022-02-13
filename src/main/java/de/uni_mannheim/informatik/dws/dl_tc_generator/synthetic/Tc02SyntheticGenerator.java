@@ -54,6 +54,14 @@ public class Tc02SyntheticGenerator extends SyntheticGenerator {
     }
 
     /**
+     * Convenience constructor.
+     * @param directory The directory to be created. The directory must not exist yet.
+     */
+    public Tc02SyntheticGenerator(String directory) {
+        super(directory);
+    }
+
+    /**
      * Write the graph to the fileToBeWritten. This method also fills the {@link SyntheticGenerator#positives}.
      * @param fileToBeWritten The file that shall be written (must not exist yet).
      * @param totalNodes The total number of nodes. The actual graph may not contain the full number.

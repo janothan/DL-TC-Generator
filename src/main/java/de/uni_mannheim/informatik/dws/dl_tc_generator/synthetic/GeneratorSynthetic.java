@@ -80,4 +80,8 @@ public class GeneratorSynthetic implements IGenerator {
         generatorSet.forEach(x -> x.setSeparator(separator));
         this.separator = separator;
     }
+
+    public File getGeneratedDirectory() {
+        return generatedDirectory;
+    }
 }
