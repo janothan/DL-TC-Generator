@@ -43,10 +43,10 @@ public class Tc07SyntheticGenerator extends SyntheticGenerator{
         }
         Set<String> nodeIds = generateNodeIds(totalNodes);
         Set<String> edgeIds = generateEdgeIds(totalEdges);
-        String targetNode = nodeIds.iterator().next();
+        final String targetNode = nodeIds.iterator().next();
         Iterator<String> edgeIterator = edgeIds.iterator();
-        String targetEdge1 = edgeIterator.next();
-        String targetEdge2 = edgeIterator.next();
+        final String targetEdge1 = edgeIterator.next();
+        final String targetEdge2 = edgeIterator.next();
 
         try (BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(fileToBeWritten), StandardCharsets.UTF_8))) {
             while (positives.size() < nodesOfInterest) {

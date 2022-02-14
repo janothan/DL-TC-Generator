@@ -12,27 +12,27 @@ import java.util.Set;
  * Test Case Form:
  * {@code
  * Positive: X<br/>
- * Named Nodes: N<br/>
- * Named Edges: -<br/>
- * Pattern: (X E1 S E2 N) OR (N E1 S E2 X) <br/>
+ * Named Nodes: -<br/>
+ * Named Edges: E<br/>
+ * Pattern: (Y E X) AND (Z E X) <br/>
  * }
  */
-public class Tc05SyntheticGenerator extends SyntheticGenerator {
+public class Tc10SyntheticGenerator extends SyntheticGenerator {
 
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(Tc05SyntheticGenerator.class);
-
-    public Tc05SyntheticGenerator(File directory, int[] sizes) {
+    public Tc10SyntheticGenerator(File directory, int[] sizes) {
         super(directory, sizes);
     }
 
-    public Tc05SyntheticGenerator(File directory) {
+    public Tc10SyntheticGenerator(File directory) {
         super(directory);
     }
 
-    public Tc05SyntheticGenerator(String directory) {
+    public Tc10SyntheticGenerator(String directory) {
         super(directory);
     }
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(Tc10SyntheticGenerator.class);
 
     @Override
     void writeGraphAndSetPositives(File fileToBeWritten, int totalNodes, int nodesOfInterest, int totalEdges) {
@@ -42,24 +42,23 @@ public class Tc05SyntheticGenerator extends SyntheticGenerator {
         }
         Set<String> nodeIds = generateNodeIds(totalNodes);
         Set<String> edgeIds = generateEdgeIds(totalEdges);
-        final String targetNode = nodeIds.iterator().next();
+        final String targetEdge = edgeIds.iterator().next();
 
         try (BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(fileToBeWritten), StandardCharsets.UTF_8))) {
             while (positives.size() < nodesOfInterest) {
-                Triple triple1 = generateTriple(nodeIds, edgeIds);
-                Triple triple2 = generateTripleWithStartNode(triple1.object, nodeIds, edgeIds);
+                Triple triple = generateTriple(nodeIds, edgeIds);
 
-                if(triple1.subject.equals(targetNode)){
-                    positives.add(triple2.object);
-                }
-                if(triple2.object.equals(targetNode)){
-                    positives.add(triple1.subject);
+                if(triple.predicate.equals(targetEdge)) {
+                    Set<Triple> result = graph.getObjectTriplesWithPredicateObject(triple.predicate, triple.object);
+                    if(result != null
+                            && result.size() >= 1
+                            && !result.iterator().next().subject.equals(triple.subject)) {
+                        positives.add(triple.object);
+                    }
                 }
 
-                writer.write(triple1.subject + " " + triple1.predicate + " " + triple1.object + ". \n");
-                writer.write(triple2.subject + " " + triple2.predicate + " " + triple2.object + ". \n");
-                graph.addObjectTriple(triple1);
-                graph.addObjectTriple(triple2);
+                writer.write(triple.subject + " " + triple.predicate + " " + triple.object + ". \n");
+                graph.addObjectTriple(triple);
             }
         } catch (IOException e) {
             LOGGER.error("An error occurred while writing the file.", e);
@@ -68,6 +67,6 @@ public class Tc05SyntheticGenerator extends SyntheticGenerator {
 
     @Override
     String getTcId() {
-        return "TC05";
+        return "TC10";
     }
 }
