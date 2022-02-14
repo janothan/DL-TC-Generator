@@ -7,10 +7,10 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class Tc11SyntheticGeneratorTest {
+class Tc12SyntheticGeneratorTest {
 
 
-    private static final String TC11_DIR = "./tc11-test-dir";
+    private static final String TC12_DIR = "./tc12-test-dir";
 
     @BeforeAll
     static void setUp(){
@@ -19,7 +19,7 @@ class Tc11SyntheticGeneratorTest {
 
     @Test
     void testGenerator(){
-        Tc11SyntheticGenerator generator = new Tc11SyntheticGenerator(TC11_DIR);
+        Tc12SyntheticGenerator generator = new Tc12SyntheticGenerator(TC12_DIR);
         generator.setNumberOfEdges(10);
         generator.setTotalNodesFactor(4);
         SyntheticGeneratorTest.testGenerator(generator, 10, 15);
@@ -27,13 +27,13 @@ class Tc11SyntheticGeneratorTest {
 
     @Test
     void getTcId() {
-        Tc11SyntheticGenerator generator = new Tc11SyntheticGenerator(TC11_DIR);
+        Tc12SyntheticGenerator generator = new Tc12SyntheticGenerator(TC12_DIR);
         assertNotNull(generator.getTcId());
     }
 
     @Test
     void getSetTotalNodesFactor(){
-        Tc11SyntheticGenerator generator = new Tc11SyntheticGenerator(TC11_DIR);
+        Tc12SyntheticGenerator generator = new Tc12SyntheticGenerator(TC12_DIR);
         generator.setTotalNodesFactor(10);
         assertEquals(10, generator.getTotalNodesFactor());
         generator.setTotalNodesFactor(1);
@@ -42,7 +42,7 @@ class Tc11SyntheticGeneratorTest {
 
     @AfterAll
     public static void tearDown(){
-        Util.delete(TC11_DIR);
+        Util.delete(TC12_DIR);
     }
 
 }

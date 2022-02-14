@@ -17,24 +17,24 @@ import java.util.stream.Collectors;
  * Positive: X<br/>
  * Named Nodes: N<br/>
  * Named Edges: E1, E2<br/>
- * Pattern: (X E1 Y1) AND (X E1 Y2) AND (Y1 E2 N) AND (Y2 E2 N)  <br/>
+ * Pattern: (Y1 E1 X) AND (Y1 E2 N) AND (Y2 E1 X) AND (Y2 E2 N)  <br/>
  * }
  */
-public class Tc11SyntheticGenerator extends SyntheticGenerator {
+public class Tc12SyntheticGenerator extends SyntheticGenerator {
 
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(Tc11SyntheticGenerator.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(Tc12SyntheticGenerator.class);
 
-    public Tc11SyntheticGenerator(File directory, int[] sizes) {
+    public Tc12SyntheticGenerator(String directory) {
+        super(directory);
+    }
+
+    public Tc12SyntheticGenerator(File directory) {
+        super(directory);
+    }
+
+    public Tc12SyntheticGenerator(File directory, int[] sizes) {
         super(directory, sizes);
-    }
-
-    public Tc11SyntheticGenerator(File directory) {
-        super(directory);
-    }
-
-    public Tc11SyntheticGenerator(String directory) {
-        super(directory);
     }
 
     @Override
@@ -53,31 +53,29 @@ public class Tc11SyntheticGenerator extends SyntheticGenerator {
         try (BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(fileToBeWritten), StandardCharsets.UTF_8))) {
             while (positives.size() < nodesOfInterest) {
                 Triple triple1 = generateTriple(nodeIds, edgeIds);
-                Triple triple2 = generateTripleWithStartNode(triple1.object, nodeIds, edgeIds);
+                Triple triple2 = generateTripleWithStartNode(triple1.subject, nodeIds, edgeIds);
 
-                if (triple1.predicate.equals(targetEdge1)) {
-                    if (triple2.predicate.equals(targetEdge2)) {
-                        if (triple2.object.equals(targetNode)) {
+                if (triple1.predicate.equals(targetEdge1)
+                    && triple2.predicate.equals(targetEdge2)
+                    && triple2.object.equals(targetNode)
+                ) {
+                    // Y1: triple2.subject is ok.
+                    // Next we check whether there is also a Y2.
 
-                            // now we check whether there is another fitting object
-                            Set<Triple> triples =
-                                    graph.getObjectTriplesWithSubjectPredicate(triple1.subject, triple1.predicate);
-                            if (triples != null) {
-                                Set<String> objects = TripleDataSetMemory.getObjectsFromTripleSet(triples);
-
-                                for (String o : objects) {
-                                    // lastly, we check whether there is a triple O targetEdge2 targetNode
-                                    if (graph.getAllObjectTriples().contains(
-                                            new Triple(o, targetEdge2, targetNode))
-                                    ) {
-                                        positives.add(triple1.subject);
-                                    }
-                                }
+                    Set<Triple> triples = graph.getObjectTriplesWithPredicateObject(targetEdge1, triple1.object);
+                    if(triples != null){
+                        // we now have some potential Y2
+                        // we need to check whether Y2 E2 N
+                        Set<String> subjects = TripleDataSetMemory.getSubjectsFromTripleSet(triples);
+                        for(String s : subjects){
+                            if(graph.getAllObjectTriples().contains(
+                                    new Triple(s,targetEdge2, targetNode)
+                            )){
+                                positives.add(triple1.object);
                             }
                         }
                     }
                 }
-
                 writer.write(triple1.subject + " " + triple1.predicate + " " + triple1.object + ". \n");
                 writer.write(triple2.subject + " " + triple2.predicate + " " + triple2.object + ". \n");
                 graph.addObjectTriple(triple2);
@@ -89,6 +87,6 @@ public class Tc11SyntheticGenerator extends SyntheticGenerator {
 
     @Override
     String getTcId() {
-        return "TC11";
+        return "TC12";
     }
 }

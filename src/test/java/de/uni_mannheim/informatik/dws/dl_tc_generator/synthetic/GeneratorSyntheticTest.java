@@ -28,13 +28,34 @@ class GeneratorSyntheticTest {
     @Test
     void generateTestCases(){
         GeneratorSynthetic generator = new GeneratorSynthetic(GENERATION_DIR);
-        generator.setSizes(new int[]{10, 20});
+        generator.setSizes(new int[]{10, 11});
+        generator.setNumberOfEdges(10);
         generator.generateTestCases();
 
         testFileExistance("tc01", 10);
-        testFileExistance("tc01", 20);
+        testFileExistance("tc01", 11);
+        testFileExistance("tc02", 10);
+        testFileExistance("tc02", 11);
         testFileExistance("tc03", 10);
-        testFileExistance("tc03", 20);
+        testFileExistance("tc03", 11);
+        testFileExistance("tc04", 10);
+        testFileExistance("tc04", 11);
+        testFileExistance("tc05", 10);
+        testFileExistance("tc05", 11);
+        testFileExistance("tc06", 10);
+        testFileExistance("tc06", 11);
+        testFileExistance("tc07", 10);
+        testFileExistance("tc07", 11);
+        testFileExistance("tc08", 10);
+        testFileExistance("tc08", 11);
+        testFileExistance("tc09", 10);
+        testFileExistance("tc09", 11);
+        testFileExistance("tc10", 10);
+        testFileExistance("tc10", 11);
+        testFileExistance("tc11", 10);
+        testFileExistance("tc11", 11);
+        testFileExistance("tc12", 10);
+        testFileExistance("tc12", 11);
     }
 
     static void testFileExistance(String tcName, int numberTest){

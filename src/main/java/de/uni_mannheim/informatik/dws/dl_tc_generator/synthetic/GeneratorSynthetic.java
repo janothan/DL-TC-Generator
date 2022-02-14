@@ -37,6 +37,8 @@ public class GeneratorSynthetic implements IGenerator {
      */
     private int[] sizes = Defaults.SIZES;
 
+    private int numberOfEdges = 10;
+
     Set<SyntheticGenerator> generatorSet;
 
     public GeneratorSynthetic(File directoryToGenerate) {
@@ -44,24 +46,40 @@ public class GeneratorSynthetic implements IGenerator {
         generatorSet = new HashSet<>();
         generatorSet.add(new Tc01SyntheticGenerator(
                         Paths.get(generatedDirectory.getAbsolutePath(), "tc01", "synthetic").toFile()
-                )
-        );
+                ));
         generatorSet.add(new Tc02SyntheticGenerator(
                         Paths.get(generatedDirectory.getAbsolutePath(), "tc02", "synthetic").toFile()
-                )
-        );
+                ));
         generatorSet.add(new Tc03SyntheticGenerator(
                         Paths.get(generatedDirectory.getAbsolutePath(), "tc03", "synthetic").toFile()
-                )
-        );
+                ));
         generatorSet.add(new Tc04SyntheticGenerator(
                         Paths.get(generatedDirectory.getAbsolutePath(), "tc04", "synthetic").toFile()
-                )
-        );
+                ));
         generatorSet.add(new Tc05SyntheticGenerator(
                         Paths.get(generatedDirectory.getAbsolutePath(), "tc05", "synthetic").toFile()
-                )
-        );
+                ));
+        generatorSet.add(new Tc06SyntheticGenerator(
+                Paths.get(generatedDirectory.getAbsolutePath(), "tc06", "synthetic").toFile()
+        ));
+        generatorSet.add(new Tc07SyntheticGenerator(
+                Paths.get(generatedDirectory.getAbsolutePath(), "tc07", "synthetic").toFile()
+        ));
+        generatorSet.add(new Tc08SyntheticGenerator(
+                Paths.get(generatedDirectory.getAbsolutePath(), "tc08", "synthetic").toFile()
+        ));
+        generatorSet.add(new Tc09SyntheticGenerator(
+                Paths.get(generatedDirectory.getAbsolutePath(), "tc09", "synthetic").toFile()
+        ));
+        generatorSet.add(new Tc10SyntheticGenerator(
+                Paths.get(generatedDirectory.getAbsolutePath(), "tc10", "synthetic").toFile()
+        ));
+        generatorSet.add(new Tc11SyntheticGenerator(
+                Paths.get(generatedDirectory.getAbsolutePath(), "tc11", "synthetic").toFile()
+        ));
+        generatorSet.add(new Tc12SyntheticGenerator(
+                Paths.get(generatedDirectory.getAbsolutePath(), "tc12", "synthetic").toFile()
+        ));
 
         generatorSet.forEach(x -> x.setSizes(sizes));
         generatorSet.forEach(x -> x.setSeparator(separator));
@@ -103,5 +121,22 @@ public class GeneratorSynthetic implements IGenerator {
 
     public File getGeneratedDirectory() {
         return generatedDirectory;
+    }
+
+    public int getNumberOfEdges() {
+        return numberOfEdges;
+    }
+
+    public void setNumberOfEdges(int numberOfEdges) {
+        generatorSet.forEach(x -> x.setNumberOfEdges(numberOfEdges));
+        this.numberOfEdges = numberOfEdges;
+    }
+
+    public Set<SyntheticGenerator> getGeneratorSet() {
+        return generatorSet;
+    }
+
+    public void setGeneratorSet(Set<SyntheticGenerator> generatorSet) {
+        this.generatorSet = generatorSet;
     }
 }

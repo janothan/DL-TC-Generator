@@ -16,12 +16,20 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class SyntheticGeneratorTest {
 
+
     private static final String DIR_0 = "./synthetic_tc";
     private static final String DIR_1 = "./synthetic_tc01";
     private static final String DIR_2 = "./synthetic_tc02";
     private static final String DIR_3 = "./synthetic_tc03";
     private static final String DIR_4 = "./synthetic_tc04";
     private static final String DIR_5 = "./synthetic_tc05";
+    private static final String DIR_6 = "./synthetic_tc06";
+    private static final String DIR_7 = "./synthetic_tc07";
+    private static final String DIR_8 = "./synthetic_tc08";
+    private static final String DIR_9 = "./synthetic_tc09";
+    private static final String DIR_10 = "./synthetic_tc10";
+    private static final String DIR_11 = "./synthetic_tc11";
+    private static final String DIR_12 = "./synthetic_tc12";
 
     /**
      * A list of all synthetic generators which can be used in multiple test cases.
@@ -34,6 +42,13 @@ class SyntheticGeneratorTest {
         generatorList.add(new Tc03SyntheticGenerator(DIR_3));
         generatorList.add(new Tc04SyntheticGenerator(DIR_4));
         generatorList.add(new Tc05SyntheticGenerator(DIR_5));
+        generatorList.add(new Tc06SyntheticGenerator(DIR_6));
+        generatorList.add(new Tc07SyntheticGenerator(DIR_7));
+        generatorList.add(new Tc08SyntheticGenerator(DIR_8));
+        generatorList.add(new Tc09SyntheticGenerator(DIR_9));
+        generatorList.add(new Tc10SyntheticGenerator(DIR_10));
+        generatorList.add(new Tc11SyntheticGenerator(DIR_11));
+        generatorList.add(new Tc12SyntheticGenerator(DIR_12));
     }
 
     /**
@@ -42,7 +57,8 @@ class SyntheticGeneratorTest {
     @Test
     void testAllSyntheticGenerators() {
         for (SyntheticGenerator generator : generatorList) {
-            testGenerator(generator);
+            generator.setNumberOfEdges(10);
+            testGenerator(generator, 10, 11);
         }
     }
 
@@ -103,6 +119,13 @@ class SyntheticGeneratorTest {
         Util.delete(DIR_3);
         Util.delete(DIR_4);
         Util.delete(DIR_5);
+        Util.delete(DIR_6);
+        Util.delete(DIR_7);
+        Util.delete(DIR_8);
+        Util.delete(DIR_9);
+        Util.delete(DIR_10);
+        Util.delete(DIR_11);
+        Util.delete(DIR_12);
     }
 
 }
