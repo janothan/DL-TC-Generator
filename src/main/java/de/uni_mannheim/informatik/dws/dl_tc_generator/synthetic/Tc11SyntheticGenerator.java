@@ -1,0 +1,93 @@
+package de.uni_mannheim.informatik.dws.dl_tc_generator.synthetic;
+
+import de.uni_mannheim.informatik.dws.jrdf2vec.walk_generation.data_structures.Triple;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.io.*;
+import java.nio.charset.StandardCharsets;
+import java.util.Iterator;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+/**
+ * Test Case Form:
+ * {@code
+ * Positive: X<br/>
+ * Named Nodes: N<br/>
+ * Named Edges: E1, E2<br/>
+ * Pattern: (X E1 Y1) AND (X E1 Y2) AND (Y1 E2 N) AND (Y2 E2 N)  <br/>
+ * }
+ */
+public class Tc11SyntheticGenerator extends SyntheticGenerator {
+
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(Tc11SyntheticGenerator.class);
+
+    public Tc11SyntheticGenerator(File directory, int[] sizes) {
+        super(directory, sizes);
+    }
+
+    public Tc11SyntheticGenerator(File directory) {
+        super(directory);
+    }
+
+    public Tc11SyntheticGenerator(String directory) {
+        super(directory);
+    }
+
+    @Override
+    void writeGraphAndSetPositives(File fileToBeWritten, int totalNodes, int nodesOfInterest, int totalEdges) {
+        if (fileToBeWritten.exists()) {
+            LOGGER.error("The file to be written exists already. Aborting generation.");
+            return;
+        }
+        Set<String> nodeIds = generateNodeIds(totalNodes);
+        Set<String> edgeIds = generateEdgeIds(totalEdges);
+        Iterator<String> edgeIterator = edgeIds.iterator();
+        final String targetEdge1 = edgeIterator.next();
+        final String targetEdge2 = edgeIterator.next();
+        final String targetNode = nodeIds.iterator().next();
+
+        try (BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(fileToBeWritten), StandardCharsets.UTF_8))) {
+            while (positives.size() < nodesOfInterest) {
+                Triple triple1 = generateTriple(nodeIds, edgeIds);
+                Triple triple2 = generateTripleWithStartNode(triple1.object, nodeIds, edgeIds);
+
+                if (triple1.predicate.equals(targetEdge1)) {
+                    if (triple2.predicate.equals(targetEdge2)) {
+                        if (triple2.object.equals(targetNode)) {
+
+                            // now we check whether there is another fitting object
+                            Set<Triple> triples =
+                                    graph.getObjectTriplesWithSubjectPredicate(triple1.subject, triple1.predicate);
+                            if (triples != null) {
+                                Set<String> objects = triples.stream().map(x -> x.object).collect(Collectors.toSet());
+
+                                for (String o : objects) {
+                                    // lastly, we check whether there is a triple O targetEdge2 targetNode
+                                    if (graph.getAllObjectTriples().contains(
+                                            new Triple(o, targetEdge2, targetNode))
+                                    ) {
+                                        positives.add(triple1.subject);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+                writer.write(triple1.subject + " " + triple1.predicate + " " + triple1.object + ". \n");
+                writer.write(triple2.subject + " " + triple2.predicate + " " + triple2.object + ". \n");
+                graph.addObjectTriple(triple2);
+            }
+        } catch (IOException e) {
+            LOGGER.error("An error occurred while writing the file.", e);
+        }
+    }
+
+    @Override
+    String getTcId() {
+        return "TC11";
+    }
+}
