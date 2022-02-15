@@ -1,4 +1,4 @@
-package de.uni_mannheim.informatik.dws.dl_tc_generator.synthetic;
+package de.uni_mannheim.informatik.dws.dl_tc_generator.synthetic.random;
 
 import de.uni_mannheim.informatik.dws.jrdf2vec.walk_generation.data_structures.Triple;
 import org.slf4j.Logger;
@@ -8,48 +8,55 @@ import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.Set;
 
-
 /**
  * Test Case Form:
  * {@code
  * Positive: X<br/>
- * Named Nodes: N<br/>
- * Named Edges: -<br/>
- * Pattern: (X E N) OR (N E X) <br/>
+ * Named Nodes: -<br/>
+ * Named Edges: E<br/>
+ * Pattern: (X E Y) AND (X E Z)<br/>
  * }
  */
-public class Tc04SyntheticGenerator extends SyntheticGenerator {
+public class Tc09GeneratorSyntheticRandom extends TcGeneratorSyntheticRandom {
 
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(Tc04SyntheticGenerator.class);
+    public Tc09GeneratorSyntheticRandom(File directory, int[] sizes) {
+        super(directory, sizes);
+    }
 
-
-    public Tc04SyntheticGenerator(File directory) {
+    public Tc09GeneratorSyntheticRandom(File directory) {
         super(directory);
     }
-    public Tc04SyntheticGenerator(String directory) {
+
+    public Tc09GeneratorSyntheticRandom(String directory) {
         super(directory);
     }
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(Tc09GeneratorSyntheticRandom.class);
 
     @Override
-    void writeGraphAndSetPositives(File fileToBeWritten, int totalNodes, int nodesOfInterest, int totalEdges) {
+    public void writeGraphAndSetPositives(File fileToBeWritten, int totalNodes, int nodesOfInterest, int totalEdges) {
         if (fileToBeWritten.exists()) {
             LOGGER.error("The file to be written exists already. Aborting generation.");
             return;
         }
         Set<String> nodeIds = generateNodeIds(totalNodes);
         Set<String> edgeIds = generateEdgeIds(totalEdges);
-        final String targetNode = nodeIds.iterator().next();
+        final String targetEdge = edgeIds.iterator().next();
 
         try (BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(fileToBeWritten), StandardCharsets.UTF_8))) {
             while (positives.size() < nodesOfInterest) {
                 Triple triple = generateTriple(nodeIds, edgeIds);
-                if(triple.subject.equals(targetNode)) {
-                    positives.add(triple.object);
+
+                if(triple.predicate.equals(targetEdge)) {
+                    Set<Triple> result = graph.getObjectTriplesWithSubjectPredicate(triple.subject, triple.predicate);
+                    if(result != null
+                            && result.size() >= 1
+                            && !result.iterator().next().object.equals(triple.object)) {
+                        positives.add(triple.subject);
+                    }
                 }
-                if(triple.object.equals(targetNode)){
-                    positives.add(triple.subject);
-                }
+
                 writer.write(triple.subject + " " + triple.predicate + " " + triple.object + ". \n");
                 graph.addObjectTriple(triple);
             }
@@ -59,7 +66,7 @@ public class Tc04SyntheticGenerator extends SyntheticGenerator {
     }
 
     @Override
-    String getTcId() {
-        return "TC04";
+    public String getTcId() {
+        return "TC09";
     }
 }

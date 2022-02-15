@@ -2,6 +2,7 @@ package de.uni_mannheim.informatik.dws.dl_tc_generator;
 
 import de.uni_mannheim.informatik.dws.dl_tc_generator.by_query.GeneratorQuery;
 import de.uni_mannheim.informatik.dws.dl_tc_generator.synthetic.GeneratorSynthetic;
+import de.uni_mannheim.informatik.dws.dl_tc_generator.synthetic.random.GeneratorSyntheticRandom;
 import org.apache.commons.io.FileUtils;
 
 import java.io.File;
@@ -24,7 +25,7 @@ public class MainIde {
 
 
     private static void generateSynthetic() throws Exception {
-        GeneratorSynthetic generator = new GeneratorSynthetic("synthetic_results");
+        GeneratorSynthetic generator = new GeneratorSyntheticRandom("synthetic_results");
         generator.generateTestCases();
     }
 

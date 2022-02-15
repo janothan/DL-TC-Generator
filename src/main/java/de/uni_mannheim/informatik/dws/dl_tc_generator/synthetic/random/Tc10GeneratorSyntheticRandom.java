@@ -1,4 +1,4 @@
-package de.uni_mannheim.informatik.dws.dl_tc_generator.synthetic;
+package de.uni_mannheim.informatik.dws.dl_tc_generator.synthetic.random;
 
 import de.uni_mannheim.informatik.dws.jrdf2vec.walk_generation.data_structures.Triple;
 import org.slf4j.Logger;
@@ -14,38 +14,29 @@ import java.util.Set;
  * Positive: X<br/>
  * Named Nodes: -<br/>
  * Named Edges: E<br/>
- * Pattern: (X E Y) OR (Y E X) <br/>
+ * Pattern: (Y E X) AND (Z E X) <br/>
  * }
  */
-public class Tc03SyntheticGenerator extends SyntheticGenerator {
+public class Tc10GeneratorSyntheticRandom extends TcGeneratorSyntheticRandom {
 
 
-    /**
-     * Convenience Constructor.
-     * @param directory The directory to be created. The directory must not exist yet.
-     */
-    public Tc03SyntheticGenerator(File directory){
+    public Tc10GeneratorSyntheticRandom(File directory, int[] sizes) {
+        super(directory, sizes);
+    }
+
+    public Tc10GeneratorSyntheticRandom(File directory) {
         super(directory);
     }
 
-    /**
-     * Convenience constructor.
-     * @param directory The directory to be created. The directory must not exist yet.
-     */
-    public Tc03SyntheticGenerator(String directory) {
+    public Tc10GeneratorSyntheticRandom(String directory) {
         super(directory);
     }
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(Tc03SyntheticGenerator.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(Tc10GeneratorSyntheticRandom.class);
 
-    /**
-     * Write the graph to the fileToBeWritten. This method also fills the {@link SyntheticGenerator#positives}.
-     * @param fileToBeWritten The file that shall be written (must not exist yet).
-     * @param totalNodes The total number of nodes. The actual graph may not contain the full number.
-     * @param nodesOfInterest The number of desired positives.
-     * @param totalEdges The number of edges. The actual graph may not contain the full number.
-     */
-    public void writeGraphAndSetPositives(File fileToBeWritten, int totalNodes, int nodesOfInterest, int totalEdges){
+    @Override
+    protected void writeGraphAndSetPositives(File fileToBeWritten, int totalNodes, int nodesOfInterest,
+                                             int totalEdges) {
         if (fileToBeWritten.exists()) {
             LOGGER.error("The file to be written exists already. Aborting generation.");
             return;
@@ -57,10 +48,16 @@ public class Tc03SyntheticGenerator extends SyntheticGenerator {
         try (BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(fileToBeWritten), StandardCharsets.UTF_8))) {
             while (positives.size() < nodesOfInterest) {
                 Triple triple = generateTriple(nodeIds, edgeIds);
+
                 if(triple.predicate.equals(targetEdge)) {
-                    positives.add(triple.subject);
-                    positives.add(triple.object);
+                    Set<Triple> result = graph.getObjectTriplesWithPredicateObject(triple.predicate, triple.object);
+                    if(result != null
+                            && result.size() >= 1
+                            && !result.iterator().next().subject.equals(triple.subject)) {
+                        positives.add(triple.object);
+                    }
                 }
+
                 writer.write(triple.subject + " " + triple.predicate + " " + triple.object + ". \n");
                 graph.addObjectTriple(triple);
             }
@@ -70,7 +67,7 @@ public class Tc03SyntheticGenerator extends SyntheticGenerator {
     }
 
     @Override
-    String getTcId() {
-        return "TC03";
+    public String getTcId() {
+        return "TC10";
     }
 }

@@ -1,21 +1,18 @@
-package de.uni_mannheim.informatik.dws.dl_tc_generator.synthetic;
+package de.uni_mannheim.informatik.dws.dl_tc_generator.synthetic.random;
 
 import de.uni_mannheim.informatik.dws.dl_tc_generator.Defaults;
 import de.uni_mannheim.informatik.dws.dl_tc_generator.Util;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.File;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 
 import static de.uni_mannheim.informatik.dws.dl_tc_generator.ResultValidator.isOverlapFree;
 import static org.junit.jupiter.api.Assertions.*;
 
-class Tc01SyntheticGeneratorTest {
+class Tc01GeneratorSyntheticRandomTest {
 
 
     //private static final Logger LOGGER = LoggerFactory.getLogger(Tc01SyntheticGeneratorTest.class);
@@ -25,7 +22,7 @@ class Tc01SyntheticGeneratorTest {
     @Test
     void generate() {
         File f = new File(TC01_FILE_STR);
-        Tc01SyntheticGenerator generator = new Tc01SyntheticGenerator(f);
+        Tc01GeneratorSyntheticRandom generator = new Tc01GeneratorSyntheticRandom(f);
         generator.setSizes(new int[]{50, 100});
 
         generator.generate();
@@ -52,7 +49,7 @@ class Tc01SyntheticGeneratorTest {
 
     @Test
     void setGetNumberOfEdges(){
-        Tc01SyntheticGenerator generator = new Tc01SyntheticGenerator(new File(TC01_FILE_STR));
+        Tc01GeneratorSyntheticRandom generator = new Tc01GeneratorSyntheticRandom(new File(TC01_FILE_STR));
         assertEquals(Defaults.NUMBER_OF_EDGES, generator.getNumberOfEdges());
         generator.setNumberOfEdges(-10);
         assertEquals(Defaults.NUMBER_OF_EDGES, generator.getNumberOfEdges());

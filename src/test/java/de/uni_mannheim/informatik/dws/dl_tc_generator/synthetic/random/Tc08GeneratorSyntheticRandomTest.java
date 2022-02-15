@@ -1,4 +1,4 @@
-package de.uni_mannheim.informatik.dws.dl_tc_generator.synthetic;
+package de.uni_mannheim.informatik.dws.dl_tc_generator.synthetic.random;
 
 import de.uni_mannheim.informatik.dws.dl_tc_generator.Util;
 import org.junit.jupiter.api.AfterAll;
@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class Tc08SyntheticGeneratorTest {
+class Tc08GeneratorSyntheticRandomTest {
 
 
     private static final String TC08_DIR = "./tc08-test-dir";
@@ -19,21 +19,21 @@ class Tc08SyntheticGeneratorTest {
 
     @Test
     void testGenerator(){
-        Tc08SyntheticGenerator generator = new Tc08SyntheticGenerator(TC08_DIR);
+        Tc08GeneratorSyntheticRandom generator = new Tc08GeneratorSyntheticRandom(TC08_DIR);
         generator.setNumberOfEdges(10);
         generator.setTotalNodesFactor(4);
-        SyntheticGeneratorTest.testGenerator(generator, 10, 15);
+        TcGeneratorSyntheticRandomTest.testGenerator(generator, 10, 15);
     }
 
     @Test
     void getTcId() {
-        Tc08SyntheticGenerator generator = new Tc08SyntheticGenerator(TC08_DIR);
+        Tc08GeneratorSyntheticRandom generator = new Tc08GeneratorSyntheticRandom(TC08_DIR);
         assertNotNull(generator.getTcId());
     }
 
     @Test
     void getSetTotalNodesFactor(){
-        Tc08SyntheticGenerator generator = new Tc08SyntheticGenerator(TC08_DIR);
+        Tc08GeneratorSyntheticRandom generator = new Tc08GeneratorSyntheticRandom(TC08_DIR);
         generator.setTotalNodesFactor(10);
         assertEquals(10, generator.getTotalNodesFactor());
         generator.setTotalNodesFactor(1);

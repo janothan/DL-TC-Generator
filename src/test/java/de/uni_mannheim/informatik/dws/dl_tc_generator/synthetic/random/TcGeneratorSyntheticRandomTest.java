@@ -1,6 +1,7 @@
-package de.uni_mannheim.informatik.dws.dl_tc_generator.synthetic;
+package de.uni_mannheim.informatik.dws.dl_tc_generator.synthetic.random;
 
 import de.uni_mannheim.informatik.dws.dl_tc_generator.Util;
+import de.uni_mannheim.informatik.dws.dl_tc_generator.synthetic.TcGeneratorSynthetic;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Test;
 
@@ -14,7 +15,7 @@ import java.util.Set;
 import static de.uni_mannheim.informatik.dws.dl_tc_generator.ResultValidator.isOverlapFree;
 import static org.junit.jupiter.api.Assertions.*;
 
-class SyntheticGeneratorTest {
+class TcGeneratorSyntheticRandomTest {
 
 
     private static final String DIR_0 = "./synthetic_tc";
@@ -34,21 +35,21 @@ class SyntheticGeneratorTest {
     /**
      * A list of all synthetic generators which can be used in multiple test cases.
      */
-    private static final List<SyntheticGenerator> generatorList = new ArrayList<>();
+    private static final List<TcGeneratorSynthetic> generatorList = new ArrayList<>();
 
     static {
-        generatorList.add(new Tc01SyntheticGenerator(DIR_1));
-        generatorList.add(new Tc02SyntheticGenerator(DIR_2));
-        generatorList.add(new Tc03SyntheticGenerator(DIR_3));
-        generatorList.add(new Tc04SyntheticGenerator(DIR_4));
-        generatorList.add(new Tc05SyntheticGenerator(DIR_5));
-        generatorList.add(new Tc06SyntheticGenerator(DIR_6));
-        generatorList.add(new Tc07SyntheticGenerator(DIR_7));
-        generatorList.add(new Tc08SyntheticGenerator(DIR_8));
-        generatorList.add(new Tc09SyntheticGenerator(DIR_9));
-        generatorList.add(new Tc10SyntheticGenerator(DIR_10));
-        generatorList.add(new Tc11SyntheticGenerator(DIR_11));
-        generatorList.add(new Tc12SyntheticGenerator(DIR_12));
+        generatorList.add(new Tc01GeneratorSyntheticRandom(DIR_1));
+        generatorList.add(new Tc02GeneratorSyntheticRandom(DIR_2));
+        generatorList.add(new Tc03GeneratorSyntheticRandom(DIR_3));
+        generatorList.add(new Tc04GeneratorSyntheticRandom(DIR_4));
+        generatorList.add(new Tc05GeneratorSyntheticRandom(DIR_5));
+        generatorList.add(new Tc06GeneratorSyntheticRandom(DIR_6));
+        generatorList.add(new Tc07GeneratorSyntheticRandom(DIR_7));
+        generatorList.add(new Tc08GeneratorSyntheticRandom(DIR_8));
+        generatorList.add(new Tc09GeneratorSyntheticRandom(DIR_9));
+        generatorList.add(new Tc10GeneratorSyntheticRandom(DIR_10));
+        generatorList.add(new Tc11GeneratorSyntheticRandom(DIR_11));
+        generatorList.add(new Tc12GeneratorSyntheticRandom(DIR_12));
     }
 
     /**
@@ -56,13 +57,13 @@ class SyntheticGeneratorTest {
      */
     @Test
     void testAllSyntheticGenerators() {
-        for (SyntheticGenerator generator : generatorList) {
+        for (TcGeneratorSynthetic generator : generatorList) {
             generator.setNumberOfEdges(10);
             testGenerator(generator, 10, 11);
         }
     }
 
-    public static void testGenerator(SyntheticGenerator generator, int... sizes){
+    public static void testGenerator(TcGeneratorSynthetic generator, int... sizes){
         if(sizes == null || sizes.length == 0){
             fail("Wrong sizes parameter. Must contain elements.");
         }
@@ -99,7 +100,7 @@ class SyntheticGeneratorTest {
      * Some assertions on the specified generator.
      * @param generator The generator to be tested.
      */
-    public static void testGenerator(SyntheticGenerator generator){
+    public static void testGenerator(TcGeneratorSynthetic generator){
         testGenerator(generator, 50, 100);
     }
 

@@ -1,4 +1,4 @@
-package de.uni_mannheim.informatik.dws.dl_tc_generator.synthetic;
+package de.uni_mannheim.informatik.dws.dl_tc_generator.synthetic.random;
 
 import de.uni_mannheim.informatik.dws.jrdf2vec.walk_generation.data_structures.Triple;
 import de.uni_mannheim.informatik.dws.jrdf2vec.walk_generation.data_structures.TripleDataSetMemory;
@@ -9,7 +9,6 @@ import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.Iterator;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 /**
  * Test Case Form:
@@ -20,25 +19,25 @@ import java.util.stream.Collectors;
  * Pattern: (Y1 E1 X) AND (Y1 E2 N) AND (Y2 E1 X) AND (Y2 E2 N)  <br/>
  * }
  */
-public class Tc12SyntheticGenerator extends SyntheticGenerator {
+public class Tc12GeneratorSyntheticRandom extends TcGeneratorSyntheticRandom {
 
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(Tc12SyntheticGenerator.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(Tc12GeneratorSyntheticRandom.class);
 
-    public Tc12SyntheticGenerator(String directory) {
+    public Tc12GeneratorSyntheticRandom(String directory) {
         super(directory);
     }
 
-    public Tc12SyntheticGenerator(File directory) {
+    public Tc12GeneratorSyntheticRandom(File directory) {
         super(directory);
     }
 
-    public Tc12SyntheticGenerator(File directory, int[] sizes) {
+    public Tc12GeneratorSyntheticRandom(File directory, int[] sizes) {
         super(directory, sizes);
     }
 
     @Override
-    void writeGraphAndSetPositives(File fileToBeWritten, int totalNodes, int nodesOfInterest, int totalEdges) {
+    public void writeGraphAndSetPositives(File fileToBeWritten, int totalNodes, int nodesOfInterest, int totalEdges) {
         if (fileToBeWritten.exists()) {
             LOGGER.error("The file to be written exists already. Aborting generation.");
             return;
@@ -86,7 +85,7 @@ public class Tc12SyntheticGenerator extends SyntheticGenerator {
     }
 
     @Override
-    String getTcId() {
+    public String getTcId() {
         return "TC12";
     }
 }

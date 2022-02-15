@@ -1,6 +1,8 @@
-package de.uni_mannheim.informatik.dws.dl_tc_generator.synthetic;
+package de.uni_mannheim.informatik.dws.dl_tc_generator.synthetic.random;
 
 import de.uni_mannheim.informatik.dws.dl_tc_generator.Util;
+import de.uni_mannheim.informatik.dws.dl_tc_generator.synthetic.GeneratorSynthetic;
+import de.uni_mannheim.informatik.dws.dl_tc_generator.synthetic.random.GeneratorSyntheticRandom;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -10,7 +12,7 @@ import java.nio.file.Paths;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class GeneratorSyntheticTest {
+class GeneratorSyntheticRandomTest {
 
 
     private static final String GENERATION_DIR = "./genSyntheticTestDir";
@@ -18,13 +20,13 @@ class GeneratorSyntheticTest {
     private static final String MERGED_GRAPH = "./merged_graph.nt";
 
     @BeforeAll
-    public static void setUp(){
+    public static void setUp() {
         tearDown();
     }
 
     @Test
-    void generateTestCases(){
-        GeneratorSynthetic generator = new GeneratorSynthetic(GENERATION_DIR);
+    void generateTestCases() {
+        GeneratorSynthetic generator = new GeneratorSyntheticRandom(GENERATION_DIR);
         generator.setSizes(new int[]{10, 11});
         generator.setNumberOfEdges(10);
         generator.generateTestCases();
@@ -60,8 +62,8 @@ class GeneratorSyntheticTest {
     }
 
     @Test
-    void generateTestCasesWithSelector(){
-        GeneratorSynthetic generator = new GeneratorSynthetic(GENERATION_DIR_2);
+    void generateTestCasesWithSelector() {
+        GeneratorSynthetic generator = new GeneratorSyntheticRandom(GENERATION_DIR_2);
         generator.setSizes(new int[]{10});
         generator.setIncludeOnlyCollection("tc01", "tc02");
         generator.setNumberOfEdges(10);
@@ -74,7 +76,7 @@ class GeneratorSyntheticTest {
         assertFalse(tc03_10.exists());
     }
 
-    static void testFileExistence(String generationDirectory, String tcName, int numberTest){
+    static void testFileExistence(String generationDirectory, String tcName, int numberTest) {
         File resultDir = new File(generationDirectory);
         assertTrue(resultDir.exists());
         assertTrue(resultDir.isDirectory());
@@ -109,9 +111,8 @@ class GeneratorSyntheticTest {
         assertFalse(fileContent.contains("<NOT_EXITS_404>"));
     }
 
-
-        @AfterAll
-    public static void tearDown(){
+    @AfterAll
+    public static void tearDown() {
         Util.delete(GENERATION_DIR);
         Util.delete(GENERATION_DIR_2);
         Util.delete(MERGED_GRAPH);

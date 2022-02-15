@@ -1,4 +1,4 @@
-package de.uni_mannheim.informatik.dws.dl_tc_generator.synthetic;
+package de.uni_mannheim.informatik.dws.dl_tc_generator.synthetic.random;
 
 import de.uni_mannheim.informatik.dws.dl_tc_generator.Util;
 import org.junit.jupiter.api.AfterAll;
@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class Tc05SyntheticGeneratorTest {
+class Tc05GeneratorSyntheticRandomTest {
 
 
     private static final String TC05_DIR = "./tc05-test-dir";
@@ -19,13 +19,13 @@ class Tc05SyntheticGeneratorTest {
 
     @Test
     void testGenerator(){
-        Tc05SyntheticGenerator generator = new Tc05SyntheticGenerator(TC05_DIR);
-        SyntheticGeneratorTest.testGenerator(generator);
+        Tc05GeneratorSyntheticRandom generator = new Tc05GeneratorSyntheticRandom(TC05_DIR);
+        TcGeneratorSyntheticRandomTest.testGenerator(generator);
     }
 
     @Test
     void getTcId() {
-        Tc05SyntheticGenerator generator = new Tc05SyntheticGenerator(TC05_DIR);
+        Tc05GeneratorSyntheticRandom generator = new Tc05GeneratorSyntheticRandom(TC05_DIR);
         assertNotNull(generator.getTcId());
     }
 

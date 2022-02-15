@@ -2,6 +2,7 @@ package de.uni_mannheim.informatik.dws.dl_tc_generator;
 
 import de.uni_mannheim.informatik.dws.dl_tc_generator.by_query.GeneratorQuery;
 import de.uni_mannheim.informatik.dws.dl_tc_generator.synthetic.GeneratorSynthetic;
+import de.uni_mannheim.informatik.dws.dl_tc_generator.synthetic.random.GeneratorSyntheticRandom;
 import org.apache.commons.cli.*;
 import org.apache.jena.reasoner.rulesys.impl.Generator;
 
@@ -146,7 +147,7 @@ public class Main {
             } else {
                 System.out.println("Missing option -q for query directory. Therefore, synthetic datasets will be " +
                         "calculated.");
-                generator = new GeneratorSynthetic(resultDirectory);
+                generator = new GeneratorSyntheticRandom(resultDirectory);
             }
 
             if (sizeArray != null) {

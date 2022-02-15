@@ -1,4 +1,4 @@
-package de.uni_mannheim.informatik.dws.dl_tc_generator.synthetic;
+package de.uni_mannheim.informatik.dws.dl_tc_generator.synthetic.random;
 
 
 import de.uni_mannheim.informatik.dws.jrdf2vec.walk_generation.data_structures.Triple;
@@ -21,13 +21,13 @@ import static de.uni_mannheim.informatik.dws.jrdf2vec.util.Util.randomDrawFromSe
  * Pattern: X E Y<br/>
  * }
  */
-public class Tc01SyntheticGenerator extends SyntheticGenerator {
+public class Tc01GeneratorSyntheticRandom extends TcGeneratorSyntheticRandom {
 
 
     /**
      * Logger
      */
-    private static final Logger LOGGER = LoggerFactory.getLogger(Tc01SyntheticGenerator.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(Tc01GeneratorSyntheticRandom.class);
 
 
     /**
@@ -36,7 +36,7 @@ public class Tc01SyntheticGenerator extends SyntheticGenerator {
      * @param directory The directory to be created. The directory must not exist yet.
      * @param sizes     The sizes to be evaluated.
      */
-    public Tc01SyntheticGenerator(File directory, int[] sizes) {
+    public Tc01GeneratorSyntheticRandom(File directory, int[] sizes) {
         super(directory, sizes);
     }
 
@@ -45,7 +45,7 @@ public class Tc01SyntheticGenerator extends SyntheticGenerator {
      *
      * @param directory The directory to be created. The directory must not exist yet.
      */
-    public Tc01SyntheticGenerator(File directory) {
+    public Tc01GeneratorSyntheticRandom(File directory) {
         super(directory);
     }
 
@@ -53,12 +53,12 @@ public class Tc01SyntheticGenerator extends SyntheticGenerator {
      * Convenience constructor.
      * @param directory The directory to be created. The directory must not exist yet.
      */
-    public Tc01SyntheticGenerator(String directory) {
+    public Tc01GeneratorSyntheticRandom(String directory) {
         super(directory);
     }
 
     /**
-     * Write the graph to the fileToBeWritten. This method also fills the {@link Tc01SyntheticGenerator#positives}.
+     * Write the graph to the fileToBeWritten. This method also fills the {@link Tc01GeneratorSyntheticRandom#positives}.
      *
      * @param fileToBeWritten The file that shall be written (must not exist yet).
      * @param totalNodes      The total number of nodes. The actual graph may not contain the full number.
@@ -115,7 +115,7 @@ public class Tc01SyntheticGenerator extends SyntheticGenerator {
     }
 
     @Override
-    String getTcId() {
+    public String getTcId() {
         return "TC01";
     }
 

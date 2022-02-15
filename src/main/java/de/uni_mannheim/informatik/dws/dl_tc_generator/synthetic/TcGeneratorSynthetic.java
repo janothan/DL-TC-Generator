@@ -3,6 +3,7 @@ package de.uni_mannheim.informatik.dws.dl_tc_generator.synthetic;
 import de.uni_mannheim.informatik.dws.dl_tc_generator.Defaults;
 import de.uni_mannheim.informatik.dws.dl_tc_generator.TrainTestSplit;
 import de.uni_mannheim.informatik.dws.dl_tc_generator.Util;
+import de.uni_mannheim.informatik.dws.dl_tc_generator.synthetic.random.Tc01GeneratorSyntheticRandom;
 import de.uni_mannheim.informatik.dws.jrdf2vec.walk_generation.data_structures.Triple;
 import de.uni_mannheim.informatik.dws.jrdf2vec.walk_generation.data_structures.TripleDataSetMemory;
 import org.slf4j.Logger;
@@ -21,10 +22,10 @@ import static de.uni_mannheim.informatik.dws.jrdf2vec.util.Util.randomDrawFromSe
  * Abstract super class for each individual test case synthetic generator.
  * The overall coordination of generation is performed through {@link GeneratorSynthetic}.
  */
-public abstract class SyntheticGenerator {
+public abstract class TcGeneratorSynthetic {
 
 
-    public SyntheticGenerator(File directory, int[] sizes) {
+    public TcGeneratorSynthetic(File directory, int[] sizes) {
         positives = new HashSet<>();
         graph = new TripleDataSetMemory();
         this.directory = directory;
@@ -36,7 +37,7 @@ public abstract class SyntheticGenerator {
      *
      * @param directory The directory to be created. The directory must not exist yet.
      */
-    public SyntheticGenerator(File directory) {
+    public TcGeneratorSynthetic(File directory) {
         this(directory, Defaults.SIZES);
     }
 
@@ -45,11 +46,11 @@ public abstract class SyntheticGenerator {
      *
      * @param directory The directory to be created. The directory must not exist yet.
      */
-    public SyntheticGenerator(String directory) {
+    public TcGeneratorSynthetic(String directory) {
         this(new File(directory));
     }
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(SyntheticGenerator.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(TcGeneratorSynthetic.class);
 
     /**
      * Get the negatives.
@@ -77,43 +78,43 @@ public abstract class SyntheticGenerator {
     /**
      * Complete set of positive URIs.
      */
-    final Set<String> positives;
+    protected final Set<String> positives;
 
     /**
      * The generated graph.
      */
-    final TripleDataSetMemory graph;
+    protected final TripleDataSetMemory graph;
 
     /**
      * The directory in which will be created.
      * All generated files are generated into this directory.
      */
-    final File directory;
+    protected final File directory;
 
     /**
      * The separator for the data files (e.g. train.txt).
      */
-    String separator = Defaults.CSV_SEPARATOR;
+    protected String separator = Defaults.CSV_SEPARATOR;
 
     /**
      * Size groups in which the synthetic test case shall appear.
      */
-    int[] sizes;
+    protected int[] sizes;
 
     /**
      * Default train-test split ratio.
      */
-    TrainTestSplit trainTestSplit = Defaults.TRAIN_TEST_SPLIT;
+    protected TrainTestSplit trainTestSplit = Defaults.TRAIN_TEST_SPLIT;
 
     /**
      * The maximum number of edges that generated graph may have at most.
      */
-    int numberOfEdges = Defaults.NUMBER_OF_EDGES;
+    protected int numberOfEdges = Defaults.NUMBER_OF_EDGES;
 
     /**
      * The multiple of total nodes.
      */
-    int totalNodesFactor = 5;
+    protected int totalNodesFactor = 5;
 
     /**
      * Generate the test case.
@@ -157,14 +158,15 @@ public abstract class SyntheticGenerator {
 
     /**
      * Write the graph to the fileToBeWritten.
-     * This method also fills the {@link Tc01SyntheticGenerator#positives}.
+     * This method also fills the {@link Tc01GeneratorSyntheticRandom#positives}.
      *
      * @param fileToBeWritten The file that shall be written (must not exist yet).
      * @param totalNodes      The total number of nodes. The actual graph may not contain the full number.
      * @param nodesOfInterest The number of desired positives.
      * @param totalEdges      The number of edges. The actual graph may not contain the full number.
      */
-    abstract void writeGraphAndSetPositives(File fileToBeWritten, int totalNodes, int nodesOfInterest, int totalEdges);
+    protected abstract void writeGraphAndSetPositives(File fileToBeWritten, int totalNodes, int nodesOfInterest,
+                                              int totalEdges);
 
     /**
      * Get the ID of the test case such as "TC01".
@@ -177,7 +179,7 @@ public abstract class SyntheticGenerator {
      *
      * @return A unique test case id.
      */
-    abstract String getTcId();
+    public abstract String getTcId();
 
     /**
      * Adds additional node ids to the existing set
@@ -185,7 +187,7 @@ public abstract class SyntheticGenerator {
      * @param numberOfNewNodes The number of new nodes to be added.
      * @return The <em>newly generated</em> ids are returned!
      */
-    Set<String> addAdditionalNodeIds(Set<String> setToWhichWillBeAdded, int numberOfNewNodes){
+    protected Set<String> addAdditionalNodeIds(Set<String> setToWhichWillBeAdded, int numberOfNewNodes){
         Set<String> newNodeIds =generateNodeIds(numberOfNewNodes, setToWhichWillBeAdded.size());
         setToWhichWillBeAdded.addAll(newNodeIds);
         return newNodeIds;
@@ -196,11 +198,11 @@ public abstract class SyntheticGenerator {
      * @param numberOfNodes The number of node IDs to be generated.
      * @return A set of unique node IDs.
      */
-    Set<String> generateNodeIds(int numberOfNodes){
+    protected Set<String> generateNodeIds(int numberOfNodes){
         return generateNodeIds(numberOfNodes, 0);
     }
 
-    Set<String> generateNodeIds(int numberOfNodes, int startId){
+    protected Set<String> generateNodeIds(int numberOfNodes, int startId){
         Set<String> nodeIds = new HashSet<>();
         for( int i = startId; i < numberOfNodes + startId; i++ ) {
             nodeIds.add("<N_" + getTcId() + "_" + i + ">");
@@ -239,7 +241,7 @@ public abstract class SyntheticGenerator {
      * @param numberOfEdges The number od edge IDs to be generated.
      * @return A set of unique edge IDs.
      */
-    Set<String> generateEdgeIds(int numberOfEdges){
+    protected Set<String> generateEdgeIds(int numberOfEdges){
         Set<String> edgeIds = new HashSet<>();
         for ( int i = 0; i < numberOfEdges; i++ ){
             edgeIds.add("<E_" + getTcId() + "_" + i + ">");

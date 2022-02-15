@@ -1,4 +1,4 @@
-package de.uni_mannheim.informatik.dws.dl_tc_generator.synthetic;
+package de.uni_mannheim.informatik.dws.dl_tc_generator.synthetic.random;
 
 import de.uni_mannheim.informatik.dws.dl_tc_generator.Util;
 import org.junit.jupiter.api.AfterAll;
@@ -7,10 +7,10 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class Tc11SyntheticGeneratorTest {
+class Tc06GeneratorSyntheticRandomTest {
 
 
-    private static final String TC11_DIR = "./tc11-test-dir";
+    private static final String TC06_DIR = "./tc06-test-dir";
 
     @BeforeAll
     static void setUp(){
@@ -19,21 +19,21 @@ class Tc11SyntheticGeneratorTest {
 
     @Test
     void testGenerator(){
-        Tc11SyntheticGenerator generator = new Tc11SyntheticGenerator(TC11_DIR);
+        Tc06GeneratorSyntheticRandom generator = new Tc06GeneratorSyntheticRandom(TC06_DIR);
         generator.setNumberOfEdges(10);
         generator.setTotalNodesFactor(4);
-        SyntheticGeneratorTest.testGenerator(generator, 10, 15);
+        TcGeneratorSyntheticRandomTest.testGenerator(generator, 10, 15);
     }
 
     @Test
     void getTcId() {
-        Tc11SyntheticGenerator generator = new Tc11SyntheticGenerator(TC11_DIR);
+        Tc06GeneratorSyntheticRandom generator = new Tc06GeneratorSyntheticRandom(TC06_DIR);
         assertNotNull(generator.getTcId());
     }
 
     @Test
     void getSetTotalNodesFactor(){
-        Tc11SyntheticGenerator generator = new Tc11SyntheticGenerator(TC11_DIR);
+        Tc06GeneratorSyntheticRandom generator = new Tc06GeneratorSyntheticRandom(TC06_DIR);
         generator.setTotalNodesFactor(10);
         assertEquals(10, generator.getTotalNodesFactor());
         generator.setTotalNodesFactor(1);
@@ -42,7 +42,7 @@ class Tc11SyntheticGeneratorTest {
 
     @AfterAll
     public static void tearDown(){
-        Util.delete(TC11_DIR);
+        Util.delete(TC06_DIR);
     }
 
 }
