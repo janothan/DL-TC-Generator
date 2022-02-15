@@ -1,0 +1,12 @@
+http://dbpedia.org/resource/Sheffield,_Alabama	1
+http://dbpedia.org/resource/Grand_Rivers,_Kentucky	1
+http://dbpedia.org/resource/Vienna,_Missouri	1
+http://dbpedia.org/resource/Florence,_Alabama	1
+http://dbpedia.org/resource/Trenton,_Georgia	1
+http://dbpedia.org/resource/Scarborough,_Tobago	1
+http://dbpedia.org/resource/Norwich,_Connecticut	0
+http://dbpedia.org/resource/Syracuse,_New_York	0
+http://dbpedia.org/resource/Elk_Falls,_Kansas	0
+http://dbpedia.org/resource/Cottonwood_Falls,_Kansas	0
+http://dbpedia.org/resource/Russell,_Kansas	0
+http://dbpedia.org/resource/Smolan,_Kansas	0

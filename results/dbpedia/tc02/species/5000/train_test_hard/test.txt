@@ -1,0 +1,10 @@
+http://dbpedia.org/resource/Crenarchaeota	1
+http://dbpedia.org/resource/Chromista	1
+http://dbpedia.org/resource/Sphingobacteria_(phylum)	1
+http://dbpedia.org/resource/Gracilicutes	1
+http://dbpedia.org/resource/Vendobionta	1
+http://dbpedia.org/resource/Cryptosara_vadonalis	0
+http://dbpedia.org/resource/Caphornia	0
+http://dbpedia.org/resource/Mordellistena_pectoralis	0
+http://dbpedia.org/resource/Brasiliomyces	0
+http://dbpedia.org/resource/Eudonia_albertalis	0

@@ -1,0 +1,12 @@
+http://dbpedia.org/resource/Worcester,_Massachusetts	1
+http://dbpedia.org/resource/Córdoba,_Argentina	1
+http://dbpedia.org/resource/Phra_Nakhon_Si_Ayutthaya_(city)	1
+http://dbpedia.org/resource/Geneva,_Ohio	1
+http://dbpedia.org/resource/Plevna,_Kansas	1
+http://dbpedia.org/resource/Valladolid,_Yucatán	1
+http://dbpedia.org/resource/Norwich,_Kansas	0
+http://dbpedia.org/resource/Almena,_Kansas	0
+http://dbpedia.org/resource/Lancaster,_Pennsylvania	0
+http://dbpedia.org/resource/London,_Kentucky	0
+http://dbpedia.org/resource/Nebo,_Kentucky	0
+http://dbpedia.org/resource/Portland,_Maine	0

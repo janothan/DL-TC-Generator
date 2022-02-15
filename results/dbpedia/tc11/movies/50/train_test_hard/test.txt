@@ -1,0 +1,8 @@
+http://dbpedia.org/resource/G-Force_(film)__G-Force__1	1
+http://dbpedia.org/resource/Wiggly,_Wiggly_Christmas__!__1	1
+http://dbpedia.org/resource/Big_Red_Car__Here_Comes_the_Big_Red_Car__1	1
+http://dbpedia.org/resource/Tubelight_(2017_Hindi_film)__Tubelight__1	1
+http://dbpedia.org/resource/Thanichalla_Njan	0
+http://dbpedia.org/resource/Welcome_to_Mooseport	0
+http://dbpedia.org/resource/Stay_Until_Tomorrow	0
+http://dbpedia.org/resource/Call_of_the_Rockies_(1944_film)	0

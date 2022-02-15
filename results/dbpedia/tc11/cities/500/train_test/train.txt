@@ -1,0 +1,12 @@
+http://dbpedia.org/resource/Worcester,_Massachusetts	1
+http://dbpedia.org/resource/Córdoba,_Argentina	1
+http://dbpedia.org/resource/Phra_Nakhon_Si_Ayutthaya_(city)	1
+http://dbpedia.org/resource/Geneva,_Ohio	1
+http://dbpedia.org/resource/Plevna,_Kansas	1
+http://dbpedia.org/resource/Valladolid,_Yucatán	1
+http://dbpedia.org/resource/Horcajo_(Madrid)	0
+http://dbpedia.org/resource/Meta,_Missouri	0
+http://dbpedia.org/resource/Yangsan	0
+http://dbpedia.org/resource/Dehaq	0
+http://dbpedia.org/resource/Wildwood,_Florida	0
+http://dbpedia.org/resource/Bardeh_Rasheh,_Marivan	0

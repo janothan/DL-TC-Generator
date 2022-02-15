@@ -1,0 +1,8 @@
+http://dbpedia.org/resource/Luna_Sea_3D_in_Los_Angeles__Luna_Sea_3D_in_Los_Angeles__1	1
+http://dbpedia.org/resource/Big_Red_Car__Here_Comes_the_Big_Red_Car__1	1
+http://dbpedia.org/resource/Tubelight_(2017_Hindi_film)__Tubelight__1	1
+http://dbpedia.org/resource/G-Force_(film)__G-Force__1	1
+http://dbpedia.org/resource/The_Money_Jungle	0
+http://dbpedia.org/resource/Women_Talking	0
+http://dbpedia.org/resource/Boku_to,_bokura_no_natsu	0
+http://dbpedia.org/resource/Apaadi	0

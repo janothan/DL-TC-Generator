@@ -1,0 +1,2 @@
+http://dbpedia.org/resource/Big_Red_Car__Here_Comes_the_Big_Red_Car__1	1
+http://dbpedia.org/resource/The_Three_Burials_of_Melquiades_Estrada	0

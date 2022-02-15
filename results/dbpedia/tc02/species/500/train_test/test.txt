@@ -1,0 +1,10 @@
+http://dbpedia.org/resource/Crenarchaeota	1
+http://dbpedia.org/resource/Vendobionta	1
+http://dbpedia.org/resource/Chromista	1
+http://dbpedia.org/resource/Gracilicutes	1
+http://dbpedia.org/resource/Sphingobacteria_(phylum)	1
+http://dbpedia.org/resource/Mycoplasma_faucium	0
+http://dbpedia.org/resource/Yalpa	0
+http://dbpedia.org/resource/Sitobion_leelamaniae	0
+http://dbpedia.org/resource/Lanugo_(wasp)	0
+http://dbpedia.org/resource/Dorcadion_reitteri	0

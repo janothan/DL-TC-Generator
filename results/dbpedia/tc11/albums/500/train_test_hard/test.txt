@@ -1,0 +1,14 @@
+http://dbpedia.org/resource/Anjada_Gandu__Anjada_Gandu__1	1
+http://dbpedia.org/resource/Tubelight_(2017_Hindi_film)__Tubelight__1	1
+http://dbpedia.org/resource/Cowboy_(2013_film)__Cowboy__1	1
+http://dbpedia.org/resource/Batman:_Gotham_Knight__Batman:_Gotham_Knight__1	1
+http://dbpedia.org/resource/Department_(film)__Department__1	1
+http://dbpedia.org/resource/Shaitan_(film)__Shaitan__1	1
+http://dbpedia.org/resource/Harold_and_Maude__Harold_and_Maude__1	1
+http://dbpedia.org/resource/Hallo_(film)__Hallo__1	0
+http://dbpedia.org/resource/Melnaattu_Marumagan__Melnaattu_Marumagan__1	0
+http://dbpedia.org/resource/White_of_the_Eye__White_of_the_Eye__1	0
+http://dbpedia.org/resource/I_See_You_(2006_film)__I_See_You__1	0
+http://dbpedia.org/resource/Fan_(film)__Fan__1	0
+http://dbpedia.org/resource/Srinivasa_Kalyana__Srinivasa_Kalyana__1	0
+http://dbpedia.org/resource/Mismatch_(film)__Mismatch__1	0

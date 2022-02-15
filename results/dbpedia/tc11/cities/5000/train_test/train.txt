@@ -1,0 +1,12 @@
+http://dbpedia.org/resource/Sheffield,_Alabama	1
+http://dbpedia.org/resource/Grand_Rivers,_Kentucky	1
+http://dbpedia.org/resource/Vienna,_Missouri	1
+http://dbpedia.org/resource/Florence,_Alabama	1
+http://dbpedia.org/resource/Trenton,_Georgia	1
+http://dbpedia.org/resource/Scarborough,_Tobago	1
+http://dbpedia.org/resource/Jesup,_Georgia	0
+http://dbpedia.org/resource/Ratlam	0
+http://dbpedia.org/resource/Bopa	0
+http://dbpedia.org/resource/Arnoun	0
+http://dbpedia.org/resource/New_Florence,_Missouri	0
+http://dbpedia.org/resource/Pematangsiantar	0

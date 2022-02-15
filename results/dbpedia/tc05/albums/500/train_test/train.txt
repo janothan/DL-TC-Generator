@@ -1,0 +1,4 @@
+http://dbpedia.org/resource/The_Stripes__The_Stripes__1	1
+http://dbpedia.org/resource/G-Force_(film)__G-Force__1	1
+http://dbpedia.org/resource/Low_Flame	0
+http://dbpedia.org/resource/Huinya	0

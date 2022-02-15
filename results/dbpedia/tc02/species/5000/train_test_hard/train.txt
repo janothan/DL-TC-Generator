@@ -1,0 +1,2 @@
+http://dbpedia.org/resource/Euryarchaeota	1
+http://dbpedia.org/resource/Euzophera_ultimella	0

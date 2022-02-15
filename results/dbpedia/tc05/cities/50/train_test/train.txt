@@ -1,0 +1,20 @@
+http://dbpedia.org/resource/North_Washington,_Iowa	1
+http://dbpedia.org/resource/Wyoming,_Michigan	1
+http://dbpedia.org/resource/Page,_Arizona	1
+http://dbpedia.org/resource/Richland,_Iowa	1
+http://dbpedia.org/resource/Henderson,_Iowa	1
+http://dbpedia.org/resource/Benson,_Arizona	1
+http://dbpedia.org/resource/Richardson,_Texas	1
+http://dbpedia.org/resource/Emmetsburg,_Iowa	1
+http://dbpedia.org/resource/Aurora,_Illinois	1
+http://dbpedia.org/resource/Harrington,_Washington	1
+http://dbpedia.org/resource/Rozveh	0
+http://dbpedia.org/resource/Lebo,_Kansas	0
+http://dbpedia.org/resource/Mount_Vernon,_Ohio	0
+http://dbpedia.org/resource/Gabiadji	0
+http://dbpedia.org/resource/Mangʻit	0
+http://dbpedia.org/resource/Artsyz	0
+http://dbpedia.org/resource/Yazd	0
+http://dbpedia.org/resource/White_City,_Kansas	0
+http://dbpedia.org/resource/Rajnagar,_Chhatarpur	0
+http://dbpedia.org/resource/Columbus,_Indiana	0

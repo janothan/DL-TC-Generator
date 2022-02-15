@@ -10,6 +10,6 @@ class ResultValidatorTest {
     void validate() {
         ResultValidator validator = new ResultValidator("./results/dbpedia");
         // TODO activate later
-        //assertTrue(validator.validate());
+        assertTrue(validator.validate());
     }
 }

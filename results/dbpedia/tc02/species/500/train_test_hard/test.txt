@@ -1,0 +1,10 @@
+http://dbpedia.org/resource/Crenarchaeota	1
+http://dbpedia.org/resource/Vendobionta	1
+http://dbpedia.org/resource/Chromista	1
+http://dbpedia.org/resource/Gracilicutes	1
+http://dbpedia.org/resource/Sphingobacteria_(phylum)	1
+http://dbpedia.org/resource/Cerithiopsis_prieguei	0
+http://dbpedia.org/resource/Oreodera_copei	0
+http://dbpedia.org/resource/Dawsomyces	0
+http://dbpedia.org/resource/Trachelipus_riparianus	0
+http://dbpedia.org/resource/Eoptolamna	0

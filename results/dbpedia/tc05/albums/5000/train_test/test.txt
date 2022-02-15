@@ -1,0 +1,16 @@
+http://dbpedia.org/resource/The_Stripes__The_Stripes__1	1
+http://dbpedia.org/resource/G-Force_(film)__G-Force__1	1
+http://dbpedia.org/resource/Just_One_of_the_Guys__Just_One_of_the_Guys__1	1
+http://dbpedia.org/resource/New_York_EP	1
+http://dbpedia.org/resource/Batman:_Gotham_Knight__Batman:_Gotham_Knight__1	1
+http://dbpedia.org/resource/Mona_Lisa_Smile__Mona_Lisa_Smile__1	1
+http://dbpedia.org/resource/So_This_Is_Love_(film)__So_This_Is_Love__1	1
+http://dbpedia.org/resource/New_York_(album)	1
+http://dbpedia.org/resource/Reunited_–_Cliff_Richard_and_The_Shadows	0
+http://dbpedia.org/resource/Back_from_the_Grave,_Volume_2__Back_from_the_Grave,_Volumes_1_and_2_CD__1	0
+http://dbpedia.org/resource/Stories_&_Songs_(Mark_Schultz_album)	0
+http://dbpedia.org/resource/Cock_Robin_(album)	0
+http://dbpedia.org/resource/Concentration_(album)	0
+http://dbpedia.org/resource/Back_from_the_Grave,_Volume_4_(CD)	0
+http://dbpedia.org/resource/King_Kobra_II	0
+http://dbpedia.org/resource/The_Path_of_Totality	0

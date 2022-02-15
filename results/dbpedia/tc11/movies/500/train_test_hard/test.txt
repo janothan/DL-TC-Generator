@@ -1,0 +1,8 @@
+http://dbpedia.org/resource/Luna_Sea_3D_in_Los_Angeles__Luna_Sea_3D_in_Los_Angeles__1	1
+http://dbpedia.org/resource/G-Force_(film)__G-Force__1	1
+http://dbpedia.org/resource/Wiggly,_Wiggly_Christmas__!__1	1
+http://dbpedia.org/resource/Tubelight_(2017_Hindi_film)__Tubelight__1	1
+http://dbpedia.org/resource/Akounak_Tedalat_Taha_Tazoughai	0
+http://dbpedia.org/resource/Wayne's_World_(film)	0
+http://dbpedia.org/resource/Delhii_Heights	0
+http://dbpedia.org/resource/The_Blazing_Sun_(1950_film)	0

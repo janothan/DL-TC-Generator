@@ -1,0 +1,10 @@
+http://dbpedia.org/resource/The_Omen__The_Omen__1
+http://dbpedia.org/resource/Twin_Peaks:_Fire_Walk_with_Me__Twin_Peaks:_Fire_Walk_with_Me__1
+http://dbpedia.org/resource/The_Stripes__The_Stripes__1
+http://dbpedia.org/resource/G-Force_(film)__G-Force__1
+http://dbpedia.org/resource/Just_One_of_the_Guys__Just_One_of_the_Guys__1
+http://dbpedia.org/resource/New_York_EP
+http://dbpedia.org/resource/Batman:_Gotham_Knight__Batman:_Gotham_Knight__1
+http://dbpedia.org/resource/Mona_Lisa_Smile__Mona_Lisa_Smile__1
+http://dbpedia.org/resource/So_This_Is_Love_(film)__So_This_Is_Love__1
+http://dbpedia.org/resource/New_York_(album)

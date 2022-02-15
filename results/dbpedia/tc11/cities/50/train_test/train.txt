@@ -1,0 +1,12 @@
+http://dbpedia.org/resource/Panama_City,_Florida__Panama_City,_Florida__1	1
+http://dbpedia.org/resource/Midway,_Kentucky	1
+http://dbpedia.org/resource/Florence,_Alabama	1
+http://dbpedia.org/resource/Medina,_Minnesota	1
+http://dbpedia.org/resource/Kief,_North_Dakota	1
+http://dbpedia.org/resource/Grand_Rivers,_Kentucky	1
+http://dbpedia.org/resource/Orem,_Utah	0
+http://dbpedia.org/resource/Soap_Lake,_Washington	0
+http://dbpedia.org/resource/Wiota,_Iowa	0
+http://dbpedia.org/resource/Aguadilla,_Puerto_Rico	0
+http://dbpedia.org/resource/Garwin,_Iowa	0
+http://dbpedia.org/resource/Colonia_Obrera	0
