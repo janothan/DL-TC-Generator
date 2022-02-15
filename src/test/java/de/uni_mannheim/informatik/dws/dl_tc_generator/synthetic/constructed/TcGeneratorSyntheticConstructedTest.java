@@ -2,7 +2,6 @@ package de.uni_mannheim.informatik.dws.dl_tc_generator.synthetic.constructed;
 
 import de.uni_mannheim.informatik.dws.dl_tc_generator.Util;
 import de.uni_mannheim.informatik.dws.dl_tc_generator.synthetic.TcGeneratorSynthetic;
-import de.uni_mannheim.informatik.dws.dl_tc_generator.synthetic.random.*;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Test;
 
@@ -40,6 +39,10 @@ class TcGeneratorSyntheticConstructedTest {
 
     static {
         generatorList.add(new Tc01GeneratorSyntheticConstructed(DIR_1));
+        generatorList.add(new Tc02GeneratorSyntheticConstructed(DIR_2));
+        generatorList.add(new Tc03GeneratorSyntheticConstructed(DIR_3));
+        generatorList.add(new Tc04GeneratorSyntheticConstructed(DIR_4));
+        generatorList.add(new Tc05GeneratorSyntheticConstructed(DIR_5));
     }
 
     /**
@@ -49,7 +52,7 @@ class TcGeneratorSyntheticConstructedTest {
     void testAllSyntheticGenerators() {
         for (TcGeneratorSynthetic generator : generatorList) {
             generator.setNumberOfEdges(10);
-            testGenerator(generator, 10, 11);
+            testGenerator(generator, 100, 200);
         }
     }
 

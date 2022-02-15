@@ -62,7 +62,6 @@ public class Tc02GeneratorSyntheticRandom extends TcGeneratorSyntheticRandom {
      * @param totalEdges The number of edges. The actual graph may not contain the full number.
      */
     public void writeGraphAndSetPositives(File fileToBeWritten, int totalNodes, int nodesOfInterest, int totalEdges){
-
         if(fileToBeWritten.exists()){
             LOGGER.error("The file to be written exists already. Aborting generation.");
             return;
@@ -70,7 +69,7 @@ public class Tc02GeneratorSyntheticRandom extends TcGeneratorSyntheticRandom {
 
         Set<String> nodeIds = generateNodeIds(totalNodes);
         Set<String> edgeIds = generateEdgeIds(totalEdges);
-        String targetEdge = edgeIds.iterator().next();
+        final String targetEdge = edgeIds.iterator().next();
 
         try (BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(fileToBeWritten), StandardCharsets.UTF_8))) {
             while (positives.size() < nodesOfInterest) {

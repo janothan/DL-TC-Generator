@@ -23,7 +23,6 @@ public class Tc04GeneratorSyntheticRandom extends TcGeneratorSyntheticRandom {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(Tc04GeneratorSyntheticRandom.class);
 
-
     public Tc04GeneratorSyntheticRandom(File directory) {
         super(directory);
     }

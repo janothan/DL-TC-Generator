@@ -13,34 +13,38 @@ import java.util.Set;
  * Test Case Form:
  * {@code
  * Positive: X<br/>
- * Named Nodes: -<br/>
- * Named Edges: E<br/>
- * Pattern: X E Y<br/>
+ * Named Nodes: N<br/>
+ * Named Edges: -<br/>
+ * Pattern: (X E N) OR (N E X) <br/>
  * }
  */
-public class Tc01GeneratorSyntheticConstructed extends TcGeneratorSyntheticConstructed {
+public class Tc04GeneratorSyntheticConstructed extends TcGeneratorSyntheticConstructed {
 
+
+    public Tc04GeneratorSyntheticConstructed(File directory, int[] sizes) {
+        super(directory, sizes);
+    }
+
+    public Tc04GeneratorSyntheticConstructed(File directory) {
+        super(directory);
+    }
+
+    public Tc04GeneratorSyntheticConstructed(String directory) {
+        super(directory);
+    }
 
     /**
      * Logger
      */
-    private static final Logger LOGGER = LoggerFactory.getLogger(Tc01GeneratorSyntheticConstructed.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(Tc04GeneratorSyntheticConstructed.class);
 
-    public Tc01GeneratorSyntheticConstructed(File directory, int[] sizes) {
-        super(directory, sizes);
-    }
-
-    public Tc01GeneratorSyntheticConstructed(File directory) {
-        super(directory);
-    }
-
-    public Tc01GeneratorSyntheticConstructed(String directory) {
-        super(directory);
+    @Override
+    public String getTcId() {
+        return "TC04";
     }
 
     @Override
-    protected void writeGraphAndSetPositives(File fileToBeWritten, int totalNodes, int nodesOfInterest,
-                                             int totalEdges, int maxTriplesPerNode) {
+    protected void writeGraphAndSetPositives(File fileToBeWritten, int totalNodes, int nodesOfInterest, int totalEdges, int avgTriplesPerNode) {
         if (fileToBeWritten.exists()) {
             LOGGER.error("The file to be written exists already. Aborting generation.");
             return;
@@ -48,7 +52,7 @@ public class Tc01GeneratorSyntheticConstructed extends TcGeneratorSyntheticConst
 
         Set<String> nodeIds = generateNodeIds(totalNodes);
         Set<String> edgeIds = generateEdgeIds(totalEdges);
-        final String targetEdge = edgeIds.iterator().next();
+        final String targetNode = nodeIds.iterator().next();
 
         try (BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(fileToBeWritten), StandardCharsets.UTF_8))) {
 
@@ -59,9 +63,16 @@ public class Tc01GeneratorSyntheticConstructed extends TcGeneratorSyntheticConst
                     // the node is already positive
                     continue;
                 }
-                String randomObject = Util.randomDrawFromSet(nodeIds);
-                writer.write(positiveNode + " " + targetEdge + " " + randomObject + " . \n");
-                graph.addObjectTriple(new Triple(positiveNode, targetEdge, randomObject));
+                int s0o1 = random.nextInt(2);
+                String randomEdge = Util.randomDrawFromSet(edgeIds);
+
+                if(s0o1 == 0){
+                    writer.write(  positiveNode + " " + randomEdge + " " + targetNode + " . \n");
+                    graph.addObjectTriple(new Triple(positiveNode, randomEdge, targetNode));
+                } else {
+                    writer.write( targetNode + " " + randomEdge + " " + positiveNode + " . \n");
+                    graph.addObjectTriple(new Triple(targetNode, randomEdge, positiveNode));
+                }
                 positives.add(positiveNode);
             }
 
@@ -72,7 +83,11 @@ public class Tc01GeneratorSyntheticConstructed extends TcGeneratorSyntheticConst
                 int tripleNumber = random.nextInt(maxTriplesPerNode + 1);
                 for(int i = 0; i < tripleNumber; i++) {
                     Triple triple = generateTripleWithStartNode(node, nodeIds, edgeIds);
-                    if(triple.predicate.equals(targetEdge) && !positives.contains(triple.subject)){
+                    if(
+                            ( triple.subject.equals(targetNode) && !positives.contains(triple.object) )
+                            || ( triple.object.equals(targetNode) && !positives.contains(triple.subject) )
+
+                    ){
                         i--;
                     } else {
                         writer.write(triple.subject + " " + triple.predicate + " " + triple.object + " . \n");
@@ -85,10 +100,5 @@ public class Tc01GeneratorSyntheticConstructed extends TcGeneratorSyntheticConst
         } catch (IOException e) {
             LOGGER.error("An error occurred while writing the file.", e);
         }
-    }
-
-    @Override
-    public String getTcId() {
-        return "TC01";
     }
 }
