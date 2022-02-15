@@ -15,6 +15,7 @@ class GeneratorSyntheticTest {
 
     private static final String GENERATION_DIR = "./genSyntheticTestDir";
     private static final String GENERATION_DIR_2 = "./genSyntheticTestDir2";
+    private static final String MERGED_GRAPH = "./merged_graph.nt";
 
     @BeforeAll
     public static void setUp(){
@@ -52,6 +53,10 @@ class GeneratorSyntheticTest {
         testFileExistence(GENERATION_DIR, "tc11", 11);
         testFileExistence(GENERATION_DIR, "tc12", 10);
         testFileExistence(GENERATION_DIR, "tc12", 11);
+
+        File mergedGraph = new File(GENERATION_DIR, "graph.nt");
+        assertTrue(mergedGraph.exists());
+        assertTrue(mergedGraph.isFile());
     }
 
     @Test
@@ -87,10 +92,29 @@ class GeneratorSyntheticTest {
         assertTrue(tc03_20test.isFile());
     }
 
-    @AfterAll
+    @Test
+    void mergeGraphsToOne() {
+        File testSynDir = Util.loadFile("./genSyntheticTestDir");
+        assertTrue(testSynDir.exists(), "The test resource 'genSyntheticTestDir' could not be found.");
+        assertTrue(testSynDir.isDirectory(), "The test resource 'genSyntheticTestDir' is not a directory.");
+        File mergedGraphFile = new File(MERGED_GRAPH);
+        assertFalse(mergedGraphFile.exists());
+        GeneratorSynthetic.mergeGraphsToOne(testSynDir, mergedGraphFile);
+        assertTrue(mergedGraphFile.exists());
+        assertTrue(mergedGraphFile.isFile());
+        String fileContent = Util.readUtf8(mergedGraphFile);
+        assertTrue(fileContent.contains("<N_TC02_96>"));
+        assertTrue(fileContent.contains("<N_TC08_47>"));
+        assertTrue(fileContent.contains("<N_TC12_98>"));
+        assertFalse(fileContent.contains("<NOT_EXITS_404>"));
+    }
+
+
+        @AfterAll
     public static void tearDown(){
         Util.delete(GENERATION_DIR);
         Util.delete(GENERATION_DIR_2);
+        Util.delete(MERGED_GRAPH);
     }
 
 }

@@ -5,7 +5,8 @@ import de.uni_mannheim.informatik.dws.dl_tc_generator.IGenerator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.File;
+import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -114,7 +115,65 @@ public class GeneratorSynthetic implements IGenerator {
             }
             g.generate();
         }
+        LOGGER.info("Merging graphs...");
+        mergeGraphsToOne(generatedDirectory);
+    }
 
+    /**
+     * Given a result directory of synthetic test cases, this method writes a large graph and places it in the
+     * specified synthetic results directory.
+     * @param syntheticDirectory The result directory.
+     */
+    public static void mergeGraphsToOne(File syntheticDirectory){
+        mergeGraphsToOne(syntheticDirectory, new File(syntheticDirectory, "graph.nt"));
+    }
+
+    /**
+     * Given a result directory of synthetic test cases, this method writes a large graph.
+     * @param syntheticDirectory The result directory.
+     * @param fileToWrite The new, large graph file that shall be written.
+     */
+    public static void mergeGraphsToOne(File syntheticDirectory, File fileToWrite) {
+        if(fileToWrite == null){
+            LOGGER.error("File to write must not be null. ABORTING operation.");
+            return;
+        }
+        if(fileToWrite.exists()){
+            LOGGER.error("The fileToWrite must not yet exist. ABORTING operation.");
+            return;
+        }
+        if(syntheticDirectory == null || !syntheticDirectory.exists() || syntheticDirectory.isFile()){
+            LOGGER.error("The syntheticDirectory is null, does not exist, or is no directory. ABORTING operation.");
+            return;
+        }
+
+        try (BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(fileToWrite), StandardCharsets.UTF_8))) {
+
+            // we first loop over the synthetic directory
+            File[] tcFiles = syntheticDirectory.listFiles();
+            if(tcFiles == null){
+                LOGGER.error("No test cases found. ABORTING operation.");
+                return;
+            }
+            for(File tcFile : tcFiles){
+                File graphFile = Paths.get(tcFile.getAbsolutePath(), "synthetic", "graph.nt").toFile();
+                if(!graphFile.exists()){
+                    LOGGER.warn("No graph.nt file found in test case directory: " + tcFile.getAbsolutePath());
+                    continue;
+                }
+                try(BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(graphFile),
+                        StandardCharsets.UTF_8))) {
+                   String line;
+                   while((line = reader.readLine()) != null){
+                       writer.write(line + "\n");
+                   }
+                } catch (IOException e) {
+                    LOGGER.error("An error occurred while reading file: " + graphFile.getAbsolutePath(), e);
+                }
+            }
+        } catch (IOException e) {
+            LOGGER.error("An error occurred while writing the file.", e);
+        }
     }
 
     public int[] getSizes() {
