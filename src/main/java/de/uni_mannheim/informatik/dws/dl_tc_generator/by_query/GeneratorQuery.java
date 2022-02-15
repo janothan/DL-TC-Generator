@@ -59,8 +59,8 @@ public class GeneratorQuery implements IGenerator {
 
     /**
      * If this set contains entries, the {@link GeneratorQuery#generateTestCases()} method will only consider test case
-     * collections (i.e., directories) with that name - for example, if there are tc1, tc2, ... and the set contains
-     * tc1 and tc2, then only the latter two will be generated.
+     * collections (i.e., directories) with that name - for example, if there are tc01, tc02, ... and the set contains
+     * tc01 and tc02, then only the latter two will be generated.
      */
     private Set<String> includeOnlyCollection;
 
@@ -248,8 +248,6 @@ public class GeneratorQuery implements IGenerator {
     }
 
 
-
-
     /**
      * Run a query given a file.
      *
@@ -373,6 +371,13 @@ public class GeneratorQuery implements IGenerator {
         return includeOnlyCollection;
     }
 
+    /**
+     * If set, the generation method will only consider test case
+     * collections (i.e., directories) with that name - for example, if there are tc01, tc02, ... and the set contains
+     * tc01 and tc02, then only the latter two will be generated.
+     * @param includeOnlyCollection The collection that shall be included.
+     */
+
     public void setIncludeOnlyCollection(Set<String> includeOnlyCollection) {
         this.includeOnlyCollection = includeOnlyCollection;
     }
@@ -382,6 +387,7 @@ public class GeneratorQuery implements IGenerator {
      *
      * @param includeOnlyCollection Values for the set.
      */
+    @Override
     public void setIncludeOnlyCollection(String... includeOnlyCollection) {
         this.includeOnlyCollection = new HashSet<>();
         this.includeOnlyCollection.addAll(Arrays.stream(includeOnlyCollection).toList());

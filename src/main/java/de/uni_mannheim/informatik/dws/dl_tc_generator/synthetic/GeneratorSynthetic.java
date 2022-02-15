@@ -7,7 +7,9 @@ import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.nio.file.Paths;
+import java.util.Arrays;
 import java.util.HashSet;
+import java.util.Locale;
 import java.util.Set;
 
 /**
@@ -39,26 +41,30 @@ public class GeneratorSynthetic implements IGenerator {
 
     private int numberOfEdges = 10;
 
+    private int nodesFactor = 4;
+
+    private Set<String> includeOnlyCollection;
+
     Set<SyntheticGenerator> generatorSet;
 
     public GeneratorSynthetic(File directoryToGenerate) {
         this.generatedDirectory = directoryToGenerate;
         generatorSet = new HashSet<>();
         generatorSet.add(new Tc01SyntheticGenerator(
-                        Paths.get(generatedDirectory.getAbsolutePath(), "tc01", "synthetic").toFile()
-                ));
+                Paths.get(generatedDirectory.getAbsolutePath(), "tc01", "synthetic").toFile()
+        ));
         generatorSet.add(new Tc02SyntheticGenerator(
-                        Paths.get(generatedDirectory.getAbsolutePath(), "tc02", "synthetic").toFile()
-                ));
+                Paths.get(generatedDirectory.getAbsolutePath(), "tc02", "synthetic").toFile()
+        ));
         generatorSet.add(new Tc03SyntheticGenerator(
-                        Paths.get(generatedDirectory.getAbsolutePath(), "tc03", "synthetic").toFile()
-                ));
+                Paths.get(generatedDirectory.getAbsolutePath(), "tc03", "synthetic").toFile()
+        ));
         generatorSet.add(new Tc04SyntheticGenerator(
-                        Paths.get(generatedDirectory.getAbsolutePath(), "tc04", "synthetic").toFile()
-                ));
+                Paths.get(generatedDirectory.getAbsolutePath(), "tc04", "synthetic").toFile()
+        ));
         generatorSet.add(new Tc05SyntheticGenerator(
-                        Paths.get(generatedDirectory.getAbsolutePath(), "tc05", "synthetic").toFile()
-                ));
+                Paths.get(generatedDirectory.getAbsolutePath(), "tc05", "synthetic").toFile()
+        ));
         generatorSet.add(new Tc06SyntheticGenerator(
                 Paths.get(generatedDirectory.getAbsolutePath(), "tc06", "synthetic").toFile()
         ));
@@ -96,6 +102,16 @@ public class GeneratorSynthetic implements IGenerator {
             LOGGER.info("Created directory: " + generatedDirectory.getAbsolutePath());
         }
         for (SyntheticGenerator g : generatorSet) {
+            if (includeOnlyCollection != null
+                    &&
+                    !(
+                            includeOnlyCollection.contains(g.getTcId())
+                                    || includeOnlyCollection.contains(g.getTcId().toLowerCase(Locale.ROOT))
+                                    || includeOnlyCollection.contains(g.getTcId().toUpperCase(Locale.ROOT))
+                    )
+            ) {
+                continue;
+            }
             g.generate();
         }
 
@@ -108,6 +124,29 @@ public class GeneratorSynthetic implements IGenerator {
     public void setSizes(int[] sizes) {
         generatorSet.forEach(x -> x.setSizes(sizes));
         this.sizes = sizes;
+    }
+
+    /**
+     * If set, the generation method will only consider test case
+     * collections (i.e., directories) with that name - for example, if there are tc01, tc02, ... and the set contains
+     * tc01 and tc02, then only the latter two will be generated.
+     *
+     * @param includeOnlyCollection The collection that shall be included.
+     */
+
+    public void setIncludeOnlyCollection(Set<String> includeOnlyCollection) {
+        this.includeOnlyCollection = includeOnlyCollection;
+    }
+
+    /**
+     * This method will override the current set.
+     *
+     * @param includeOnlyCollection Values for the set.
+     */
+    @Override
+    public void setIncludeOnlyCollection(String... includeOnlyCollection) {
+        this.includeOnlyCollection = new HashSet<>();
+        this.includeOnlyCollection.addAll(Arrays.stream(includeOnlyCollection).toList());
     }
 
     public String getSeparator() {
@@ -138,5 +177,14 @@ public class GeneratorSynthetic implements IGenerator {
 
     public void setGeneratorSet(Set<SyntheticGenerator> generatorSet) {
         this.generatorSet = generatorSet;
+    }
+
+    public int getNodesFactor() {
+        return nodesFactor;
+    }
+
+    public void setNodesFactor(int nodesFactor) {
+        generatorSet.forEach(x -> x.setTotalNodesFactor(nodesFactor));
+        this.nodesFactor = nodesFactor;
     }
 }

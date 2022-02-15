@@ -7,18 +7,14 @@ import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 
-import static de.uni_mannheim.informatik.dws.dl_tc_generator.ResultValidator.isOverlapFree;
 import static org.junit.jupiter.api.Assertions.*;
 
 class GeneratorSyntheticTest {
 
 
     private static final String GENERATION_DIR = "./genSyntheticTestDir";
+    private static final String GENERATION_DIR_2 = "./genSyntheticTestDir2";
 
     @BeforeAll
     public static void setUp(){
@@ -32,53 +28,69 @@ class GeneratorSyntheticTest {
         generator.setNumberOfEdges(10);
         generator.generateTestCases();
 
-        testFileExistance("tc01", 10);
-        testFileExistance("tc01", 11);
-        testFileExistance("tc02", 10);
-        testFileExistance("tc02", 11);
-        testFileExistance("tc03", 10);
-        testFileExistance("tc03", 11);
-        testFileExistance("tc04", 10);
-        testFileExistance("tc04", 11);
-        testFileExistance("tc05", 10);
-        testFileExistance("tc05", 11);
-        testFileExistance("tc06", 10);
-        testFileExistance("tc06", 11);
-        testFileExistance("tc07", 10);
-        testFileExistance("tc07", 11);
-        testFileExistance("tc08", 10);
-        testFileExistance("tc08", 11);
-        testFileExistance("tc09", 10);
-        testFileExistance("tc09", 11);
-        testFileExistance("tc10", 10);
-        testFileExistance("tc10", 11);
-        testFileExistance("tc11", 10);
-        testFileExistance("tc11", 11);
-        testFileExistance("tc12", 10);
-        testFileExistance("tc12", 11);
+        testFileExistence(GENERATION_DIR, "tc01", 10);
+        testFileExistence(GENERATION_DIR, "tc01", 11);
+        testFileExistence(GENERATION_DIR, "tc02", 10);
+        testFileExistence(GENERATION_DIR, "tc02", 11);
+        testFileExistence(GENERATION_DIR, "tc03", 10);
+        testFileExistence(GENERATION_DIR, "tc03", 11);
+        testFileExistence(GENERATION_DIR, "tc04", 10);
+        testFileExistence(GENERATION_DIR, "tc04", 11);
+        testFileExistence(GENERATION_DIR, "tc05", 10);
+        testFileExistence(GENERATION_DIR, "tc05", 11);
+        testFileExistence(GENERATION_DIR, "tc06", 10);
+        testFileExistence(GENERATION_DIR, "tc06", 11);
+        testFileExistence(GENERATION_DIR, "tc07", 10);
+        testFileExistence(GENERATION_DIR, "tc07", 11);
+        testFileExistence(GENERATION_DIR, "tc08", 10);
+        testFileExistence(GENERATION_DIR, "tc08", 11);
+        testFileExistence(GENERATION_DIR, "tc09", 10);
+        testFileExistence(GENERATION_DIR, "tc09", 11);
+        testFileExistence(GENERATION_DIR, "tc10", 10);
+        testFileExistence(GENERATION_DIR, "tc10", 11);
+        testFileExistence(GENERATION_DIR, "tc11", 10);
+        testFileExistence(GENERATION_DIR, "tc11", 11);
+        testFileExistence(GENERATION_DIR, "tc12", 10);
+        testFileExistence(GENERATION_DIR, "tc12", 11);
     }
 
-    static void testFileExistance(String tcName, int numberTest){
-        File resultDir = new File(GENERATION_DIR);
+    @Test
+    void generateTestCasesWithSelector(){
+        GeneratorSynthetic generator = new GeneratorSynthetic(GENERATION_DIR_2);
+        generator.setSizes(new int[]{10});
+        generator.setIncludeOnlyCollection("tc01", "tc02");
+        generator.setNumberOfEdges(10);
+        generator.generateTestCases();
+
+        testFileExistence(GENERATION_DIR_2, "tc01", 10);
+        testFileExistence(GENERATION_DIR_2, "tc02", 10);
+
+        File tc03_10 = Paths.get(GENERATION_DIR_2, "tc03", "synthetic", "10").toFile();
+        assertFalse(tc03_10.exists());
+    }
+
+    static void testFileExistence(String generationDirectory, String tcName, int numberTest){
+        File resultDir = new File(generationDirectory);
         assertTrue(resultDir.exists());
         assertTrue(resultDir.isDirectory());
 
         File tc03_10 = Paths.get(resultDir.getAbsolutePath(), tcName, "synthetic", "" + numberTest).toFile();
-        assertTrue(tc03_10.exists());
+        assertTrue(tc03_10.exists(), "File not found: " + tc03_10.getAbsolutePath());
         assertTrue(tc03_10.isDirectory());
 
         File tc03_10graph = Paths.get(resultDir.getAbsolutePath(), tcName, "synthetic", "graph.nt").toFile();
-        assertTrue(tc03_10graph.exists());
+        assertTrue(tc03_10graph.exists(), "File not found: " + tc03_10graph.getAbsolutePath());
         assertTrue(tc03_10graph.isFile());
 
         File tc03_20test = Paths.get(tc03_10.getAbsolutePath(), "train_test", "test.txt").toFile();
-        assertTrue(tc03_20test.exists());
+        assertTrue(tc03_20test.exists(), "File not found: " + tc03_20test);
         assertTrue(tc03_20test.isFile());
     }
 
     @AfterAll
     public static void tearDown(){
         Util.delete(GENERATION_DIR);
+        Util.delete(GENERATION_DIR_2);
     }
 
 }
