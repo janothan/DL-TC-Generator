@@ -127,7 +127,8 @@ public abstract class TcGeneratorSynthetic {
         int nodesOfInterest = Arrays.stream(sizes).reduce(0, Integer::sum);
 
         LOGGER.info("Writing graph for " + this.getTcId());
-        writeGraphAndSetPositives(new File(directory, "graph.nt"), totalNodesFactor * nodesOfInterest, nodesOfInterest, numberOfEdges);
+        writeGraphAndSetPositives(new File(directory, "graph.nt"), totalNodesFactor * nodesOfInterest,
+                nodesOfInterest, numberOfEdges);
 
         List<String> posList = positives.stream().toList();
         List<String> negList = getNegatives().stream().toList();
@@ -166,7 +167,7 @@ public abstract class TcGeneratorSynthetic {
      * @param totalEdges      The number of edges. The actual graph may not contain the full number.
      */
     protected abstract void writeGraphAndSetPositives(File fileToBeWritten, int totalNodes, int nodesOfInterest,
-                                              int totalEdges);
+                                                      int totalEdges);
 
     /**
      * Get the ID of the test case such as "TC01".

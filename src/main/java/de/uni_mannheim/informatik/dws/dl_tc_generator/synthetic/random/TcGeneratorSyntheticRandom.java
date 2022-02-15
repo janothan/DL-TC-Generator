@@ -6,6 +6,7 @@ import java.io.File;
 
 public abstract class TcGeneratorSyntheticRandom extends TcGeneratorSynthetic {
 
+
     public TcGeneratorSyntheticRandom(File directory, int[] sizes) {
         super(directory, sizes);
     }
@@ -17,5 +18,6 @@ public abstract class TcGeneratorSyntheticRandom extends TcGeneratorSynthetic {
     public TcGeneratorSyntheticRandom(String directory) {
         super(directory);
     }
+
 }
 

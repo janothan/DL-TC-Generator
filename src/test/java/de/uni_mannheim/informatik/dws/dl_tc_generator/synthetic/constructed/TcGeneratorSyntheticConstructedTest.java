@@ -1,7 +1,8 @@
-package de.uni_mannheim.informatik.dws.dl_tc_generator.synthetic.random;
+package de.uni_mannheim.informatik.dws.dl_tc_generator.synthetic.constructed;
 
 import de.uni_mannheim.informatik.dws.dl_tc_generator.Util;
 import de.uni_mannheim.informatik.dws.dl_tc_generator.synthetic.TcGeneratorSynthetic;
+import de.uni_mannheim.informatik.dws.dl_tc_generator.synthetic.random.*;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Test;
 
@@ -15,22 +16,22 @@ import java.util.Set;
 import static de.uni_mannheim.informatik.dws.dl_tc_generator.ResultValidator.isOverlapFree;
 import static org.junit.jupiter.api.Assertions.*;
 
-class TcGeneratorSyntheticRandomTest {
+class TcGeneratorSyntheticConstructedTest {
 
 
-    private static final String DIR_0 = "./synthetic_tc";
-    private static final String DIR_1 = "./synthetic_tc01";
-    private static final String DIR_2 = "./synthetic_tc02";
-    private static final String DIR_3 = "./synthetic_tc03";
-    private static final String DIR_4 = "./synthetic_tc04";
-    private static final String DIR_5 = "./synthetic_tc05";
-    private static final String DIR_6 = "./synthetic_tc06";
-    private static final String DIR_7 = "./synthetic_tc07";
-    private static final String DIR_8 = "./synthetic_tc08";
-    private static final String DIR_9 = "./synthetic_tc09";
-    private static final String DIR_10 = "./synthetic_tc10";
-    private static final String DIR_11 = "./synthetic_tc11";
-    private static final String DIR_12 = "./synthetic_tc12";
+    private static final String DIR_0 = "./synthetic_constructed_tc";
+    private static final String DIR_1 = "./synthetic_constructed_tc01";
+    private static final String DIR_2 = "./synthetic_constructed_tc02";
+    private static final String DIR_3 = "./synthetic_constructed_tc03";
+    private static final String DIR_4 = "./synthetic_constructed_tc04";
+    private static final String DIR_5 = "./synthetic_constructed_tc05";
+    private static final String DIR_6 = "./synthetic_constructed_tc06";
+    private static final String DIR_7 = "./synthetic_constructed_tc07";
+    private static final String DIR_8 = "./synthetic_constructed_tc08";
+    private static final String DIR_9 = "./synthetic_constructed_tc09";
+    private static final String DIR_10 = "./synthetic_constructed_tc10";
+    private static final String DIR_11 = "./synthetic_constructed_tc11";
+    private static final String DIR_12 = "./synthetic_constructed_tc12";
 
     /**
      * A list of all synthetic generators which can be used in multiple test cases.
@@ -38,18 +39,7 @@ class TcGeneratorSyntheticRandomTest {
     private static final List<TcGeneratorSynthetic> generatorList = new ArrayList<>();
 
     static {
-        generatorList.add(new Tc01GeneratorSyntheticRandom(DIR_1));
-        generatorList.add(new Tc02GeneratorSyntheticRandom(DIR_2));
-        generatorList.add(new Tc03GeneratorSyntheticRandom(DIR_3));
-        generatorList.add(new Tc04GeneratorSyntheticRandom(DIR_4));
-        generatorList.add(new Tc05GeneratorSyntheticRandom(DIR_5));
-        generatorList.add(new Tc06GeneratorSyntheticRandom(DIR_6));
-        generatorList.add(new Tc07GeneratorSyntheticRandom(DIR_7));
-        generatorList.add(new Tc08GeneratorSyntheticRandom(DIR_8));
-        generatorList.add(new Tc09GeneratorSyntheticRandom(DIR_9));
-        generatorList.add(new Tc10GeneratorSyntheticRandom(DIR_10));
-        generatorList.add(new Tc11GeneratorSyntheticRandom(DIR_11));
-        generatorList.add(new Tc12GeneratorSyntheticRandom(DIR_12));
+        generatorList.add(new Tc01GeneratorSyntheticConstructed(DIR_1));
     }
 
     /**
@@ -79,13 +69,11 @@ class TcGeneratorSyntheticRandomTest {
         for(int size : sizes) {
             File posFile = Paths.get(generatedDirectory.getAbsolutePath(), "" + size, "positives.txt").toFile();
             File negFile = Paths.get(generatedDirectory.getAbsolutePath(), "" + size, "negatives.txt").toFile();
-            assertTrue(isOverlapFree(posFile, negFile), "Overlap occurred in the following two files\n" +
-                    posFile.getAbsolutePath() + "\n" +
-                    negFile.getAbsolutePath() + "\n");
+            assertTrue(isOverlapFree(posFile, negFile));
 
             // test number of negative concepts:
             List<String> negList = Util.readUtf8FileIntoList(negFile);
-            assertEquals(size, negList.size(), "Insufficient negatives in " + negFile.getAbsolutePath());
+            assertEquals(size, negList.size());
 
             assertTrue(posFile.exists() && posFile.isFile());
             assertTrue(negFile.exists() && negFile.isFile());
@@ -130,5 +118,4 @@ class TcGeneratorSyntheticRandomTest {
         Util.delete(DIR_11);
         Util.delete(DIR_12);
     }
-
 }

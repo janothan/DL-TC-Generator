@@ -31,26 +31,27 @@ class GeneratorQueryTest {
         resultDir.deleteOnExit();
         try {
             GeneratorQuery generator = new GeneratorQuery(Util.loadFile("testQueries"), resultDir);
+            generator.setSizes(new int[]{10, 20});
             generator.generateTestCases();
-            File resultFile = new File(resultDir, "tc01/cities/50/positives.txt");
+            File resultFile = new File(resultDir, "tc01/cities/10/positives.txt");
             assertTrue(resultFile.exists());
             String content = Util.readUtf8(resultFile);
             assertTrue(content.contains("\n"));
-            resultFile = new File(resultDir, "tc02/cities/500/positives.txt");
+            resultFile = new File(resultDir, "tc02/cities/20/positives.txt");
             assertTrue(resultFile.exists());
 
             // check for train/test split
-            resultFile = new File(resultDir, "tc02/cities/500/train_test/test.txt");
+            resultFile = new File(resultDir, "tc02/cities/20/train_test/test.txt");
             assertTrue(resultFile.exists());
-            resultFile = new File(resultDir, "tc02/cities/500/train_test/train.txt");
+            resultFile = new File(resultDir, "tc02/cities/20/train_test/train.txt");
             assertTrue(resultFile.exists());
-            resultFile = new File(resultDir, "tc02/cities/500/train_test_hard/test.txt");
+            resultFile = new File(resultDir, "tc02/cities/20/train_test_hard/test.txt");
             assertTrue(resultFile.exists());
-            resultFile = new File(resultDir, "tc02/cities/500/train_test_hard/train.txt");
+            resultFile = new File(resultDir, "tc02/cities/20/train_test_hard/train.txt");
             assertTrue(resultFile.exists());
 
             // make sure there are no hard cases for species
-            resultFile = new File(resultDir, "tc01/species/500/train_test_hard");
+            resultFile = new File(resultDir, "tc01/species/20/train_test_hard");
             assertFalse(resultFile.exists());
         } catch (Exception e){
             fail(e);
