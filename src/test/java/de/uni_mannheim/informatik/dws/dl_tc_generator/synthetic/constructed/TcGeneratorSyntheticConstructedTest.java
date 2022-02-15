@@ -3,6 +3,7 @@ package de.uni_mannheim.informatik.dws.dl_tc_generator.synthetic.constructed;
 import de.uni_mannheim.informatik.dws.dl_tc_generator.Util;
 import de.uni_mannheim.informatik.dws.dl_tc_generator.synthetic.TcGeneratorSynthetic;
 import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
@@ -43,6 +44,14 @@ class TcGeneratorSyntheticConstructedTest {
         generatorList.add(new Tc03GeneratorSyntheticConstructed(DIR_3));
         generatorList.add(new Tc04GeneratorSyntheticConstructed(DIR_4));
         generatorList.add(new Tc05GeneratorSyntheticConstructed(DIR_5));
+        generatorList.add(new Tc06GeneratorSyntheticConstructed(DIR_6));
+        generatorList.add(new Tc07GeneratorSyntheticConstructed(DIR_7));
+        generatorList.add(new Tc08GeneratorSyntheticConstructed(DIR_8));
+    }
+
+    @BeforeAll
+    static void setUp(){
+        cleanUp();
     }
 
     /**
@@ -76,7 +85,7 @@ class TcGeneratorSyntheticConstructedTest {
 
             // test number of negative concepts:
             List<String> negList = Util.readUtf8FileIntoList(negFile);
-            assertEquals(size, negList.size());
+            assertEquals(size, negList.size(), "Insufficient number of negatives in file " + negFile.getAbsolutePath());
 
             assertTrue(posFile.exists() && posFile.isFile());
             assertTrue(negFile.exists() && negFile.isFile());
