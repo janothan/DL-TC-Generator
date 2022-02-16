@@ -68,10 +68,10 @@ public class Tc11GeneratorSyntheticConstructed extends TcGeneratorSyntheticConst
                     continue;
                 }
 
-                writer.write(positive + " " + targetEdge1 + " " + randomNode1 + ". \n");
-                writer.write(randomNode1 + " " + targetEdge2 + " " + targetNode + ". \n");
-                writer.write(positive + " " + targetEdge1 + " " + randomNode2 + ". \n");
-                writer.write(randomNode2 + " " + targetEdge2 + " " + targetNode + ". \n");
+                writer.write(positive + " " + targetEdge1 + " " + randomNode1 + " . \n");
+                writer.write(randomNode1 + " " + targetEdge2 + " " + targetNode + " . \n");
+                writer.write(positive + " " + targetEdge1 + " " + randomNode2 + " . \n");
+                writer.write(randomNode2 + " " + targetEdge2 + " " + targetNode + " . \n");
 
                 graph.addObjectTriple(new Triple(positive, targetEdge1, randomNode1));
                 graph.addObjectTriple(new Triple(randomNode1, targetEdge2, targetNode));

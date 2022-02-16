@@ -50,6 +50,7 @@ class TcGeneratorSyntheticConstructedTest {
         generatorList.add(new Tc09GeneratorSyntheticConstructed(DIR_9));
         generatorList.add(new Tc10GeneratorSyntheticConstructed(DIR_10));
         generatorList.add(new Tc11GeneratorSyntheticConstructed(DIR_11));
+        generatorList.add(new Tc12GeneratorSyntheticConstructed(DIR_12));
     }
 
     @BeforeAll

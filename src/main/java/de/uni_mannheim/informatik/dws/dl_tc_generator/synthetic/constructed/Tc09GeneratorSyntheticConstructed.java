@@ -58,8 +58,8 @@ public class Tc09GeneratorSyntheticConstructed extends TcGeneratorSyntheticConst
                 final String randomSubject = Util.randomDrawFromSet(nodeIds);
                 final String randomObject1 = Util.randomDrawFromSet(nodeIds);
                 final String randomObject2 = Util.randomDrawFromSet(nodeIds);
-                writer.write(randomSubject + " " + targetEdge + " " + randomObject1 + ". \n");
-                writer.write(randomSubject + " " + targetEdge + " " + randomObject2 + ". \n");
+                writer.write(randomSubject + " " + targetEdge + " " + randomObject1 + " . \n");
+                writer.write(randomSubject + " " + targetEdge + " " + randomObject2 + " . \n");
                 graph.addObjectTriple(new Triple(randomSubject, targetEdge, randomObject1));
                 graph.addObjectTriple(new Triple(randomSubject, targetEdge, randomObject2));
                 positives.add(randomSubject);

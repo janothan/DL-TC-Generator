@@ -55,7 +55,7 @@ public class Tc06GeneratorSyntheticConstructed extends TcGeneratorSyntheticConst
         try (BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(fileToBeWritten), StandardCharsets.UTF_8))) {
             while (positives.size() < nodesOfInterest) {
                 final String randomSubject = Util.randomDrawFromSet(nodeIds);
-                writer.write(randomSubject + " " + targetEdge + " " + targetNode + ". \n");
+                writer.write(randomSubject + " " + targetEdge + " " + targetNode + " . \n");
                 graph.addObjectTriple(new Triple(randomSubject, targetEdge, targetNode));
                 positives.add(randomSubject);
             }

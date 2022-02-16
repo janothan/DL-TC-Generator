@@ -60,8 +60,8 @@ public class Tc10GeneratorSyntheticConstructed extends TcGeneratorSyntheticConst
                     // just redraw
                     continue;
                 }
-                writer.write(randomSubject1 + " " + targetEdge + " " + randomObject + ". \n");
-                writer.write(randomSubject2 + " " + targetEdge + " " + randomObject + ". \n");
+                writer.write(randomSubject1 + " " + targetEdge + " " + randomObject + " . \n");
+                writer.write(randomSubject2 + " " + targetEdge + " " + randomObject + " . \n");
                 graph.addObjectTriple(new Triple(randomSubject1, targetEdge, randomObject));
                 graph.addObjectTriple(new Triple(randomSubject2, targetEdge, randomObject));
                 positives.add(randomObject);
