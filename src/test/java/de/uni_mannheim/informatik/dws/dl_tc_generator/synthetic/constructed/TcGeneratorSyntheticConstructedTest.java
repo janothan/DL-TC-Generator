@@ -47,6 +47,9 @@ class TcGeneratorSyntheticConstructedTest {
         generatorList.add(new Tc06GeneratorSyntheticConstructed(DIR_6));
         generatorList.add(new Tc07GeneratorSyntheticConstructed(DIR_7));
         generatorList.add(new Tc08GeneratorSyntheticConstructed(DIR_8));
+        generatorList.add(new Tc09GeneratorSyntheticConstructed(DIR_9));
+        generatorList.add(new Tc10GeneratorSyntheticConstructed(DIR_10));
+        generatorList.add(new Tc11GeneratorSyntheticConstructed(DIR_11));
     }
 
     @BeforeAll
