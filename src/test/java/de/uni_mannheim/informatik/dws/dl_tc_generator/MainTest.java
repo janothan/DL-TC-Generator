@@ -1,6 +1,7 @@
 package de.uni_mannheim.informatik.dws.dl_tc_generator;
 
 import de.uni_mannheim.informatik.dws.dl_tc_generator.synthetic.GeneratorSynthetic;
+import de.uni_mannheim.informatik.dws.dl_tc_generator.synthetic.random.GeneratorSyntheticRandom;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -49,11 +50,12 @@ class MainTest {
         try {
             Main.main(new String[]{"-d", RESULT_DIR_5, "-s", "10", "11", "-e", "10", "-n", "3"});
 
-            File resultFile = new File(RESULT_DIR_5, "tc01/synthetic/10/positives.txt");
+            File resultFile = new File(RESULT_DIR_5, "tc01/" + GeneratorSyntheticRandom.TC_GROUP_NAME + "/10" +
+                    "/positives.txt");
             assertTrue(resultFile.exists());
             String content = Util.readUtf8(resultFile);
             assertTrue(content.contains("\n"));
-            resultFile = new File(RESULT_DIR_5, "tc02/synthetic/11/positives.txt");
+            resultFile = new File(RESULT_DIR_5, "tc02/" + GeneratorSyntheticRandom.TC_GROUP_NAME + "/11/positives.txt");
             assertTrue(resultFile.exists());
 
             GeneratorSynthetic generator = ((GeneratorSynthetic)Main.getGenerator());

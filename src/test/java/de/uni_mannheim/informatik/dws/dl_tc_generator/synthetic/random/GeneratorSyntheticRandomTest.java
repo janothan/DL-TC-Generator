@@ -2,7 +2,6 @@ package de.uni_mannheim.informatik.dws.dl_tc_generator.synthetic.random;
 
 import de.uni_mannheim.informatik.dws.dl_tc_generator.Util;
 import de.uni_mannheim.informatik.dws.dl_tc_generator.synthetic.GeneratorSynthetic;
-import de.uni_mannheim.informatik.dws.dl_tc_generator.synthetic.random.GeneratorSyntheticRandom;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -10,14 +9,15 @@ import org.junit.jupiter.api.Test;
 import java.io.File;
 import java.nio.file.Paths;
 
+import static de.uni_mannheim.informatik.dws.dl_tc_generator.synthetic.GeneratorSyntheticTest.testFileExistence;
 import static org.junit.jupiter.api.Assertions.*;
 
 class GeneratorSyntheticRandomTest {
 
 
-    private static final String GENERATION_DIR = "./genSyntheticTestDir";
-    private static final String GENERATION_DIR_2 = "./genSyntheticTestDir2";
-    private static final String MERGED_GRAPH = "./merged_graph.nt";
+    private static final String GENERATION_DIR = "./genSyntheticRandomTestDir";
+    private static final String GENERATION_DIR_2 = "./genSyntheticRandomTestDir2";
+    private static final String MERGED_GRAPH = "./merged_graph_random.nt";
 
     @BeforeAll
     public static void setUp() {
@@ -30,31 +30,32 @@ class GeneratorSyntheticRandomTest {
         generator.setSizes(new int[]{10, 11});
         generator.setNumberOfEdges(10);
         generator.generateTestCases();
+        final String groupName = generator.getTcGroupName();
 
-        testFileExistence(GENERATION_DIR, "tc01", 10);
-        testFileExistence(GENERATION_DIR, "tc01", 11);
-        testFileExistence(GENERATION_DIR, "tc02", 10);
-        testFileExistence(GENERATION_DIR, "tc02", 11);
-        testFileExistence(GENERATION_DIR, "tc03", 10);
-        testFileExistence(GENERATION_DIR, "tc03", 11);
-        testFileExistence(GENERATION_DIR, "tc04", 10);
-        testFileExistence(GENERATION_DIR, "tc04", 11);
-        testFileExistence(GENERATION_DIR, "tc05", 10);
-        testFileExistence(GENERATION_DIR, "tc05", 11);
-        testFileExistence(GENERATION_DIR, "tc06", 10);
-        testFileExistence(GENERATION_DIR, "tc06", 11);
-        testFileExistence(GENERATION_DIR, "tc07", 10);
-        testFileExistence(GENERATION_DIR, "tc07", 11);
-        testFileExistence(GENERATION_DIR, "tc08", 10);
-        testFileExistence(GENERATION_DIR, "tc08", 11);
-        testFileExistence(GENERATION_DIR, "tc09", 10);
-        testFileExistence(GENERATION_DIR, "tc09", 11);
-        testFileExistence(GENERATION_DIR, "tc10", 10);
-        testFileExistence(GENERATION_DIR, "tc10", 11);
-        testFileExistence(GENERATION_DIR, "tc11", 10);
-        testFileExistence(GENERATION_DIR, "tc11", 11);
-        testFileExistence(GENERATION_DIR, "tc12", 10);
-        testFileExistence(GENERATION_DIR, "tc12", 11);
+        testFileExistence(GENERATION_DIR, "tc01", groupName, 10);
+        testFileExistence(GENERATION_DIR, "tc01", groupName, 11);
+        testFileExistence(GENERATION_DIR, "tc02", groupName, 10);
+        testFileExistence(GENERATION_DIR, "tc02", groupName, 11);
+        testFileExistence(GENERATION_DIR, "tc03", groupName, 10);
+        testFileExistence(GENERATION_DIR, "tc03", groupName, 11);
+        testFileExistence(GENERATION_DIR, "tc04", groupName, 10);
+        testFileExistence(GENERATION_DIR, "tc04", groupName, 11);
+        testFileExistence(GENERATION_DIR, "tc05", groupName, 10);
+        testFileExistence(GENERATION_DIR, "tc05", groupName, 11);
+        testFileExistence(GENERATION_DIR, "tc06", groupName, 10);
+        testFileExistence(GENERATION_DIR, "tc06", groupName, 11);
+        testFileExistence(GENERATION_DIR, "tc07", groupName, 10);
+        testFileExistence(GENERATION_DIR, "tc07", groupName, 11);
+        testFileExistence(GENERATION_DIR, "tc08", groupName, 10);
+        testFileExistence(GENERATION_DIR, "tc08", groupName, 11);
+        testFileExistence(GENERATION_DIR, "tc09", groupName, 10);
+        testFileExistence(GENERATION_DIR, "tc09", groupName, 11);
+        testFileExistence(GENERATION_DIR, "tc10", groupName, 10);
+        testFileExistence(GENERATION_DIR, "tc10", groupName, 11);
+        testFileExistence(GENERATION_DIR, "tc11", groupName, 10);
+        testFileExistence(GENERATION_DIR, "tc11", groupName, 11);
+        testFileExistence(GENERATION_DIR, "tc12", groupName, 10);
+        testFileExistence(GENERATION_DIR, "tc12", groupName, 11);
 
         File mergedGraph = new File(GENERATION_DIR, "graph.nt");
         assertTrue(mergedGraph.exists());
@@ -69,29 +70,11 @@ class GeneratorSyntheticRandomTest {
         generator.setNumberOfEdges(10);
         generator.generateTestCases();
 
-        testFileExistence(GENERATION_DIR_2, "tc01", 10);
-        testFileExistence(GENERATION_DIR_2, "tc02", 10);
+        testFileExistence(GENERATION_DIR_2, "tc01", generator.getTcGroupName(), 10);
+        testFileExistence(GENERATION_DIR_2, "tc02", generator.getTcGroupName(), 10);
 
         File tc03_10 = Paths.get(GENERATION_DIR_2, "tc03", "synthetic", "10").toFile();
         assertFalse(tc03_10.exists());
-    }
-
-    static void testFileExistence(String generationDirectory, String tcName, int numberTest) {
-        File resultDir = new File(generationDirectory);
-        assertTrue(resultDir.exists());
-        assertTrue(resultDir.isDirectory());
-
-        File tc03_10 = Paths.get(resultDir.getAbsolutePath(), tcName, "synthetic", "" + numberTest).toFile();
-        assertTrue(tc03_10.exists(), "File not found: " + tc03_10.getAbsolutePath());
-        assertTrue(tc03_10.isDirectory());
-
-        File tc03_10graph = Paths.get(resultDir.getAbsolutePath(), tcName, "synthetic", "graph.nt").toFile();
-        assertTrue(tc03_10graph.exists(), "File not found: " + tc03_10graph.getAbsolutePath());
-        assertTrue(tc03_10graph.isFile());
-
-        File tc03_20test = Paths.get(tc03_10.getAbsolutePath(), "train_test", "test.txt").toFile();
-        assertTrue(tc03_20test.exists(), "File not found: " + tc03_20test);
-        assertTrue(tc03_20test.isFile());
     }
 
     @Test

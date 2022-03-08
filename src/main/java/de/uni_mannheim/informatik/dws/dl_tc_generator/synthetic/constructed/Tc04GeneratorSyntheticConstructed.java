@@ -83,10 +83,14 @@ public class Tc04GeneratorSyntheticConstructed extends TcGeneratorSyntheticConst
                 int tripleNumber = random.nextInt(maxTriplesPerNode + 1);
                 for(int i = 0; i < tripleNumber; i++) {
                     Triple triple = generateTripleWithStartNode(node, nodeIds, edgeIds);
+
+
                     if(
+                            // target node is subject or object AND the other triple side is not a positive
+                            // -> we continue and do not write the graph to avoid generating another positive
+                            // else we can add the triple
                             ( triple.subject.equals(targetNode) && !positives.contains(triple.object) )
                             || ( triple.object.equals(targetNode) && !positives.contains(triple.subject) )
-
                     ){
                         i--;
                     } else {

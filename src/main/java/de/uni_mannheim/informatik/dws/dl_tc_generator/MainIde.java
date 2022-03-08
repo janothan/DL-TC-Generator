@@ -2,6 +2,7 @@ package de.uni_mannheim.informatik.dws.dl_tc_generator;
 
 import de.uni_mannheim.informatik.dws.dl_tc_generator.by_query.GeneratorQuery;
 import de.uni_mannheim.informatik.dws.dl_tc_generator.synthetic.GeneratorSynthetic;
+import de.uni_mannheim.informatik.dws.dl_tc_generator.synthetic.constructed.GeneratorSyntheticConstructed;
 import de.uni_mannheim.informatik.dws.dl_tc_generator.synthetic.random.GeneratorSyntheticRandom;
 import org.apache.commons.io.FileUtils;
 
@@ -19,12 +20,18 @@ public class MainIde {
      * @throws Exception Some exception.
      */
     public static void main(String[] args) throws Exception {
-        generateByQuery();
-        //generateSynthetic();
+        //generateByQuery();
+        //generateSyntheticRandom();
+        generateSyntheticConstructed();
     }
 
+    private static void generateSyntheticConstructed() throws Exception {
+        GeneratorSyntheticConstructed generator = new GeneratorSyntheticConstructed("./results/synthetic_constructed");
+        generator.setSizes(new int[]{50, 500, 5000});
+        generator.generateTestCases();
+    }
 
-    private static void generateSynthetic() throws Exception {
+    private static void generateSyntheticRandom() throws Exception {
         GeneratorSynthetic generator = new GeneratorSyntheticRandom("synthetic_results");
         generator.generateTestCases();
     }

@@ -24,10 +24,10 @@ public abstract class TcGeneratorSyntheticConstructed extends TcGeneratorSynthet
 
     int maxTriplesPerNode = DEFAULT_MAX_TRIPLES_PER_NODE;
 
-    final Random random = new Random();
+    public final Random random = new Random();
 
     @Override
-    protected void writeGraphAndSetPositives(File fileToBeWritten, int totalNodes, int nodesOfInterest, int totalEdges) {
+    public void writeGraphAndSetPositives(File fileToBeWritten, int totalNodes, int nodesOfInterest, int totalEdges) {
         writeGraphAndSetPositives(fileToBeWritten, totalNodes, nodesOfInterest, totalEdges, maxTriplesPerNode);
     }
 

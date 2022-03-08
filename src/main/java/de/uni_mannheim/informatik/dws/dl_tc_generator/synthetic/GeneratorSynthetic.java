@@ -206,4 +206,12 @@ public abstract class GeneratorSynthetic implements IGenerator {
         generatorSet.forEach(x -> x.setTotalNodesFactor(nodesFactor));
         this.nodesFactor = nodesFactor;
     }
+
+    /**
+     * Synthetic test cases only have one test case group.
+     * Depending on the synthetic generator, the group may have varying names.
+     *
+     * @return The test case group name used by this generator.
+     */
+    public abstract String getTcGroupName();
 }

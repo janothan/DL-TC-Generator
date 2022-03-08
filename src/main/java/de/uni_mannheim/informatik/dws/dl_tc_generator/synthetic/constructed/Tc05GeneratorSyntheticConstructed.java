@@ -1,7 +1,6 @@
 package de.uni_mannheim.informatik.dws.dl_tc_generator.synthetic.constructed;
 
 import de.uni_mannheim.informatik.dws.dl_tc_generator.Util;
-import de.uni_mannheim.informatik.dws.dl_tc_generator.synthetic.random.Tc05GeneratorSyntheticRandom;
 import de.uni_mannheim.informatik.dws.jrdf2vec.walk_generation.data_structures.Triple;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

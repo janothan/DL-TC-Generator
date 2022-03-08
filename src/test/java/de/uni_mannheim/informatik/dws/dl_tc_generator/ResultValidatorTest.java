@@ -7,9 +7,14 @@ import static org.junit.jupiter.api.Assertions.*;
 class ResultValidatorTest {
 
     @Test
-    void validate() {
+    void validateDBpediaTcs() {
         ResultValidator validator = new ResultValidator("./results/dbpedia");
-        // TODO activate later
+        assertTrue(validator.validate());
+    }
+
+    @Test
+    void validateSyntheticConstructedTcs() {
+        ResultValidator validator = new ResultValidator("./results/synthetic_constructed");
         assertTrue(validator.validate());
     }
 }

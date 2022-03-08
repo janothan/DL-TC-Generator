@@ -55,8 +55,8 @@ public class ResultValidator {
             File[] testCaseCollectionFiles = testCaseCollection.listFiles();
             if (testCaseCollectionFiles == null) {
                 LOGGER.error("An error occurred while trying to obtain the children of test case collection: "
-                        + collectionName + "\nAborting analysis.");
-                return false;
+                        + collectionName + ".");
+                continue;
             }
             for (File testCaseDirectory : testCaseCollectionFiles) {
                 String testCaseName = testCaseDirectory.getName();
@@ -70,7 +70,14 @@ public class ResultValidator {
 
                 for (File quantDirectory : quantDirectoryFiles) {
                     String quantName = quantDirectory.getName();
-                    int idealSize = Integer.parseInt(quantName);
+
+                    int idealSize;
+                    try {
+                        idealSize = Integer.parseInt(quantName);
+                    } catch (NumberFormatException nfe){
+                        LOGGER.info("A number format exception occurred for '" + quantName + "'.");
+                        continue;
+                    }
 
                     if (sizeRestriction != null && sizeRestriction.size() > 0){
                         if(!sizeRestriction.contains(idealSize)){
