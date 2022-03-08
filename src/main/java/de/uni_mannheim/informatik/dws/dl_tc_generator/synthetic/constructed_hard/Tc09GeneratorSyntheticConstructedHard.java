@@ -1,8 +1,7 @@
-package de.uni_mannheim.informatik.dws.dl_tc_generator.synthetic.constructed;
+package de.uni_mannheim.informatik.dws.dl_tc_generator.synthetic.constructed_hard;
 
 import de.uni_mannheim.informatik.dws.dl_tc_generator.Util;
 import de.uni_mannheim.informatik.dws.jrdf2vec.walk_generation.data_structures.Triple;
-import de.uni_mannheim.informatik.dws.jrdf2vec.walk_generation.data_structures.TripleDataSetMemory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -10,6 +9,7 @@ import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.Set;
 
+import static de.uni_mannheim.informatik.dws.dl_tc_generator.synthetic.constructed.Tc09GeneratorSyntheticConstructed.isAccidentallyPositive;
 
 /**
  * Test Case Form:
@@ -20,27 +20,27 @@ import java.util.Set;
  * Pattern: (X E Y) AND (X E Z)<br/>
  * }
  */
-public class Tc09GeneratorSyntheticConstructed extends TcGeneratorSyntheticConstructed {
+public class Tc09GeneratorSyntheticConstructedHard extends TcGeneratorSyntheticConstructedHard {
 
 
-    public Tc09GeneratorSyntheticConstructed(File directory, int[] sizes) {
+    public Tc09GeneratorSyntheticConstructedHard(File directory, int[] sizes) {
         super(directory, sizes);
     }
 
-    public Tc09GeneratorSyntheticConstructed(File directory) {
+    public Tc09GeneratorSyntheticConstructedHard(File directory) {
         super(directory);
     }
 
-    public Tc09GeneratorSyntheticConstructed(String directory) {
+    public Tc09GeneratorSyntheticConstructedHard(String directory) {
         super(directory);
     }
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(Tc09GeneratorSyntheticConstructed.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(Tc09GeneratorSyntheticConstructedHard.class);
 
 
     @Override
     public String getTcId() {
-        return "TC09";
+        return "TC09h";
     }
 
     @Override
@@ -54,6 +54,7 @@ public class Tc09GeneratorSyntheticConstructed extends TcGeneratorSyntheticConst
         final String targetEdge = edgeIds.iterator().next();
 
         try (BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(fileToBeWritten), StandardCharsets.UTF_8))) {
+
             // generate positives
             while (positives.size() < nodesOfInterest) {
                 final String randomSubject = Util.randomDrawFromSet(nodeIds);
@@ -66,11 +67,27 @@ public class Tc09GeneratorSyntheticConstructed extends TcGeneratorSyntheticConst
                 positives.add(randomSubject);
             }
 
-            // generating negatives randomly
+            // generate hard negatives
+            while (negatives.size() < nodesOfInterest) {
+                final String randomSubject = Util.randomDrawFromSet(nodeIds);
+                if(positives.contains(randomSubject)){
+                    continue;
+                }
+                final String randomObject = Util.randomDrawFromSet(nodeIds);
+
+                Triple t = new Triple(randomSubject, targetEdge, randomObject);
+                if(!isAccidentallyPositive(t, targetEdge, graph)) {
+                    negatives.add(randomSubject);
+                    writer.write(t.subject + " " + t.predicate + " " + t.object + " . \n");
+                    graph.addObjectTriple(t);
+                }
+            }
+
+            // generating random triples
             for(String node : nodeIds) {
 
                 // draw number of triples
-                int tripleNumber = random.nextInt(maxTriplesPerNode + 1);
+                int tripleNumber = random.nextInt(getMaxTriplesPerNode() + 1);
                 for (int i = 0; i < tripleNumber; i++) {
                     Triple triple = generateTripleWithStartNode(node, nodeIds, edgeIds);
 
@@ -83,19 +100,8 @@ public class Tc09GeneratorSyntheticConstructed extends TcGeneratorSyntheticConst
                 }
             }
 
-
         } catch (IOException e) {
             LOGGER.error("An error occurred while writing the file.", e);
         }
     }
-
-    public static boolean isAccidentallyPositive(Triple triple, String targetEdge, TripleDataSetMemory graph){
-        if(triple.predicate.equals(targetEdge)
-        ){
-            Set<Triple> triples = graph.getObjectTriplesWithSubjectPredicate(triple.subject, targetEdge);
-            return triples != null && triples.size() >= 1;
-        }
-        return false;
-    }
-
 }
