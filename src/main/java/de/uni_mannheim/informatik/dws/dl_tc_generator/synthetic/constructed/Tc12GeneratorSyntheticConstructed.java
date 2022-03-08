@@ -45,8 +45,6 @@ public class Tc12GeneratorSyntheticConstructed extends TcGeneratorSyntheticConst
 
     @Override
     protected void writeGraphAndSetPositives(File fileToBeWritten, int totalNodes, int nodesOfInterest, int totalEdges, int avgTriplesPerNode) {
-
-
         if (fileToBeWritten.exists()) {
             LOGGER.error("The file to be written exists already. Aborting generation.");
             return;
@@ -59,7 +57,6 @@ public class Tc12GeneratorSyntheticConstructed extends TcGeneratorSyntheticConst
         final String targetEdge2 = edgeIterator.next();
         final String targetNode = nodeIds.iterator().next();
 
-
         try (BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(fileToBeWritten), StandardCharsets.UTF_8))) {
             // generate positives
             while (positives.size() < nodesOfInterest) {
@@ -71,7 +68,6 @@ public class Tc12GeneratorSyntheticConstructed extends TcGeneratorSyntheticConst
                     // just redraw
                     continue;
                 }
-
 
                 writer.write(randomNode1 + " " + targetEdge1 + " " + positive + " . \n");
                 writer.write(randomNode1 + " " + targetEdge2 + " " + targetNode + " . \n");
@@ -94,82 +90,85 @@ public class Tc12GeneratorSyntheticConstructed extends TcGeneratorSyntheticConst
                 int tripleNumber = random.nextInt(maxTriplesPerNode + 1);
                 for (int i = 0; i < tripleNumber; i++) {
                     Triple triple = generateTripleWithStartNode(node, nodeIds, edgeIds);
-                    boolean isWrite = true;
 
-                    if (triple.predicate.equals(targetEdge2) && triple.object.equals(targetNode)) {
-                        // case 1: we generated a Y1 E2 N
-
-                        Set<String> potentialXs = TripleDataSetMemory.getObjectsFromTripleSet(
-                                graph.getObjectTriplesWithSubjectPredicate(triple.subject, targetEdge1)
-                        );
-                        if (potentialXs != null) {
-
-                            potentialXloop:
-                            for (String potentialX : potentialXs) {
-
-                                // get potential y2
-                                Set<String> potentialY2s = TripleDataSetMemory.getSubjectsFromTripleSet(
-                                        graph.getObjectTriplesWithPredicateObject(targetEdge1, potentialX)
-                                );
-                                if (potentialY2s != null) {
-                                    for (String potentialY2 : potentialY2s) {
-                                        Set<Triple> y2e2triples =
-                                                graph.getObjectTriplesWithSubjectPredicate(potentialY2,
-                                                        targetEdge2);
-                                        if (y2e2triples != null) {
-                                            for (Triple t : y2e2triples) {
-                                                if (t.object.equals(targetNode)) {
-                                                    isWrite = false;
-                                                    i--;
-                                                    break potentialXloop;
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    } else if (triple.predicate.equals(targetEdge1)) {
-                        // we generated a Y1 E1 X
-
-                        // check for Y1 E2 N
-                        if (graph.getAllObjectTriples().contains(
-                                new Triple(triple.subject, targetEdge2, targetNode)
-                        )) {
-
-                            // check whether there is a Y2
-                            Set<String> potentialY2s = TripleDataSetMemory.getSubjectsFromTripleSet(
-                                    graph.getObjectTriplesWithPredicateObject(targetEdge1, triple.object)
-                            );
-
-                            if (potentialY2s != null) {
-
-                                for (String potentialY2 : potentialY2s) {
-                                    if (graph.getAllObjectTriples().contains(
-                                            new Triple(potentialY2, targetEdge2, targetNode))
-                                    ) {
-                                        isWrite = false;
-                                        i--;
-                                        break;
-                                    }
-                                }
-
-                            }
-                        }
-
-                    }
-
-                    if (isWrite) {
+                    if(isAccidentallyPositive(triple, targetEdge1, targetEdge2, targetNode, graph)){
+                        i--;
+                    } else {
                         writer.write(triple.subject + " " + triple.predicate + " " + triple.object + " . \n");
                         graph.addObjectTriple(triple);
                     }
-
                 }
             }
-
 
         } catch (IOException e) {
             LOGGER.error("An error occurred while writing the file.", e);
         }
     }
+
+    public static boolean isAccidentallyPositive(Triple triple, String targetEdge1,
+                                                 String targetEdge2, String targetNode,
+                                                 TripleDataSetMemory graph) {
+
+        if (triple.predicate.equals(targetEdge2) && triple.object.equals(targetNode)) {
+            // case 1: we generated a Y1 E2 N
+
+            Set<String> potentialXs = TripleDataSetMemory.getObjectsFromTripleSet(
+                    graph.getObjectTriplesWithSubjectPredicate(triple.subject, targetEdge1)
+            );
+            if (potentialXs != null) {
+
+                for (String potentialX : potentialXs) {
+
+                    // get potential y2
+                    Set<String> potentialY2s = TripleDataSetMemory.getSubjectsFromTripleSet(
+                            graph.getObjectTriplesWithPredicateObject(targetEdge1, potentialX)
+                    );
+                    if (potentialY2s != null) {
+                        for (String potentialY2 : potentialY2s) {
+                            Set<Triple> y2e2triples =
+                                    graph.getObjectTriplesWithSubjectPredicate(potentialY2,
+                                            targetEdge2);
+                            if (y2e2triples != null) {
+                                for (Triple t : y2e2triples) {
+                                    if (t.object.equals(targetNode)) {
+                                        return true;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        if (triple.predicate.equals(targetEdge1)) {
+            // we generated a Y1 E1 X
+
+            // check for Y1 E2 N
+            if (graph.getAllObjectTriples().contains(
+                    new Triple(triple.subject, targetEdge2, targetNode)
+            )) {
+
+                // check whether there is a Y2
+                Set<String> potentialY2s = TripleDataSetMemory.getSubjectsFromTripleSet(
+                        graph.getObjectTriplesWithPredicateObject(targetEdge1, triple.object)
+                );
+
+                if (potentialY2s != null) {
+
+                    for (String potentialY2 : potentialY2s) {
+                        if (graph.getAllObjectTriples().contains(
+                                new Triple(potentialY2, targetEdge2, targetNode))
+                        ) {
+                            return true;
+                        }
+                    }
+
+                }
+            }
+
+        }
+        return false;
+    }
+
 }
