@@ -73,59 +73,11 @@ public class Tc07GeneratorSyntheticConstructed extends TcGeneratorSyntheticConst
                 // draw number of triples
                 int tripleNumber = random.nextInt(maxTriplesPerNode + 1);
                 for (int i = 0; i < tripleNumber; i++) {
-
                     Triple triple1 = generateTripleWithStartNode(node, nodeIds, edgeIds);
                     Triple triple2 = generateTripleWithStartNode(triple1.object, nodeIds, edgeIds);
 
-                    if (
-                        // case: we accidentally built a positive
-                            (triple1.predicate.equals(targetEdge1)
-                                    && triple2.predicate.equals(targetEdge2)
-                                    && triple2.object.equals(targetNode)
-                                    && !positives.contains(triple1.subject))
-                    ) {
+                    if (isAccidentallyPositive(triple1, triple2, targetEdge1, targetEdge2, targetNode, positives, graph)){
                         i--;
-                    } else if (
-                        // case: we accidentally built a missing piece to some positive
-                        // by X E1 Y whereby there exists some statement Y E2 T
-                            triple1.predicate.equals(targetEdge1) &&
-                                    graph.getAllObjectTriples().contains(
-                                            new Triple(triple1.object, targetEdge2, targetNode)
-                                    )
-                    ) {
-                        i--;
-                    } else if (
-                        // case: we accidentally built a missing piece to some positive
-                        // by Y E2 T where there exists some statement Y E1 T
-                            triple2.predicate.equals(targetEdge2)
-                                    && triple2.object.equals(targetNode)
-                                    && graph.getAllObjectTriples().contains(
-                                    new Triple(triple1.subject, targetEdge1, triple1.object)
-                            )
-                    ) {
-                        i--;
-                    } else if (
-                        // case: triple 1 is the missing piece to some positive
-                            triple1.predicate.equals(targetEdge2)
-                                    && triple1.object.equals(targetNode)
-                    ) {
-                        // we now need to make sure that EVERY subject in subject -> targetEdge1 -> triple1.subject
-                        // is a positive match
-                        // if there is one negative, we cannot add the triple!
-                        for (String subject :
-                                TripleDataSetMemory.getSubjectsFromTripleSet(
-                                        graph.getObjectTriplesWithPredicateObject(targetEdge1, triple1.subject))
-                        ) {
-                            if (!positives.contains(subject)) {
-                                i--;
-                                continue;
-                            }
-                            writer.write(triple1.subject + " " + triple1.predicate + " " + triple1.object + " . \n");
-                            writer.write(triple2.subject + " " + triple2.predicate + " " + triple2.object + " . \n");
-                            graph.addObjectTriple(triple1);
-                            graph.addObjectTriple(triple2);
-                        }
-
                     } else {
                         writer.write(triple1.subject + " " + triple1.predicate + " " + triple1.object + " . \n");
                         writer.write(triple2.subject + " " + triple2.predicate + " " + triple2.object + " . \n");
@@ -133,11 +85,81 @@ public class Tc07GeneratorSyntheticConstructed extends TcGeneratorSyntheticConst
                         graph.addObjectTriple(triple2);
                     }
                 }
-
             }
-
         } catch (IOException e) {
             LOGGER.error("An error occurred while writing the file.", e);
         }
+    }
+
+    /**
+     * Check if the two triples generate further positives.
+     * @param triple1 Triple 1
+     * @param triple2 Triple 2
+     * @param targetEdge1 Target edge 1
+     * @param targetEdge2 Target edge 2
+     * @param targetNode Target node
+     * @param positives Positives
+     * @param graph Triple graph.
+     * @return True if a new positive was generated.
+     */
+    public static boolean isAccidentallyPositive(Triple triple1, Triple triple2, String targetEdge1, String targetEdge2,
+                                          String targetNode, Set<String> positives, TripleDataSetMemory graph) {
+
+        boolean r1 = isPositiveCompositionOneSide(triple1, triple2, targetEdge1, targetEdge2, targetNode, positives);
+        if (r1) return true;
+
+        boolean r2 = isPositiveCompositionOneSide(triple2, triple1, targetEdge1, targetEdge2, targetNode, positives);
+        if (r2) return true;
+
+        boolean r3 = isAccidentallyPositiveOneSide(triple1, targetEdge1, targetEdge2, targetNode, positives, graph);
+        if (r3) return true;
+        return isAccidentallyPositiveOneSide(triple2, targetEdge1, targetEdge2, targetNode, positives, graph);
+    }
+
+    static boolean isPositiveCompositionOneSide(Triple triple1, Triple triple2, String targetEdge1, String targetEdge2,
+                                                String targetNode, Set<String> positives){
+        return  triple1.object.equals(triple2.subject)
+                && triple1.predicate.equals(targetEdge1)
+                && triple2.predicate.equals(targetEdge2)
+                && triple2.object.equals(targetNode)
+                && !positives.contains(triple1.subject);
+    }
+
+
+    static boolean isAccidentallyPositiveOneSide(Triple triple, String targetEdge1, String targetEdge2,
+                                                 String targetNode, Set<String> positives, TripleDataSetMemory graph) {
+
+        if (
+            // case: we accidentally built a missing piece to some positive
+            // by X E1 Y whereby there exists some statement Y E2 N
+                triple.predicate.equals(targetEdge1) &&
+                        graph.getAllObjectTriples().contains(
+                                new Triple(triple.object, targetEdge2, targetNode)
+                        )
+                        && !positives.contains(triple.subject)
+        ) return true;
+
+        if (
+            // case: we accidentally built a missing piece to some positive
+            // by Y E2 T where there exists some statement X E1 Y
+                triple.predicate.equals(targetEdge2)
+                        && triple.object.equals(targetNode)
+
+        ) {
+
+            Set<String> subjects = TripleDataSetMemory.getSubjectsFromTripleSet(
+                    graph.getObjectTriplesWithPredicateObject(targetEdge1, triple.subject));
+
+            if(subjects == null){
+                return false;
+            }
+
+            for (String subject :subjects) {
+                if (!positives.contains(subject)) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 }
