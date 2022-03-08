@@ -26,7 +26,8 @@ class GeneratorSyntheticConstructedHardTest {
     void generateTestCases() {
         GeneratorSyntheticConstructedHard generator = new GeneratorSyntheticConstructedHard(GENERATION_DIR);
         generator.setSizes(new int[]{10, 11});
-        generator.setNumberOfEdges(10);
+        generator.setNumberOfEdges(15);
+        generator.setNodesFactor(10);
         generator.generateTestCases();
         final String groupName = generator.getTcGroupName();
 
@@ -50,6 +51,8 @@ class GeneratorSyntheticConstructedHardTest {
         testFileExistence(GENERATION_DIR, "tc09h", groupName, 11);
         testFileExistence(GENERATION_DIR, "tc10h", groupName, 10);
         testFileExistence(GENERATION_DIR, "tc10h", groupName, 11);
+        testFileExistence(GENERATION_DIR, "tc11h", groupName, 10);
+        testFileExistence(GENERATION_DIR, "tc11h", groupName, 11);
         /*
         testFileExistence(GENERATION_DIR, "tc06", groupName, 11);
         testFileExistence(GENERATION_DIR, "tc07", groupName, 10);

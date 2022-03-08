@@ -66,10 +66,12 @@ public class GeneratorSyntheticConstructedHard extends GeneratorSynthetic {
                 Paths.get(generatedDirectory.getAbsolutePath(), "tc10h", TC_GROUP_NAME).toFile()
         ));
 
-        /*
-        generatorSet.add(new Tc11GeneratorSyntheticConstructed(
-                Paths.get(generatedDirectory.getAbsolutePath(), "tc11", TC_GROUP_NAME).toFile()
+
+        generatorSet.add(new Tc11GeneratorSyntheticConstructedHard(
+                Paths.get(generatedDirectory.getAbsolutePath(), "tc11h", TC_GROUP_NAME).toFile()
         ));
+
+        /*
         generatorSet.add(new Tc12GeneratorSyntheticConstructed(
                 Paths.get(generatedDirectory.getAbsolutePath(), "tc12", TC_GROUP_NAME).toFile()
         ));

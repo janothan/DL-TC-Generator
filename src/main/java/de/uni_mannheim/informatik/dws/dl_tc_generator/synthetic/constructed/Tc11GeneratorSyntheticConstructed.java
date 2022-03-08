@@ -87,71 +87,13 @@ public class Tc11GeneratorSyntheticConstructed extends TcGeneratorSyntheticConst
                 int tripleNumber = random.nextInt(maxTriplesPerNode + 1);
                 for (int i = 0; i < tripleNumber; i++) {
                     Triple triple = generateTripleWithStartNode(node, nodeIds, edgeIds);
-                    boolean isWrite = true;
 
-                    if(triple.predicate.equals(targetEdge2) && triple.object.equals(targetNode)){
-                        // we have Y E2 N -> ensure that the pattern does not match
-
-                        Set<String> potentialPositives =
-                                TripleDataSetMemory.getSubjectsFromTripleSet(
-                                        graph.getObjectTriplesWithPredicateObject(targetEdge1, triple.subject)
-                                );
-
-                        if(potentialPositives != null){
-
-                            for(String s : potentialPositives){
-                                Set<String> e1objects = TripleDataSetMemory.getSubjectsFromTripleSet(
-                                graph.getObjectTriplesWithSubjectPredicate(s, targetEdge1)
-                                );
-
-                                if(e1objects != null){
-
-                                    for(String y : e1objects) {
-                                        Set<String> potentialN = TripleDataSetMemory.getObjectsFromTripleSet(
-                                            graph.getObjectTriplesWithSubjectPredicate(y, targetEdge2)
-                                        );
-
-                                        if(potentialN != null){
-                                            for (String n : potentialN){
-                                                if (n.equals(targetNode)) {
-                                                    isWrite = false;
-                                                    i--;
-                                                    break;
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-
-                    } else if (triple.predicate.equals(targetEdge1)){
-                        Set<String> potentialY = TripleDataSetMemory.getObjectsFromTripleSet(
-                            graph.getObjectTriplesWithSubjectPredicate(triple.subject, targetEdge1)
-                        );
-
-                        if(potentialY != null){
-                            for(String y : potentialY){
-                                List<Triple> checkTriples = graph.getObjectTriplesInvolvingSubject(y);
-                                if(checkTriples != null) {
-                                    for (Triple checkTriple : checkTriples) {
-                                        if (checkTriple.predicate.equals(targetEdge2) && checkTriple.object.equals(targetNode)) {
-                                            isWrite = false;
-                                            i--;
-                                            break;
-                                        }
-                                    }
-                                }
-                            }
-                        }
-
-                    }
-
-                    if(isWrite){
+                    if(isAccidentallyPositive(triple, targetEdge1, targetEdge2, targetNode, graph)){
+                        i--;
+                    } else {
                         writer.write(triple.subject + " " + triple.predicate + " " + triple.object + " . \n");
                         graph.addObjectTriple(triple);
                     }
-
                 }
             }
 
@@ -160,4 +102,76 @@ public class Tc11GeneratorSyntheticConstructed extends TcGeneratorSyntheticConst
             LOGGER.error("An error occurred while writing the file.", e);
         }
     }
+
+
+    public static boolean isAccidentallyPositive(Triple triple, String targetEdge1,
+                                                 String targetEdge2, String targetNode,
+                                                 TripleDataSetMemory graph) {
+
+        if(triple.predicate.equals(targetEdge2) && triple.object.equals(targetNode)){
+            // we have Y E2 N -> ensure that the pattern does not match
+
+            Set<String> potentialPositives =
+                    TripleDataSetMemory.getSubjectsFromTripleSet(
+                            graph.getObjectTriplesWithPredicateObject(targetEdge1, triple.subject)
+                    );
+
+            if(potentialPositives != null){
+
+                for(String s : potentialPositives){
+                    Set<String> e1objects = TripleDataSetMemory.getSubjectsFromTripleSet(
+                            graph.getObjectTriplesWithSubjectPredicate(s, targetEdge1)
+                    );
+
+                    if(e1objects != null){
+
+                        for(String y : e1objects) {
+                            Set<String> potentialN = TripleDataSetMemory.getObjectsFromTripleSet(
+                                    graph.getObjectTriplesWithSubjectPredicate(y, targetEdge2)
+                            );
+
+                            if(potentialN != null){
+                                for (String n : potentialN){
+                                    if (n.equals(targetNode)) {
+                                       return true;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        if (triple.predicate.equals(targetEdge1)){
+
+            if (graph.getAllObjectTriples().contains(new Triple(triple.object, targetEdge2, targetNode))) {
+                // we have X E1 Y and Y E2 N is already exists in the graph
+                // we need to make sure that there is no other X E1 Y2 E2 N
+
+                Set<String> potentialY = TripleDataSetMemory.getObjectsFromTripleSet(
+                        graph.getObjectTriplesWithSubjectPredicate(triple.subject, targetEdge1)
+                );
+
+                if (potentialY != null) {
+                    for (String y : potentialY) {
+                        List<Triple> checkTriples = graph.getObjectTriplesInvolvingSubject(y);
+                        if (checkTriples != null) {
+                            for (Triple checkTriple : checkTriples) {
+                                if (checkTriple.predicate.equals(targetEdge2) && checkTriple.object.equals(targetNode)) {
+                                    return true;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+        }
+
+        return false;
+    }
+
+
+
 }
