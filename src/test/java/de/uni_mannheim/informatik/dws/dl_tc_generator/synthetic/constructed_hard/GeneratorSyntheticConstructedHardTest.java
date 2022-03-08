@@ -42,6 +42,10 @@ class GeneratorSyntheticConstructedHardTest {
         testFileExistence(GENERATION_DIR, "tc05", groupName, 11);
         testFileExistence(GENERATION_DIR, "tc06h", groupName, 10);
         testFileExistence(GENERATION_DIR, "tc06h", groupName, 11);
+        testFileExistence(GENERATION_DIR, "tc07h", groupName, 10);
+        testFileExistence(GENERATION_DIR, "tc07h", groupName, 11);
+        testFileExistence(GENERATION_DIR, "tc08h", groupName, 10);
+        testFileExistence(GENERATION_DIR, "tc08h", groupName, 11);
         /*
         testFileExistence(GENERATION_DIR, "tc06", groupName, 11);
         testFileExistence(GENERATION_DIR, "tc07", groupName, 10);
