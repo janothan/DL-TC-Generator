@@ -76,75 +76,8 @@ public class Tc08GeneratorSyntheticConstructed extends TcGeneratorSyntheticConst
                 for (int i = 0; i < tripleNumber; i++) {
                     Triple triple1 = generateTripleWithStartNode(node, nodeIds, edgeIds);
                     Triple triple2 = generateTripleWithStartNode(node, nodeIds, edgeIds);
-
-                    if (
-                        // if we generate (Y E1 X), make sure that there is no (Y E2 Z)
-                            (
-                                    triple1.predicate.equals(targetEdge1)
-                                            && graph.getAllObjectTriples().contains(new Triple(triple1.subject, targetEdge2, targetNode))
-                            ) || (
-                                    triple2.predicate.equals(targetEdge1)
-                                            && graph.getAllObjectTriples().contains(
-                                            new Triple(triple2.subject, targetEdge2, targetNode))
-                            )
-                    ) {
+                    if(isAccidentallyPositive(triple1, triple2, targetEdge1, targetEdge2, targetNode, positives, graph)){
                         i--;
-                    } else if (
-                        // we accidentally built a positive
-                            (
-                                    triple1.predicate.equals(targetEdge1)
-                                            && triple2.predicate.equals(targetEdge2)
-                                            && triple2.object.equals(targetNode)
-                            ) ||
-                                    (
-                                            triple2.predicate.equals(targetEdge1)
-                                                    && triple1.predicate.equals(targetEdge2)
-                                                    && triple1.object.equals(targetNode)
-                                    )
-                    ) {
-                        i--;
-                    } else if (triple1.predicate.equals(targetEdge2) && triple1.predicate.equals(targetNode)) {
-                        Set<String> objects =
-                                TripleDataSetMemory.getObjectsFromTripleSet(graph.getObjectTriplesWithSubjectPredicate(triple1.subject,
-                                        targetEdge1));
-                        boolean isOk = true;
-                        for (String object : objects) {
-                            // if there is a single non-positive: abort
-                            if (!positives.contains(object)) {
-                                isOk = false;
-                                break;
-                            }
-                        }
-                        if (isOk) {
-                            writer.write(triple1.subject + " " + triple1.predicate + " " + triple1.object + " . \n");
-                            writer.write(triple2.subject + " " + triple2.predicate + " " + triple2.object + " . \n");
-                            graph.addObjectTriple(triple1);
-                            graph.addObjectTriple(triple2);
-                        } else {
-                            i--;
-                        }
-                    } else if (triple2.predicate.equals(targetEdge2) && triple2.predicate.equals(targetNode)) {
-                        // same as above but switched triple
-                        Set<String> objects =
-                                TripleDataSetMemory.getObjectsFromTripleSet(graph.getObjectTriplesWithSubjectPredicate(triple2.subject,
-                                        targetEdge1));
-                        boolean isOk = true;
-                        for (String object : objects) {
-                            // if there is a single non-positive: abort
-                            if (!positives.contains(object)) {
-                                isOk = false;
-                                break;
-                            }
-                        }
-                        if (isOk) {
-                            writer.write(triple1.subject + " " + triple1.predicate + " " + triple1.object + " . \n");
-                            writer.write(triple2.subject + " " + triple2.predicate + " " + triple2.object + " . \n");
-                            graph.addObjectTriple(triple1);
-                            graph.addObjectTriple(triple2);
-                        } else {
-                            i--;
-                        }
-
                     } else {
                         writer.write(triple1.subject + " " + triple1.predicate + " " + triple1.object + " . \n");
                         writer.write(triple2.subject + " " + triple2.predicate + " " + triple2.object + " . \n");
@@ -157,4 +90,55 @@ public class Tc08GeneratorSyntheticConstructed extends TcGeneratorSyntheticConst
             LOGGER.error("An error occurred while writing the file.", e);
         }
     }
+
+
+    public static boolean isAccidentallyPositive(Triple triple1, Triple triple2, String targetEdge1, String targetEdge2,
+                                                 String targetNode, Set<String> positives, TripleDataSetMemory graph) {
+
+        boolean r1 = isPositiveCompositionOneSide(triple1, triple2, targetEdge1, targetEdge2, targetNode, positives);
+        if (r1) return true;
+
+        boolean r2 = isPositiveCompositionOneSide(triple2, triple1, targetEdge1, targetEdge2, targetNode, positives);
+        if (r2) return true;
+
+        boolean r3 = isAccidentallyPositiveOneSide(triple1, targetEdge1, targetEdge2, targetNode, positives, graph);
+        if (r3) return true;
+        return isAccidentallyPositiveOneSide(triple2, targetEdge1, targetEdge2, targetNode, positives, graph);
+    }
+
+    static boolean isAccidentallyPositiveOneSide(Triple triple, String targetEdge1, String targetEdge2,
+                                                 String targetNode, Set<String> positives, TripleDataSetMemory graph) {
+
+        // if we generate (Y E1 X), make sure that there is no (Y E2 Z)
+        if (
+                triple.predicate.equals(targetEdge1)
+                        && graph.getAllObjectTriples().contains(new Triple(triple.subject, targetEdge2, targetNode))
+        ) return true;
+
+        // if we generate (Y E2 Z), make sure that there is no (Y E1 X)
+        if (triple.predicate.equals(targetEdge2) && triple.predicate.equals(targetNode)) {
+            Set<String> objects =
+                    TripleDataSetMemory.getObjectsFromTripleSet(graph.getObjectTriplesWithSubjectPredicate(triple.subject,
+                            targetEdge1));
+
+            for (String object : objects) {
+                // if there is a single non-positive: abort
+                if (!positives.contains(object)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+
+    static boolean isPositiveCompositionOneSide(Triple triple1, Triple triple2, String targetEdge1, String targetEdge2,
+                                                String targetNode, Set<String> positives) {
+        return triple1.subject.equals(triple2.subject)
+                && !positives.contains(triple1.subject)
+                && triple1.predicate.equals(targetEdge1)
+                && triple2.predicate.equals(targetEdge2)
+                && triple2.object.equals(targetNode);
+    }
+
 }

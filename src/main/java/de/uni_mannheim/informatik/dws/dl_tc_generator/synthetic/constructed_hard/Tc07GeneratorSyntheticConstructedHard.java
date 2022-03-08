@@ -11,6 +11,15 @@ import java.nio.charset.StandardCharsets;
 import java.util.Iterator;
 import java.util.Set;
 
+/**
+ * Test Case Form:
+ * {@code
+ * Positive: X<br/>
+ * Named Nodes: N<br/>
+ * Named Edges: E1, E2<br/>
+ * Pattern: (X E1 Y E2 N) <br/>
+ * }
+ */
 public class Tc07GeneratorSyntheticConstructedHard extends TcGeneratorSyntheticConstructedHard {
 
 
