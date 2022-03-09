@@ -1,7 +1,6 @@
 package de.uni_mannheim.informatik.dws.dl_tc_generator.synthetic.constructed_hard;
 
 import de.uni_mannheim.informatik.dws.dl_tc_generator.Util;
-import de.uni_mannheim.informatik.dws.dl_tc_generator.synthetic.constructed.Tc12GeneratorSyntheticConstructed;
 import de.uni_mannheim.informatik.dws.jrdf2vec.walk_generation.data_structures.Triple;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -101,27 +100,37 @@ public class Tc12GeneratorSyntheticConstructedHard extends TcGeneratorSyntheticC
                 if (isAccidentallyPositive(t1, targetEdge1, targetEdge2, targetNode, graph)) {
                     continue;
                 }
-                writer.write(t1.subject + " " + t1.predicate + " " + t1.object + " . \n");
                 graph.addObjectTriple(t1);
 
                 Triple t2 = new Triple(randomY2, targetEdge2, targetNode);
                 if (isAccidentallyPositive(t2, targetEdge1, targetEdge2, targetNode, graph)) {
+                    // rollback t1
+                    graph.removeObjectTriple(t1);
                     continue;
                 }
-                writer.write(t2.subject + " " + t2.predicate + " " + t2.object + " . \n");
                 graph.addObjectTriple(t2);
 
                 Triple t3 = new Triple(randomY1, targetEdge1, randomX);
                 if (isAccidentallyPositive(t3, targetEdge1, targetEdge2, targetNode, graph)) {
+                    // rollback t1, t2
+                    graph.removeObjectTriple(t1);
+                    graph.removeObjectTriple(t2);
                     continue;
                 }
-                writer.write(t3.subject + " " + t3.predicate + " " + t3.object + " . \n");
                 graph.addObjectTriple(t3);
 
                 Triple t4 = new Triple(randomY2, targetEdge1, randomX);
                 if (isAccidentallyPositive(t4, targetEdge1, targetEdge2, targetNode, graph)) {
+                    // rollback t1, t2, t3
+                    graph.removeObjectTriple(t1);
+                    graph.removeObjectTriple(t2);
+                    graph.removeObjectTriple(t3);
                     continue;
                 }
+
+                writer.write(t1.subject + " " + t1.predicate + " " + t1.object + " . \n");
+                writer.write(t2.subject + " " + t2.predicate + " " + t2.object + " . \n");
+                writer.write(t3.subject + " " + t3.predicate + " " + t3.object + " . \n");
                 writer.write(t4.subject + " " + t4.predicate + " " + t4.object + " . \n");
                 graph.addObjectTriple(t4);
 
@@ -148,30 +157,39 @@ public class Tc12GeneratorSyntheticConstructedHard extends TcGeneratorSyntheticC
                 if (isAccidentallyPositive(t1, targetEdge1, targetEdge2, targetNode, graph)) {
                     continue;
                 }
-                writer.write(t1.subject + " " + t1.predicate + " " + t1.object + " . \n");
                 graph.addObjectTriple(t1);
 
                 Triple t2 = new Triple(randomY2, targetEdge2, targetNode);
                 if (isAccidentallyPositive(t2, targetEdge1, targetEdge2, targetNode, graph)) {
+                    // rollback t1
+                    graph.removeObjectTriple(t1);
                     continue;
                 }
-                writer.write(t2.subject + " " + t2.predicate + " " + t2.object + " . \n");
                 graph.addObjectTriple(t2);
 
                 Triple t3 = new Triple(randomY1, targetEdge1, randomX);
                 if (isAccidentallyPositive(t3, targetEdge1, targetEdge2, targetNode, graph)) {
+                    // rollback t1, t2
+                    graph.removeObjectTriple(t1);
+                    graph.removeObjectTriple(t2);
                     continue;
                 }
-                writer.write(t3.subject + " " + t3.predicate + " " + t3.object + " . \n");
                 graph.addObjectTriple(t3);
 
                 Triple t4 = new Triple(randomY2, targetEdge1, randomX);
                 if (isAccidentallyPositive(t4, targetEdge1, targetEdge2, targetNode, graph)) {
+                    // rollback t1, t2, t3
+                    graph.removeObjectTriple(t1);
+                    graph.removeObjectTriple(t2);
+                    graph.removeObjectTriple(t3);
                     continue;
                 }
+
+                writer.write(t1.subject + " " + t1.predicate + " " + t1.object + " . \n");
+                writer.write(t2.subject + " " + t2.predicate + " " + t2.object + " . \n");
+                writer.write(t3.subject + " " + t3.predicate + " " + t3.object + " . \n");
                 writer.write(t4.subject + " " + t4.predicate + " " + t4.object + " . \n");
                 graph.addObjectTriple(t4);
-
                 negatives.add(randomX);
             }
 
@@ -195,30 +213,36 @@ public class Tc12GeneratorSyntheticConstructedHard extends TcGeneratorSyntheticC
                 if (isAccidentallyPositive(t1, targetEdge1, targetEdge2, targetNode, graph)) {
                     continue;
                 }
-                writer.write(t1.subject + " " + t1.predicate + " " + t1.object + " . \n");
                 graph.addObjectTriple(t1);
 
                 Triple t2 = new Triple(randomY2, targetEdge2, targetNode);
                 if (isAccidentallyPositive(t2, targetEdge1, targetEdge2, targetNode, graph)) {
+                    graph.removeObjectTriple(t1);
                     continue;
                 }
-                writer.write(t2.subject + " " + t2.predicate + " " + t2.object + " . \n");
                 graph.addObjectTriple(t2);
 
                 Triple t3 = new Triple(randomY1, randomNotE1, randomX);
                 if (isAccidentallyPositive(t3, targetEdge1, targetEdge2, targetNode, graph)) {
+                    graph.removeObjectTriple(t1);
+                    graph.removeObjectTriple(t2);
                     continue;
                 }
-                writer.write(t3.subject + " " + t3.predicate + " " + t3.object + " . \n");
                 graph.addObjectTriple(t3);
 
                 Triple t4 = new Triple(randomY2, targetEdge1, randomX);
                 if (isAccidentallyPositive(t4, targetEdge1, targetEdge2, targetNode, graph)) {
+                    graph.removeObjectTriple(t1);
+                    graph.removeObjectTriple(t2);
+                    graph.removeObjectTriple(t3);
                     continue;
                 }
+
+                writer.write(t1.subject + " " + t1.predicate + " " + t1.object + " . \n");
+                writer.write(t2.subject + " " + t2.predicate + " " + t2.object + " . \n");
+                writer.write(t3.subject + " " + t3.predicate + " " + t3.object + " . \n");
                 writer.write(t4.subject + " " + t4.predicate + " " + t4.object + " . \n");
                 graph.addObjectTriple(t4);
-
                 negatives.add(randomX);
             }
 

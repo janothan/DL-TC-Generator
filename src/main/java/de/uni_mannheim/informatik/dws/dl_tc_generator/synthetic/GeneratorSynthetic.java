@@ -40,9 +40,9 @@ public abstract class GeneratorSynthetic implements IGenerator {
      */
     protected int[] sizes = Defaults.SIZES;
 
-    protected int numberOfEdges = 10;
+    protected int numberOfEdges = Defaults.NUMBER_OF_EDGES;
 
-    protected int nodesFactor = 4;
+    protected int nodesFactor = Defaults.NODE_FACTOR;
 
     protected Set<String> includeOnlyCollection;
 

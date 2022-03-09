@@ -3,6 +3,7 @@ package de.uni_mannheim.informatik.dws.dl_tc_generator;
 import de.uni_mannheim.informatik.dws.dl_tc_generator.by_query.GeneratorQuery;
 import de.uni_mannheim.informatik.dws.dl_tc_generator.synthetic.GeneratorSynthetic;
 import de.uni_mannheim.informatik.dws.dl_tc_generator.synthetic.constructed.GeneratorSyntheticConstructed;
+import de.uni_mannheim.informatik.dws.dl_tc_generator.synthetic.constructed_hard.GeneratorSyntheticConstructedHard;
 import de.uni_mannheim.informatik.dws.dl_tc_generator.synthetic.random.GeneratorSyntheticRandom;
 import org.apache.commons.io.FileUtils;
 
@@ -22,7 +23,16 @@ public class MainIde {
     public static void main(String[] args) throws Exception {
         //generateByQuery();
         //generateSyntheticRandom();
-        generateSyntheticConstructed();
+        //generateSyntheticConstructed();
+        generateSyntheticConstructedHard();
+    }
+
+    private static void generateSyntheticConstructedHard() throws Exception {
+        GeneratorSyntheticConstructedHard generator = new GeneratorSyntheticConstructedHard(
+                "./results/synthetic_constructed_hard");
+        generator.setSizes(new int[]{50, 500, 5000});
+        generator.setIncludeOnlyCollection("TC11h");
+        generator.generateTestCases();
     }
 
     private static void generateSyntheticConstructed() throws Exception {

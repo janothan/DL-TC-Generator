@@ -22,4 +22,9 @@ public class Defaults {
      * The maximum number of edges a synthetic graph may have.
      */
     public static final int NUMBER_OF_EDGES = 50;
+
+    /**
+     * The number of node types (nodes_of_interest * NODE_FACTOR)
+     */
+    public static final int NODE_FACTOR = 10;
 }
