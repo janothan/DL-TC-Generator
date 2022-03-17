@@ -23,6 +23,9 @@ class TreeTest {
         assertTrue(t.getChildrenOfNode("root").contains("t1a"));
 
         assertEquals("t1a", t.getParentsOfNode("a2b").iterator().next());
+
+        assertEquals(0, t.getChildrenOfNode(null).size());
+        assertEquals(0, t.getParentsOfNode(null).size());
     }
 
 }

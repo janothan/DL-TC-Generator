@@ -43,18 +43,24 @@ public class Tree implements ITree {
     public Set<String> getChildrenOfNode(String nodeId) {
         if(nodeId == null || !nodeIds.contains(nodeId)){
             LOGGER.error("nodeId does not exist. Returning null.");
-            return null;
+            return new HashSet<>();
         }
-        return nodeToChildren.get(nodeId);
+        Set<String> result = nodeToChildren.get(nodeId);
+        if(result == null){
+            return new HashSet<>();
+        } else return result;
     }
 
     @Override
     public Set<String> getParentsOfNode(String nodeId) {
         if(nodeId == null || !nodeIds.contains(nodeId)){
             LOGGER.error("nodeId does not exist. Returning null.");
-            return null;
+            return new HashSet<>();
         }
-        return nodeToParents.get(nodeId);
+        Set<String> result = nodeToParents.get(nodeId);
+        if(result == null){
+            return new HashSet<>();
+        } else return result;
     }
 
     public String getRoot() {
@@ -87,5 +93,21 @@ public class Tree implements ITree {
             this.nodeToParents.put(child, parentSet);
         }
     }
+
+    @Override
+    public String toString(){
+        StringBuilder builder = new StringBuilder();
+        builder.append("Nodes:\n");
+        for(String node : this.nodeIds){
+            builder.append("- ").append(node).append("\n");
+        }
+        builder.append("\nConnections:\n");
+        for(Map.Entry<String, Set<String>> entry: nodeToChildren.entrySet()){
+            for(String child : entry.getValue()){
+                    builder.append("- ").append(entry.getKey()).append(" -> ").append(child).append("\n");
+                }
+            }
+        return builder.toString();
+        }
 
 }
