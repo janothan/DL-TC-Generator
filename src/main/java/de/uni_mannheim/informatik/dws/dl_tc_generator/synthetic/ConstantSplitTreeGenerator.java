@@ -6,25 +6,21 @@ public class ConstantSplitTreeGenerator implements ITreeGenerator {
 
 
     final int splitNumber;
-    final String rootNode;
-    final Set<String> nodes;
 
-    public ConstantSplitTreeGenerator(int splitNumber, String rootNode, Set<String> nodes) {
+    public ConstantSplitTreeGenerator(int splitNumber) {
         this.splitNumber = splitNumber;
-        this.nodes = nodes;
-        this.rootNode = rootNode;
     }
 
     @Override
-    public Tree generateTree() {
-        Tree result = new Tree(this.rootNode);
+    public Tree generateTree(Set<String> nodes, String rootNode) {
+        Tree result = new Tree(rootNode);
 
         int currentCounter = 0;
-        String currentWorkNode = this.rootNode;
+        String currentWorkNode = rootNode;
         LinkedList<String> workList = new LinkedList<>();
 
-        for (String node : this.nodes){
-            if(node.equals(this.rootNode)){
+        for (String node : nodes){
+            if(node.equals(rootNode)){
                 continue;
             }
             if(currentCounter == splitNumber){

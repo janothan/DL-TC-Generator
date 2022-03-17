@@ -2,26 +2,37 @@ package de.uni_mannheim.informatik.dws.dl_tc_generator.synthetic;
 
 import de.uni_mannheim.informatik.dws.jrdf2vec.walk_generation.data_structures.Triple;
 
-import java.util.List;
+import java.util.Set;
 
 public interface IOntologyGenerator {
 
 
-    String getRandomNodeId();
+    String getRandomInstanceId();
 
-    String getRandomEdgeId();
+    String getRandomPredicateId();
 
-    String getRandomEdgeForNode();
+    String getRandomClassId();
 
-    Triple getRandomPredicateObjectForNode(String nodeId);
+    String getRandomPredicateForInstance(String instanceId);
 
-    String getRandomObjectNodeForEdge(String edgeId);
+    Triple getRandomPredicateObjectForInstance(String nodeId);
 
-    String getRandomSubjectNodeForEdge(String edgeId);
+    String getRandomObjectNodeForInstance(String edgeId);
 
-    List<String> getClasses();
+    String getRandomSubjectNodeForPredicate(String edgeId);
 
-    List<String> getEdges();
+    Set<String> getClasses();
 
-    List<String> getInstances();
+    Set<String> getProperties();
+
+    Set<String> getInstances();
+
+    String getRange(String propertyId);
+
+    String getDomain(String propertyId);
+
+    Tree getClassTree();
+
+    String getInstanceType(String instance);
+
 }

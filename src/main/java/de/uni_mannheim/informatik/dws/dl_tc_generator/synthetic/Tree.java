@@ -52,6 +52,17 @@ public class Tree implements ITree {
     }
 
     @Override
+    public Set<String> getAllChildrenOfNode(String nodeId) {
+        Set<String> result = new HashSet<>();
+        for(String child : this.getChildrenOfNode(nodeId)){
+            result.add(child);
+            result.addAll(getAllChildrenOfNode(child));
+        }
+        return result;
+    }
+
+
+    @Override
     public Set<String> getParentsOfNode(String nodeId) {
         if(nodeId == null || !nodeIds.contains(nodeId)){
             LOGGER.error("nodeId does not exist. Returning null.");
@@ -61,6 +72,11 @@ public class Tree implements ITree {
         if(result == null){
             return new HashSet<>();
         } else return result;
+    }
+
+    @Override
+    public Set<String> getAllParentsOfNode(String nodeId) {
+        return null;
     }
 
     public String getRoot() {

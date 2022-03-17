@@ -2,6 +2,8 @@ package de.uni_mannheim.informatik.dws.dl_tc_generator.synthetic;
 
 import org.junit.jupiter.api.Test;
 
+import java.util.Set;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class TreeTest {
@@ -26,6 +28,18 @@ class TreeTest {
 
         assertEquals(0, t.getChildrenOfNode(null).size());
         assertEquals(0, t.getParentsOfNode(null).size());
+
+        Set<String> allChildren = t.getAllChildrenOfNode("root");
+        assertEquals(4, allChildren.size());
+        assertTrue(allChildren.contains("a2b"));
+        assertFalse(allChildren.contains("root"));
+
+        assertEquals(0, t.getAllChildrenOfNode("a2b").size());
+
+        allChildren = t.getAllChildrenOfNode("t1a");
+        assertEquals(2, allChildren.size());
+        assertTrue(allChildren.contains("a2a"));
+        assertTrue(allChildren.contains("a2b"));
     }
 
 }

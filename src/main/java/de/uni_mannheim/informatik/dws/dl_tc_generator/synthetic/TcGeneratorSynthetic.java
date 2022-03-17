@@ -189,7 +189,7 @@ public abstract class TcGeneratorSynthetic {
      * @return The <em>newly generated</em> ids are returned!
      */
     protected Set<String> addAdditionalNodeIds(Set<String> setToWhichWillBeAdded, int numberOfNewNodes){
-        Set<String> newNodeIds =generateNodeIds(numberOfNewNodes, setToWhichWillBeAdded.size());
+        Set<String> newNodeIds = generateNodeIds(numberOfNewNodes, setToWhichWillBeAdded.size());
         setToWhichWillBeAdded.addAll(newNodeIds);
         return newNodeIds;
     }

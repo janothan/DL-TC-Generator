@@ -15,8 +15,8 @@ class ConstantSplitTreeGeneratorTest {
     void generateTree() {
 
         Set<String> nodes = new HashSet<>(Arrays.asList("ROOT", "N1", "N2", "N3", "N4", "N5", "N6", "N7"));
-        ConstantSplitTreeGenerator generator = new ConstantSplitTreeGenerator(2, "ROOT", nodes);
-        Tree t = generator.generateTree();
+        ConstantSplitTreeGenerator generator = new ConstantSplitTreeGenerator(2);
+        Tree t = generator.generateTree(nodes, "ROOT");
         System.out.println(t);
 
         assertEquals(8, t.getAllNodes().size());
