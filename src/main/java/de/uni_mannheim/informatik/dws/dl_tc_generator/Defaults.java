@@ -24,6 +24,16 @@ public class Defaults {
     public static final int NUMBER_OF_EDGES = 50;
 
     /**
+     * The number of classes that is desired (different from {@link Defaults#SIZES}!).
+     */
+    public static final int NUMBER_OF_CLASSES = 20;
+
+    /**
+     * Default number of sub-classes per class.
+     */
+    public static final int CLASS_SPLITS = 3;
+
+    /**
      * The number of node types (nodes_of_interest * NODE_FACTOR)
      */
     public static final int NODE_FACTOR = 10;

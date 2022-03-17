@@ -1,4 +1,4 @@
-package de.uni_mannheim.informatik.dws.dl_tc_generator.synthetic;
+package de.uni_mannheim.informatik.dws.dl_tc_generator.synthetic.constructed_ontology;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -114,7 +114,7 @@ public abstract class TcGeneratorSynthetic {
     /**
      * The multiple of total nodes.
      */
-    protected int totalNodesFactor = 5;
+    protected int totalNodesFactor = Defaults.NODE_FACTOR;
 
     /**
      * Generate the test case.

@@ -1,9 +1,6 @@
-package de.uni_mannheim.informatik.dws.dl_tc_generator;
+package de.uni_mannheim.informatik.dws.dl_tc_generator.synthetic.constructed_ontology;
 
-import de.uni_mannheim.informatik.dws.dl_tc_generator.synthetic.ConstantSplitTreeGenerator;
-import de.uni_mannheim.informatik.dws.dl_tc_generator.synthetic.IOntologyGenerator;
-import de.uni_mannheim.informatik.dws.dl_tc_generator.synthetic.ITreeGenerator;
-import de.uni_mannheim.informatik.dws.dl_tc_generator.synthetic.Tree;
+import de.uni_mannheim.informatik.dws.dl_tc_generator.Util;
 import de.uni_mannheim.informatik.dws.jrdf2vec.walk_generation.data_structures.Triple;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,14 +28,7 @@ public class OntologyGenerator implements IOntologyGenerator {
         classInstancesNonTransitive = new HashMap<>();
         for(String instance : instanceIds){
             String classId = Util.randomDrawFromSet(classIds);
-            instanceTypes.put(instance, classId);
-            if(classInstancesNonTransitive.containsKey(classId)){
-                classInstancesNonTransitive.get(classId).add(instance);
-            } else {
-                Set<String> instanceSet = new HashSet<>();
-                instanceSet.add(instance);
-                classInstancesNonTransitive.put(classId, instanceSet);
-            }
+            addInstance(instance, classId);
         }
 
         // build property domain and range
@@ -61,7 +51,17 @@ public class OntologyGenerator implements IOntologyGenerator {
                 addPropertyRange(propertyId, randomRange);
             }
         }
+    }
 
+    private void addInstance(String instance, String classId){
+        instanceTypes.put(instance, classId);
+        if(classInstancesNonTransitive.containsKey(classId)){
+            classInstancesNonTransitive.get(classId).add(instance);
+        } else {
+            Set<String> instanceSet = new HashSet<>();
+            instanceSet.add(instance);
+            classInstancesNonTransitive.put(classId, instanceSet);
+        }
     }
 
     private static final Logger LOGGER = LoggerFactory.getLogger(OntologyGenerator.class);
@@ -177,6 +177,11 @@ public class OntologyGenerator implements IOntologyGenerator {
         return new Triple(nodeId, predicate, object);
     }
 
+    /**
+     * Obtain a random range instance of the specified property.
+     * @param edgeId Property id.
+     * @return Random instance that fulfills range criterion.
+     */
     @Override
     public String getRandomObjectNodeForInstance(String edgeId) {
         return Util.randomDrawFromSet(propertyRangeInstances.get(edgeId));
@@ -220,6 +225,44 @@ public class OntologyGenerator implements IOntologyGenerator {
     @Override
     public String getInstanceType(String instance) {
         return instanceTypes.get(instance);
+    }
+
+    @Override
+    public void ensureSubjectNumberForPredicate(String predicateId, int subjectNumber) {
+        int target = subjectNumber - propertyDomainInstances.get(predicateId).size();
+        if (target <= 0){
+            LOGGER.info("Enough subjects for " + predicateId + ". Nothing to generate.");
+        } else {
+            LOGGER.warn("Not enough subjects for " + predicateId + ". Generating " + target + " additional nodes.");
+            String targetClass = propertyDomains.get(predicateId);
+            Set<String> desiredClasses = new HashSet<>(classTree.getAllChildrenOfNode(targetClass));
+            desiredClasses.add(targetClass);
+            for (int i = 0; i < target; i++){
+                addInstance("<EXTRA_I_FOR_" + Util.removeTags(predicateId) + "_" + i + ">",
+                        Util.randomDrawFromSet(desiredClasses));
+            }
+        }
+    }
+
+    @Override
+    public void ensureEnoughInstancesOfType(String classId, int desiredNumber) {
+        for(int i = 0; i < desiredNumber; i++){
+            addInstance("<EXTRA_I_FOR_CLASS_" + Util.removeTags(classId) + "_" + i + ">",
+                    classId);
+        }
+    }
+
+    @Override
+    public Set<String> getInstancesOfTypeTransitive(String classId) {
+        Set<String> targetClasses = new HashSet<>(classTree.getAllChildrenOfNode(classId));
+        targetClasses.add(classId);
+        Set<String> result = new HashSet<>();
+        for(Map.Entry<String, Set<String>> entry : classInstancesNonTransitive.entrySet()){
+            if (targetClasses.contains(entry.getKey())){
+                result.addAll(entry.getValue());
+            }
+        }
+        return result;
     }
 
     public String getTcId() {

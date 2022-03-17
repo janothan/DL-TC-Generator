@@ -1,4 +1,4 @@
-package de.uni_mannheim.informatik.dws.dl_tc_generator.synthetic;
+package de.uni_mannheim.informatik.dws.dl_tc_generator.synthetic.constructed_ontology;
 
 import de.uni_mannheim.informatik.dws.jrdf2vec.walk_generation.data_structures.Triple;
 
@@ -35,4 +35,9 @@ public interface IOntologyGenerator {
 
     String getInstanceType(String instance);
 
+    void ensureSubjectNumberForPredicate(String predicateId, int subjectNumber);
+
+    void ensureEnoughInstancesOfType(String classId, int desiredNumber);
+
+    Set<String> getInstancesOfTypeTransitive(String classId);
 }

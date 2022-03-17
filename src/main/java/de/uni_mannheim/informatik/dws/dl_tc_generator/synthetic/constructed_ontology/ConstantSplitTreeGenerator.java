@@ -1,4 +1,4 @@
-package de.uni_mannheim.informatik.dws.dl_tc_generator.synthetic;
+package de.uni_mannheim.informatik.dws.dl_tc_generator.synthetic.constructed_ontology;
 
 import java.util.*;
 
@@ -7,6 +7,12 @@ public class ConstantSplitTreeGenerator implements ITreeGenerator {
 
     final int splitNumber;
 
+    /**
+     * Constructor
+     *
+     * @param splitNumber The number of leaves per node. If no hierarchy is desired, set the {@code splitNumber}
+     *                    to a very high number.
+     */
     public ConstantSplitTreeGenerator(int splitNumber) {
         this.splitNumber = splitNumber;
     }

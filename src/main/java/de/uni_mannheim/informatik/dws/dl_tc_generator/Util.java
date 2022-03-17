@@ -264,5 +264,14 @@ public class Util {
         }
     }
 
-
+    /**
+     * This method will remove a leading less-than and a trailing greater-than sign (tags).
+     * @param stringToBeEdited The string that is to be edited.
+     * @return String without tags.
+     */
+    public static String removeTags(String stringToBeEdited){
+        if(stringToBeEdited.startsWith("<")) stringToBeEdited = stringToBeEdited.substring(1);
+        if(stringToBeEdited.endsWith(">")) stringToBeEdited = stringToBeEdited.substring(0, stringToBeEdited.length() - 1);
+        return stringToBeEdited;
+    }
 }

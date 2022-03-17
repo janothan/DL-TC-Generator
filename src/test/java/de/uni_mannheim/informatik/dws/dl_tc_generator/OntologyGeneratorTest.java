@@ -1,6 +1,7 @@
 package de.uni_mannheim.informatik.dws.dl_tc_generator;
 
-import de.uni_mannheim.informatik.dws.dl_tc_generator.synthetic.ConstantSplitTreeGenerator;
+import de.uni_mannheim.informatik.dws.dl_tc_generator.synthetic.constructed_ontology.ConstantSplitTreeGenerator;
+import de.uni_mannheim.informatik.dws.dl_tc_generator.synthetic.constructed_ontology.OntologyGenerator;
 import de.uni_mannheim.informatik.dws.jrdf2vec.walk_generation.data_structures.Triple;
 import org.junit.jupiter.api.Test;
 
