@@ -13,6 +13,15 @@ import java.util.Set;
 
 import static de.uni_mannheim.informatik.dws.dl_tc_generator.synthetic.constructed.Tc11GeneratorSyntheticConstructed.isAccidentallyPositive;
 
+/**
+ * Test Case Form:
+ * {@code
+ * Positive: X<br/>
+ * Named Nodes: N<br/>
+ * Named Edges: E1, E2<br/>
+ * Pattern: (X E1 Y1) AND (X E1 Y2) AND (Y1 E2 N) AND (Y2 E2 N)  <br/>
+ * }
+ */
 public class Tc11GeneratorSyntheticConstructedHard extends TcGeneratorSyntheticConstructedHard {
 
 

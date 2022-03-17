@@ -31,7 +31,6 @@ public class MainIde {
         GeneratorSyntheticConstructedHard generator = new GeneratorSyntheticConstructedHard(
                 "./results/synthetic_constructed_hard");
         generator.setSizes(new int[]{50, 500, 5000});
-        generator.setIncludeOnlyCollection("TC11h");
         generator.generateTestCases();
     }
 
