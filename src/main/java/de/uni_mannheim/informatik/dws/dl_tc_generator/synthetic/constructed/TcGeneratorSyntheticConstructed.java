@@ -32,7 +32,7 @@ public abstract class TcGeneratorSyntheticConstructed extends TcGeneratorSynthet
     }
 
     protected abstract void writeGraphAndSetPositives(File fileToBeWritten, int totalNodes, int nodesOfInterest,
-                                                      int totalEdges, int avgTriplesPerNode);
+                                                      int totalEdges, int maxTriplesPerNode);
 
     public int getMaxTriplesPerNode() {
         return maxTriplesPerNode;

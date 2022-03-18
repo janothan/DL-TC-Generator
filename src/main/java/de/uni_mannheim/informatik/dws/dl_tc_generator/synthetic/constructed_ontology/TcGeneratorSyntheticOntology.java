@@ -2,13 +2,15 @@ package de.uni_mannheim.informatik.dws.dl_tc_generator.synthetic.constructed_ont
 
 import de.uni_mannheim.informatik.dws.dl_tc_generator.Defaults;
 import de.uni_mannheim.informatik.dws.dl_tc_generator.synthetic.TcGeneratorSynthetic;
+import de.uni_mannheim.informatik.dws.dl_tc_generator.synthetic.constructed.TcGeneratorSyntheticConstructed;
 
 import java.io.File;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.Random;
 import java.util.Set;
 
-public abstract class TcGeneratorSyntheticOntology extends TcGeneratorSynthetic {
+public abstract class TcGeneratorSyntheticOntology extends TcGeneratorSyntheticConstructed {
 
 
     public TcGeneratorSyntheticOntology(File directory, int[] sizes) {
@@ -49,6 +51,8 @@ public abstract class TcGeneratorSyntheticOntology extends TcGeneratorSynthetic 
      * The set of negatives (in the hard case, those are tailored rather than generated).
      */
     Set<String> negatives = new HashSet<>();
+
+    public final Random random = new Random();
 
     /**
      * Get the negatives.

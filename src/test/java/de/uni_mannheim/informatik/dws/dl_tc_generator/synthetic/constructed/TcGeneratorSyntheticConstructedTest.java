@@ -16,8 +16,13 @@ import java.util.Set;
 import static de.uni_mannheim.informatik.dws.dl_tc_generator.ResultValidator.isOverlapFree;
 import static org.junit.jupiter.api.Assertions.*;
 
-class TcGeneratorSyntheticConstructedTest {
+public class TcGeneratorSyntheticConstructedTest {
 
+
+    @BeforeAll
+    static void setUp(){
+        cleanUp();
+    }
 
     private static final String DIR_0 = "./synthetic_constructed_tc";
     private static final String DIR_1 = "./synthetic_constructed_tc01";
@@ -51,11 +56,6 @@ class TcGeneratorSyntheticConstructedTest {
         generatorList.add(new Tc10GeneratorSyntheticConstructed(DIR_10));
         generatorList.add(new Tc11GeneratorSyntheticConstructed(DIR_11));
         generatorList.add(new Tc12GeneratorSyntheticConstructed(DIR_12));
-    }
-
-    @BeforeAll
-    static void setUp(){
-        cleanUp();
     }
 
     /**

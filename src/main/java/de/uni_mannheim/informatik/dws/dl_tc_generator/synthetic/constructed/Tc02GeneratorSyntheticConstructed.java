@@ -43,7 +43,7 @@ public class Tc02GeneratorSyntheticConstructed extends TcGeneratorSyntheticConst
     }
 
     @Override
-    protected void writeGraphAndSetPositives(File fileToBeWritten, int totalNodes, int nodesOfInterest, int totalEdges, int avgTriplesPerNode) {
+    protected void writeGraphAndSetPositives(File fileToBeWritten, int totalNodes, int nodesOfInterest, int totalEdges, int maxTriplesPerNode) {
         if (fileToBeWritten.exists()) {
             LOGGER.error("The file to be written exists already. Aborting generation.");
             return;
@@ -72,7 +72,7 @@ public class Tc02GeneratorSyntheticConstructed extends TcGeneratorSyntheticConst
             for(String node : nodeIds){
 
                 // draw number of triples
-                int tripleNumber = random.nextInt(maxTriplesPerNode + 1);
+                int tripleNumber = random.nextInt(this.maxTriplesPerNode + 1);
                 for(int i = 0; i < tripleNumber; i++) {
                     Triple triple = generateTripleWithStartNode(node, nodeIds, edgeIds);
                     if(triple.predicate.equals(targetEdge) && !positives.contains(triple.object)){

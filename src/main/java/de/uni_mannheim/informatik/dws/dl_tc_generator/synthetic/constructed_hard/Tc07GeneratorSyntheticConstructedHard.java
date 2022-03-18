@@ -43,7 +43,7 @@ public class Tc07GeneratorSyntheticConstructedHard extends TcGeneratorSyntheticC
     }
 
     @Override
-    protected void writeGraphAndSetPositives(File fileToBeWritten, int totalNodes, int nodesOfInterest, int totalEdges, int avgTriplesPerNode) {
+    protected void writeGraphAndSetPositives(File fileToBeWritten, int totalNodes, int nodesOfInterest, int totalEdges, int maxTriplesPerNode) {
         if (fileToBeWritten.exists()) {
             LOGGER.error("The file to be written exists already. Aborting generation.");
             return;

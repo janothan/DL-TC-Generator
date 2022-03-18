@@ -48,10 +48,10 @@ public class Tc06GeneratorSyntheticConstructedHard extends TcGeneratorSyntheticC
      * @param nodesOfInterest Can be used to determine the number of desired positives and the number of desired
      *                        negatives.
      * @param totalEdges Total edge types in the graph.
-     * @param avgTriplesPerNode Average triples per node.
+     * @param maxTriplesPerNode Average triples per node.
      */
     @Override
-    protected void writeGraphAndSetPositives(File fileToBeWritten, int totalNodes, int nodesOfInterest, int totalEdges, int avgTriplesPerNode) {
+    protected void writeGraphAndSetPositives(File fileToBeWritten, int totalNodes, int nodesOfInterest, int totalEdges, int maxTriplesPerNode) {
         if (fileToBeWritten.exists()) {
             LOGGER.error("The file to be written exists already. Aborting generation.");
             return;

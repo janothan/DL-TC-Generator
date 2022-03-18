@@ -246,9 +246,14 @@ public class OntologyGenerator implements IOntologyGenerator {
 
     @Override
     public void ensureEnoughInstancesOfType(String classId, int desiredNumber) {
-        for(int i = 0; i < desiredNumber; i++){
-            addInstance("<EXTRA_I_FOR_CLASS_" + Util.removeTags(classId) + "_" + i + ">",
-                    classId);
+        int target = desiredNumber - getInstancesOfTypeTransitive(classId).size();
+        if(target <= 0){
+            LOGGER.info("Enough instances for class " + classId + ". Nothing to generate.");
+        } else {
+            for (int i = 0; i < target; i++) {
+                addInstance("<EXTRA_I_FOR_CLASS_" + Util.removeTags(classId) + "_" + i + ">",
+                        classId);
+            }
         }
     }
 
