@@ -87,6 +87,11 @@ class OntologyGeneratorTest {
         int actualInstanceSize = og.getInstances().size();
         assertTrue(actualInstanceSize >= 100, // note that we may draw the root, so 100 is ok!
                 "Expected > 100 instances. Was: " + actualInstanceSize);
+
+        for (String instance : og.getInstances()){
+            Triple t = og.getRandomPredicateObjectForInstance(instance);
+            assertNotNull(t);
+        }
     }
 
 }

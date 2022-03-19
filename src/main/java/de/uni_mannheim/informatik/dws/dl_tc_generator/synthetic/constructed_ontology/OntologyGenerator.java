@@ -74,7 +74,15 @@ public class OntologyGenerator implements IOntologyGenerator {
             // - instanceSubjectProperties
             for (Map.Entry<String, String> entry : propertyDomains.entrySet()) {
                 if (types.contains(entry.getValue())) {
-                    updateProperty(entry.getKey());
+                    updatePropertyDomain(entry.getKey());
+                }
+            }
+        }
+
+        if(propertyRangeInstances != null){
+            for(Map.Entry<String, String> entry : propertyRanges.entrySet()){
+                if(types.contains(entry.getValue())){
+                    updatePropertyRange(entry.getKey());
                 }
             }
         }
@@ -92,17 +100,16 @@ public class OntologyGenerator implements IOntologyGenerator {
 
     private void addPropertyDomain(String property, String domain){
         propertyDomains.put(property, domain);
-        updateProperty(property);
+        updatePropertyDomain(property);
     }
 
     /**
      * Update indices for the provided property.
      * @param property The property that is to be updated.
      */
-    private void updateProperty(String property) {
+    private void updatePropertyDomain(String property) {
         final String domain = getDomain(property);
         Set<String> instances = getClassInstancesTransitive(domain);
-        instances.add(domain);
         propertyDomainInstances.put(property, instances);
         for(String instance : instances) {
             if(instanceSubjectProperties.containsKey(instance)) {
@@ -115,9 +122,24 @@ public class OntologyGenerator implements IOntologyGenerator {
         }
     }
 
+    /**
+     * Update the property indices for domain and range.
+     * @param propertyId Identifier of the property.
+     */
+    private void updateProperty(String propertyId){
+        updatePropertyRange(propertyId);
+        updatePropertyDomain(propertyId);
+    }
+
     private void addPropertyRange(String property, String range){
         propertyRanges.put(property, range);
-        propertyRangeInstances.put(property, getClassInstancesTransitive(range));
+        updatePropertyRange(property);
+    }
+
+    private void updatePropertyRange(String property){
+        final String range = getRange(property);
+        Set<String> instances = getClassInstancesTransitive(range);
+        propertyRangeInstances.put(property, instances);
     }
 
     public Set<String> getClassInstancesTransitive(String classId){
