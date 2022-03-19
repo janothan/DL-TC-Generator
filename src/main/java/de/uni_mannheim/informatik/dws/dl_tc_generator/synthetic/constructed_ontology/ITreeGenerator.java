@@ -4,5 +4,6 @@ import java.util.Set;
 
 public interface ITreeGenerator {
 
+
     Tree generateTree(Set<String> nodes, String rootNode);
 }

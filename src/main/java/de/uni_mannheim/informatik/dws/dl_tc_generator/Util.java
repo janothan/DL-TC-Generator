@@ -22,8 +22,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class Util {
 
 
-    private static Logger LOGGER = LoggerFactory.getLogger(Util.class);
-
+    private static final Logger LOGGER = LoggerFactory.getLogger(Util.class);
 
     public static List<String> readUtf8FileIntoList(File fileToRead) {
         String fileContent = readUtf8(fileToRead);
@@ -274,4 +273,30 @@ public class Util {
         if(stringToBeEdited.endsWith(">")) stringToBeEdited = stringToBeEdited.substring(0, stringToBeEdited.length() - 1);
         return stringToBeEdited;
     }
+
+    /**
+     * Writes the text to a file using UTF-8 encoding.
+     * @param fileToWrite The file to write.
+     * @param textToWrite Text to write. Each array component is a new line. A line break will be added at the end.
+     */
+    public static void writeUtf8(String fileToWrite, String... textToWrite) {
+        writeUtf8(new File(fileToWrite), textToWrite);
+    }
+
+    /**
+     * Writes the text to a file using UTF-8 encoding.
+     * @param fileToWrite The file to write.
+     * @param textToWrite Text to write. Each array component is a new line. A line break will be added at the end.
+     */
+    public static void writeUtf8(File fileToWrite, String... textToWrite) {
+        try (BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(fileToWrite), StandardCharsets.UTF_8))) {
+            for(String line : textToWrite){
+                writer.write(line + "\n");
+            }
+            writer.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 }

@@ -1,7 +1,6 @@
 package de.uni_mannheim.informatik.dws.dl_tc_generator.synthetic.constructed_ontology;
 
 import de.uni_mannheim.informatik.dws.dl_tc_generator.Defaults;
-import de.uni_mannheim.informatik.dws.dl_tc_generator.synthetic.TcGeneratorSynthetic;
 import de.uni_mannheim.informatik.dws.dl_tc_generator.synthetic.constructed.TcGeneratorSyntheticConstructed;
 
 import java.io.File;
@@ -62,5 +61,22 @@ public abstract class TcGeneratorSyntheticOntology extends TcGeneratorSyntheticC
     @Override
     public Set<String> getNegatives() {
         return negatives;
+    }
+
+    public void writeConfigToNewLog(File fileToBeWritten, int totalNodes, int nodesOfInterest, int totalEdges, int maxTriplesPerNode){
+        configLog = new StringBuilder();
+        configLog.append("File to be written: ").append(fileToBeWritten.getAbsolutePath()).append("\n");
+        configLog.append("# of Instances : ").append(ontologyGenerator.getInstances().size()).append("\n");
+        configLog.append("# of Classes : ").append(ontologyGenerator.getClasses().size()).append("\n");
+        configLog.append("# of Properties: ").append(ontologyGenerator.getProperties().size()).append("\n");
+        configLog.append("Max triples per node: ").append(maxTriplesPerNode).append("\n");
+        configLog.append("Nodes of interest: ").append(nodesOfInterest).append("\n");
+        Class<? extends ITreeGenerator> c = ontologyGenerator.getTreeGenerator().getClass();
+        configLog.append("Tree generator class: ").append(c.getSimpleName()).append("\n");
+        if(c.getSimpleName().equals(ConstantSplitTreeGenerator.class.getSimpleName())){
+            ConstantSplitTreeGenerator cstg = (ConstantSplitTreeGenerator) ontologyGenerator.getTreeGenerator();
+            configLog.append("Split number of ConstantSplitTreeGenerator: ").append(cstg.splitNumber)
+                    .append("\n");
+        }
     }
 }

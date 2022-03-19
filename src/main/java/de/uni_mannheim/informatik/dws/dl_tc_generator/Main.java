@@ -4,7 +4,6 @@ import de.uni_mannheim.informatik.dws.dl_tc_generator.by_query.GeneratorQuery;
 import de.uni_mannheim.informatik.dws.dl_tc_generator.synthetic.GeneratorSynthetic;
 import de.uni_mannheim.informatik.dws.dl_tc_generator.synthetic.random.GeneratorSyntheticRandom;
 import org.apache.commons.cli.*;
-import org.apache.jena.reasoner.rulesys.impl.Generator;
 
 import java.io.File;
 import java.util.ArrayList;

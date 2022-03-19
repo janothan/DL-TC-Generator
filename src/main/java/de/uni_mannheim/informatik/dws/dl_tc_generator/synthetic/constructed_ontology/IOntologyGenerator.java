@@ -40,4 +40,6 @@ public interface IOntologyGenerator {
     void ensureEnoughInstancesOfType(String classId, int desiredNumber);
 
     Set<String> getInstancesOfTypeTransitive(String classId);
+
+    ITreeGenerator getTreeGenerator();
 }

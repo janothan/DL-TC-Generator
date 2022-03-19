@@ -4,6 +4,7 @@ import de.uni_mannheim.informatik.dws.dl_tc_generator.by_query.GeneratorQuery;
 import de.uni_mannheim.informatik.dws.dl_tc_generator.synthetic.GeneratorSynthetic;
 import de.uni_mannheim.informatik.dws.dl_tc_generator.synthetic.constructed.GeneratorSyntheticConstructed;
 import de.uni_mannheim.informatik.dws.dl_tc_generator.synthetic.constructed_hard.GeneratorSyntheticConstructedHard;
+import de.uni_mannheim.informatik.dws.dl_tc_generator.synthetic.constructed_ontology.GeneratorSyntheticOntology;
 import de.uni_mannheim.informatik.dws.dl_tc_generator.synthetic.random.GeneratorSyntheticRandom;
 import org.apache.commons.io.FileUtils;
 
@@ -24,7 +25,17 @@ public class MainIde {
         //generateByQuery();
         //generateSyntheticRandom();
         //generateSyntheticConstructed();
-        generateSyntheticConstructedHard();
+        //generateSyntheticConstructedHard();
+        //generateSyntheticConstructedHard();
+        generateOntologyTestCases();
+    }
+
+    private static void generateOntologyTestCases() {
+        File resultsFile = new File("./results/synthetic_ontology");
+        Util.delete(resultsFile.getAbsolutePath());
+        GeneratorSyntheticOntology generatorSyntheticOntology = new GeneratorSyntheticOntology(resultsFile);
+        generatorSyntheticOntology.setSizes(new int[]{50, 500, 5000});
+        generatorSyntheticOntology.generateTestCases();
     }
 
     private static void generateSyntheticConstructedHard() throws Exception {

@@ -29,6 +29,7 @@ public class Tc01GeneratorSyntheticOntology extends TcGeneratorSyntheticOntology
      */
     private static final Logger LOGGER = LoggerFactory.getLogger(Tc01GeneratorSyntheticOntology.class);
 
+
     @Override
     protected void writeGraphAndSetPositives(File fileToBeWritten, int totalNodes, int nodesOfInterest, int totalEdges, int maxTriplesPerNode) {
         if (fileToBeWritten.exists()) {
@@ -37,7 +38,6 @@ public class Tc01GeneratorSyntheticOntology extends TcGeneratorSyntheticOntology
         }
 
         try (BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(fileToBeWritten), StandardCharsets.UTF_8))) {
-
             // determine target edge
             String targetEdge = ontologyGenerator.getRandomPredicateId();
 
@@ -48,6 +48,10 @@ public class Tc01GeneratorSyntheticOntology extends TcGeneratorSyntheticOntology
             ontologyGenerator.ensureEnoughInstancesOfType(ontologyGenerator.getDomain(targetEdge), 2*nodesOfInterest);
 
             String targetClass = ontologyGenerator.getDomain(targetEdge);
+
+            writeConfigToNewLog(fileToBeWritten, totalNodes, nodesOfInterest, totalEdges, maxTriplesPerNode);
+            configLog.append("Target edge: ").append(targetEdge).append("\n");
+            configLog.append("Target class: ").append(targetClass).append("\n");
 
             // let's generate positives
             Set<String> typeInstances = ontologyGenerator.getInstancesOfTypeTransitive(targetClass);
@@ -88,7 +92,14 @@ public class Tc01GeneratorSyntheticOntology extends TcGeneratorSyntheticOntology
                 IOException e) {
             LOGGER.error("An error occurred while writing the file.", e);
         }
+    }
 
+    @Override
+    public String getConfigurationParameters(){
+        if(configLog == null){
+            return null;
+        }
+        return configLog.toString();
     }
 
     @Override

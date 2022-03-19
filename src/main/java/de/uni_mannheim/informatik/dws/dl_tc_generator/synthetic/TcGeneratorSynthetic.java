@@ -16,6 +16,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import static de.uni_mannheim.informatik.dws.dl_tc_generator.Util.writeUtf8;
 import static de.uni_mannheim.informatik.dws.jrdf2vec.util.Util.randomDrawFromSet;
 
 /**
@@ -40,6 +41,11 @@ public abstract class TcGeneratorSynthetic {
     public TcGeneratorSynthetic(File directory) {
         this(directory, Defaults.SIZES);
     }
+
+    /**
+     * Config log to persist specific configurations.
+     */
+    protected StringBuilder configLog = null;
 
     /**
      * Convenience Constructor
@@ -155,6 +161,18 @@ public abstract class TcGeneratorSynthetic {
             Util.writeTrainTestFiles(currentPosList, currentNegList, Paths.get(directory.getAbsolutePath(), "" + s),
                     trainTestSplit, separator, false);
         }
+        if(getConfigurationParameters() != null){
+            File configFile = new File(directory.getAbsolutePath(), "configuration.txt");
+            writeUtf8(configFile, getConfigurationParameters());
+        }
+    }
+
+    /**
+     * Return some string configuration parameters if there are any.
+     * @return Configuration parameters.
+     */
+    public String getConfigurationParameters(){
+        return null;
     }
 
     /**
