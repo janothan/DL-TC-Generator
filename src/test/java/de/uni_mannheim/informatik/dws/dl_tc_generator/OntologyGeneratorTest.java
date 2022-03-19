@@ -64,6 +64,29 @@ class OntologyGeneratorTest {
         }
         assertEquals(numberInstances, instanceCounter);
         assertTrue(instanceCounterTransitive > instanceCounter);
+    }
+
+    @Test
+    void ensureEnoughInstancesOfType(){
+        final int instanceNumber = 30;
+        final int classNumber = 3;
+        OntologyGenerator og = new OntologyGenerator(classNumber, 1, instanceNumber, "test",
+                new ConstantSplitTreeGenerator(1000));
+        int iNumber = og.getInstances().size();
+        assertEquals(iNumber, instanceNumber);
+
+        assertEquals(classNumber, og.getClasses().size() );
+        String type = og.getClasses().iterator().next();
+        assertNotNull(type);
+
+        int typedInstancesNumber = og.getInstancesOfTypeTransitive(type).size();
+        assertTrue(typedInstancesNumber < 100);
+
+        og.ensureEnoughInstancesOfType(type, 100);
+        assertEquals(100, og.getInstancesOfTypeTransitive(type).size());
+        int actualInstanceSize = og.getInstances().size();
+        assertTrue(actualInstanceSize >= 100, // note that we may draw the root, so 100 is ok!
+                "Expected > 100 instances. Was: " + actualInstanceSize);
 
     }
 

@@ -69,7 +69,6 @@ public class Tc06GeneratorSyntheticConstructedHard extends TcGeneratorSyntheticC
                 positives.add(randomSubject);
             }
 
-
             while(negatives.size() < Math.ceil(nodesOfInterest/2.0)){
                 final String randomSubject = Util.randomDrawFromSet(nodeIds);
                 if(positives.contains(randomSubject)){

@@ -54,6 +54,7 @@ public class OntologyGenerator implements IOntologyGenerator {
     }
 
     private void addInstance(String instance, String classId){
+        instanceIds.add(instance);
         instanceTypes.put(instance, classId);
         if(classInstancesNonTransitive.containsKey(classId)){
             classInstancesNonTransitive.get(classId).add(instance);
