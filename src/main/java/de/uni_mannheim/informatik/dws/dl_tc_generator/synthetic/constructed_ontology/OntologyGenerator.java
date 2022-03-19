@@ -56,12 +56,27 @@ public class OntologyGenerator implements IOntologyGenerator {
     private void addInstance(String instance, String classId){
         instanceIds.add(instance);
         instanceTypes.put(instance, classId);
+
+        Set<String> types = classTree.getAllChildrenOfNode(classId);
+        types.add(classId);
+
         if(classInstancesNonTransitive.containsKey(classId)){
             classInstancesNonTransitive.get(classId).add(instance);
         } else {
             Set<String> instanceSet = new HashSet<>();
             instanceSet.add(instance);
             classInstancesNonTransitive.put(classId, instanceSet);
+        }
+
+        if(propertyDomainInstances != null) {
+            // we need to update:
+            // - propertyDomainInstances
+            // - instanceSubjectProperties
+            for (Map.Entry<String, String> entry : propertyDomains.entrySet()) {
+                if (types.contains(entry.getValue())) {
+                    updateProperty(entry.getKey());
+                }
+            }
         }
     }
 
@@ -77,7 +92,17 @@ public class OntologyGenerator implements IOntologyGenerator {
 
     private void addPropertyDomain(String property, String domain){
         propertyDomains.put(property, domain);
+        updateProperty(property);
+    }
+
+    /**
+     * Update indices for the provided property.
+     * @param property The property that is to be updated.
+     */
+    private void updateProperty(String property) {
+        final String domain = getDomain(property);
         Set<String> instances = getClassInstancesTransitive(domain);
+        instances.add(domain);
         propertyDomainInstances.put(property, instances);
         for(String instance : instances) {
             if(instanceSubjectProperties.containsKey(instance)) {
@@ -163,6 +188,10 @@ public class OntologyGenerator implements IOntologyGenerator {
 
     @Override
     public String getRandomPredicateForInstance(String instanceId) {
+        if(instanceSubjectProperties.get(instanceId) == null){
+            LOGGER.error("Did not find instance " + instanceId + " in instanceSubjectProperties.\n" +
+                    "Program will fail.");
+        }
         return Util.randomDrawFromSet(instanceSubjectProperties.get(instanceId));
     }
 
