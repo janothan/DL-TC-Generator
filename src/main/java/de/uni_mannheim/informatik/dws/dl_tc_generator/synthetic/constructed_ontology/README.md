@@ -4,4 +4,4 @@
   - Properties have domain and ranges.
   - There is a class hierarchy.
 - Positives are generated.
-- Hard negatives are generated.
+- Hard negatives are generated!

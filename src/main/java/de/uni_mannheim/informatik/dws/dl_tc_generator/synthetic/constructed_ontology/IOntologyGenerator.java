@@ -42,4 +42,6 @@ public interface IOntologyGenerator {
     Set<String> getInstancesOfTypeTransitive(String classId);
 
     ITreeGenerator getTreeGenerator();
+
+    Set<String> getPropertyRangeInstances(String property);
 }

@@ -30,6 +30,8 @@ class GeneratorSyntheticOntologyTest {
         final String groupName = generator.getTcGroupName();
         testFileExistence(GENERATION_DIR, "tc01", groupName, 10);
         testFileExistence(GENERATION_DIR, "tc01", groupName, 11);
+        testFileExistence(GENERATION_DIR, "tc06", groupName, 10);
+        testFileExistence(GENERATION_DIR, "tc06", groupName, 11);
 
         File mergedGraph = new File(GENERATION_DIR, "graph.nt");
         assertTrue(mergedGraph.exists());

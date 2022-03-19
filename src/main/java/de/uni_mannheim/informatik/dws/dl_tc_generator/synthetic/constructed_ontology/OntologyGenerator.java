@@ -282,4 +282,8 @@ public class OntologyGenerator implements IOntologyGenerator {
     public Set<String> getClassInstancesNonTransitive(String classId) {
         return classInstancesNonTransitive.get(classId);
     }
+
+    public Set<String> getPropertyRangeInstances(String property){
+        return propertyRangeInstances.get(property);
+    }
 }
