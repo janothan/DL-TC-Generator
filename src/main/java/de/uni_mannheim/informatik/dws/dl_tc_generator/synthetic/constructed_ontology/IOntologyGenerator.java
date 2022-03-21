@@ -11,6 +11,12 @@ public interface IOntologyGenerator {
 
     String getRandomPredicateId();
 
+    /**
+     * {@code predicate.domain = predicate.range}
+     * @return Some randomly drawn predicate ID where the domain is equal to the range.
+     */
+    String getRandomPredicateIdWhereDomainIsRange();
+
     String getRandomClassId();
 
     String getRandomPredicateForInstance(String instanceId);

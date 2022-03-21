@@ -257,6 +257,24 @@ public class OntologyGenerator implements IOntologyGenerator {
         return Util.randomDrawFromSet(propertyIds);
     }
 
+    /**
+     * {@code predicate.domain = predicate.range}
+     * @return Some randomly drawn predicate ID where the domain is equal to the range.
+     */
+    @Override
+    public String getRandomPredicateIdWhereDomainIsRange() {
+        Set<String> resultSet = new HashSet<>();
+        for(String property : propertyIds){
+            if(getDomain(property).equals(getRange(property))){
+                resultSet.add(property);
+            }
+        }
+        if(resultSet.size() == 0){
+            LOGGER.error("There is no property where property.range = property.domain!");
+        }
+        return Util.randomDrawFromSet(resultSet);
+    }
+
     @Override
     public String getRandomClassId() {
         return Util.randomDrawFromSet(classIds);

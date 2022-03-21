@@ -13,6 +13,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class GeneratorSyntheticOntologyTest {
 
+
     private static final String GENERATION_DIR = "./SyntheticOntologyTest";
 
     @BeforeAll
@@ -32,6 +33,8 @@ class GeneratorSyntheticOntologyTest {
         testFileExistence(GENERATION_DIR, "tc01", groupName, 11);
         testFileExistence(GENERATION_DIR, "tc02", groupName, 10);
         testFileExistence(GENERATION_DIR, "tc02", groupName, 11);
+        testFileExistence(GENERATION_DIR, "tc03", groupName, 10);
+        testFileExistence(GENERATION_DIR, "tc03", groupName, 11);
         testFileExistence(GENERATION_DIR, "tc06", groupName, 10);
         testFileExistence(GENERATION_DIR, "tc06", groupName, 11);
 
@@ -39,7 +42,6 @@ class GeneratorSyntheticOntologyTest {
         assertTrue(mergedGraph.exists());
         assertTrue(mergedGraph.isFile());
     }
-
 
     @Test
     void getTcGroupName() {
