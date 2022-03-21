@@ -30,6 +30,8 @@ class GeneratorSyntheticOntologyTest {
         final String groupName = generator.getTcGroupName();
         testFileExistence(GENERATION_DIR, "tc01", groupName, 10);
         testFileExistence(GENERATION_DIR, "tc01", groupName, 11);
+        testFileExistence(GENERATION_DIR, "tc02", groupName, 10);
+        testFileExistence(GENERATION_DIR, "tc02", groupName, 11);
         testFileExistence(GENERATION_DIR, "tc06", groupName, 10);
         testFileExistence(GENERATION_DIR, "tc06", groupName, 11);
 
@@ -48,7 +50,6 @@ class GeneratorSyntheticOntologyTest {
     @AfterAll
     public static void tearDown() {
         Util.delete(GENERATION_DIR);
-
     }
 
 }

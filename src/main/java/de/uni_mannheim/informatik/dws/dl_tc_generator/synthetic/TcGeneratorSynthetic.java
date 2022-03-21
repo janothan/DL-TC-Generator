@@ -43,11 +43,6 @@ public abstract class TcGeneratorSynthetic {
     }
 
     /**
-     * Config log to persist specific configurations.
-     */
-    protected StringBuilder configLog = null;
-
-    /**
      * Convenience Constructor
      *
      * @param directory The directory to be created. The directory must not exist yet.
@@ -168,11 +163,22 @@ public abstract class TcGeneratorSynthetic {
     }
 
     /**
+     * Config log to persist specific configurations.
+     * Lines added to the config log will appear in a per test-case configuration.txt file.
+     * Use the logger for logging entries and the config log for configuration parameters so that it can be
+     * understood with which parameters the test case was generated.
+     */
+    protected StringBuilder configLog = null;
+
+    /**
      * Return some string configuration parameters if there are any.
      * @return Configuration parameters.
      */
     public String getConfigurationParameters(){
-        return null;
+        if(configLog == null){
+            return null;
+        }
+        return configLog.toString();
     }
 
     /**
@@ -334,4 +340,5 @@ public abstract class TcGeneratorSynthetic {
         }
         this.totalNodesFactor = totalNodesFactor;
     }
+
 }

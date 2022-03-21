@@ -34,6 +34,7 @@ public class MainIde {
         File resultsFile = new File("./results/synthetic_ontology");
         Util.delete(resultsFile.getAbsolutePath());
         GeneratorSyntheticOntology generatorSyntheticOntology = new GeneratorSyntheticOntology(resultsFile);
+        generatorSyntheticOntology.setNodesFactor(20);
         generatorSyntheticOntology.setSizes(new int[]{50, 500, 5000});
         generatorSyntheticOntology.generateTestCases();
     }

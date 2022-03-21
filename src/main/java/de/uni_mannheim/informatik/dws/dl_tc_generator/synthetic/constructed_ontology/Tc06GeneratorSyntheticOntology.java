@@ -29,11 +29,9 @@ public class Tc06GeneratorSyntheticOntology extends TcGeneratorSyntheticOntology
      */
     private static final Logger LOGGER = LoggerFactory.getLogger(Tc06GeneratorSyntheticOntology.class);
 
-    StringBuilder configLog = null;
-
     @Override
     public String getTcId() {
-        return null;
+        return "tc06";
     }
 
     @Override
@@ -56,6 +54,11 @@ public class Tc06GeneratorSyntheticOntology extends TcGeneratorSyntheticOntology
             ontologyGenerator.ensureEnoughInstancesOfType(desiredType, 2*nodesOfInterest);
 
             final String targetInstance = ontologyGenerator.getRandomObjectNodeForInstance(targetEdge);
+
+            writeConfigToNewLog(fileToBeWritten, totalNodes, nodesOfInterest, totalEdges, maxTriplesPerNode);
+            configLog.append("Target class: ").append(desiredType).append("\n");
+            configLog.append("Target edge: ").append(targetEdge).append("\n");
+            configLog.append("Target instance: ").append(targetInstance).append("\n");
 
             Set<String> typeInstances = ontologyGenerator.getInstancesOfTypeTransitive(desiredType);
 

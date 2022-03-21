@@ -35,7 +35,19 @@ public interface IOntologyGenerator {
 
     String getInstanceType(String instance);
 
+    /**
+     * Ensure that there are at least {@code subjectNumber} different subjects for the provided {@code predicateId}.
+     * @param predicateId Predicate ID.
+     * @param subjectNumber Number of desired unique subjects.
+     */
     void ensureSubjectNumberForPredicate(String predicateId, int subjectNumber);
+
+    /**
+     * Ensure that there are at least {@code objectNumber} different objects for the provided {@code predicateId}.
+     * @param predicateId Predicate ID.
+     * @param objectNumber Number of desired unique objects.
+     */
+    void ensureObjectNumberForPredicate(String predicateId, int objectNumber);
 
     void ensureEnoughInstancesOfType(String classId, int desiredNumber);
 

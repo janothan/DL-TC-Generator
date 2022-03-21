@@ -10,29 +10,35 @@ import java.nio.charset.StandardCharsets;
 import java.util.Set;
 
 /**
- * Example positive query:
- * ?x a dbo:Person .
- * ?x dbo:child ?y .
+ * Example (?x is positive):
+ * ?x a dbo:City .
+ * ?y dbo:namedAfter ?x .
  */
-public class Tc01GeneratorSyntheticOntology extends TcGeneratorSyntheticOntology {
+public class Tc02GeneratorSyntheticOntology extends TcGeneratorSyntheticOntology {
 
 
-    public Tc01GeneratorSyntheticOntology(File directory, int[] sizes) {
+    public Tc02GeneratorSyntheticOntology(File directory, int[] sizes) {
         super(directory, sizes);
     }
 
-    public Tc01GeneratorSyntheticOntology(File directory) {
+    public Tc02GeneratorSyntheticOntology(File directory) {
         super(directory);
     }
 
-    public Tc01GeneratorSyntheticOntology(String directory) {
+    public Tc02GeneratorSyntheticOntology(String directory) {
         super(directory);
     }
 
     /**
      * Logger
      */
-    private static final Logger LOGGER = LoggerFactory.getLogger(Tc01GeneratorSyntheticOntology.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(Tc02GeneratorSyntheticOntology.class);
+
+
+    @Override
+    public String getTcId() {
+        return "TC02";
+    }
 
     @Override
     protected void writeGraphAndSetPositives(File fileToBeWritten, int totalNodes, int nodesOfInterest, int totalEdges, int maxTriplesPerNode) {
@@ -42,52 +48,55 @@ public class Tc01GeneratorSyntheticOntology extends TcGeneratorSyntheticOntology
         }
 
         try (BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(fileToBeWritten), StandardCharsets.UTF_8))) {
+
             // determine target edge
             final String targetEdge = ontologyGenerator.getRandomPredicateId();
 
-            // making sure that we have enough positives
-            ontologyGenerator.ensureSubjectNumberForPredicate(targetEdge, nodesOfInterest);
+            // positive type class
+            final String positiveTypeClass = ontologyGenerator.getRange(targetEdge);
 
-            final String targetClass = ontologyGenerator.getDomain(targetEdge);
+            // making sure that we have enough positives
+            ontologyGenerator.ensureObjectNumberForPredicate(targetEdge, nodesOfInterest);
 
             // making sure that we have enough negatives
-            ontologyGenerator.ensureEnoughInstancesOfType(targetClass, 2*nodesOfInterest);
+            ontologyGenerator.ensureEnoughInstancesOfType(positiveTypeClass, 2*nodesOfInterest);
 
             writeConfigToNewLog(fileToBeWritten, totalNodes, nodesOfInterest, totalEdges, maxTriplesPerNode);
             configLog.append("Target edge: ").append(targetEdge).append("\n");
-            configLog.append("Target class (class of positives): ").append(targetClass).append("\n");
+            configLog.append("Target class (class of positives): ").append(positiveTypeClass).append("\n");
 
-            Set<String> typeInstances = ontologyGenerator.getInstancesOfTypeTransitive(targetClass);
+            Set<String> typeInstances = ontologyGenerator.getInstancesOfTypeTransitive(positiveTypeClass);
 
             // let's generate positives
             while (positives.size() < nodesOfInterest) {
-                String targetNode = Util.randomDrawFromSet(typeInstances);
-                String object = ontologyGenerator.getRandomObjectNodeForInstance(targetEdge);
-                writer.write(targetNode + " " + targetEdge + " " + object + " .\n");
-                graph.addObjectTriple(targetNode, targetEdge, object);
-                positives.add(targetNode);
+                String positiveId = Util.randomDrawFromSet(typeInstances);
+                String subject = ontologyGenerator.getRandomSubjectNodeForPredicate(targetEdge);
+                writer.write(subject + " " + targetEdge + " " + positiveId + " .\n");
+                graph.addObjectTriple(subject, targetEdge, positiveId);
+                positives.add(positiveId);
             }
 
             typeInstances.removeAll(positives);
 
             // let's generate negatives
-            while (negatives.size() < nodesOfInterest) {
-                String targetNode = Util.randomDrawFromSet(typeInstances);
-                if (positives.contains(targetNode)) {
+            while (negatives.size() < nodesOfInterest){
+                String negativeId = Util.randomDrawFromSet(typeInstances);
+                if(positives.contains(negativeId)){
                     continue;
                 }
-                negatives.add(targetNode);
+                negatives.add(negativeId);
             }
 
+            // let's generate some random connections
             for (String instanceId : ontologyGenerator.getInstances()) {
 
                 // draw number of triples
                 int tripleNumber = random.nextInt(maxTriplesPerNode + 1);
 
                 for (int i = 0; i < tripleNumber; i++) {
-
                     Triple triple = ontologyGenerator.getRandomPredicateObjectForInstance(instanceId);
-                    if (triple.predicate.equals(targetEdge) && !positives.contains(triple.subject)) {
+
+                    if (triple.predicate.equals(targetEdge) && !positives.contains(triple.object)) {
                         i--;
                     } else {
                         writer.write(triple.subject + " " + triple.predicate + " " + triple.object + " . \n");
@@ -99,10 +108,5 @@ public class Tc01GeneratorSyntheticOntology extends TcGeneratorSyntheticOntology
                 IOException e) {
             LOGGER.error("An error occurred while writing the file.", e);
         }
-    }
-
-    @Override
-    public String getTcId() {
-        return "tc01";
     }
 }

@@ -2,6 +2,8 @@ package de.uni_mannheim.informatik.dws.dl_tc_generator.synthetic.constructed_ont
 
 import de.uni_mannheim.informatik.dws.dl_tc_generator.Defaults;
 import de.uni_mannheim.informatik.dws.dl_tc_generator.synthetic.constructed.TcGeneratorSyntheticConstructed;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.util.Arrays;
@@ -27,16 +29,51 @@ public abstract class TcGeneratorSyntheticOntology extends TcGeneratorSyntheticC
         setDefaultOntologyGenerator();
     }
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(TcGeneratorSyntheticOntology.class);
+
+    int numberOfClasses = Defaults.NUMBER_OF_CLASSES;
+    int numberOfEdges = Defaults.NUMBER_OF_EDGES;
+    ITreeGenerator treeGenerator = new ConstantSplitTreeGenerator(Defaults.CLASS_SPLITS);
+
     private void setDefaultOntologyGenerator(){
-        int instances = Arrays.stream(sizes).sum() * Defaults.NODE_FACTOR;
         OntologyGenerator og = new OntologyGenerator(
-            Defaults.NUMBER_OF_CLASSES, Defaults.NUMBER_OF_EDGES, instances, getTcId(),
-                new ConstantSplitTreeGenerator(Defaults.CLASS_SPLITS)
+                numberOfClasses,
+                numberOfEdges,
+                getNumberOfInstances(),
+                getTcId(),
+                treeGenerator
         );
         setOntologyGenerator(og);
     }
 
     IOntologyGenerator ontologyGenerator;
+
+    /**
+     * Set the total nodes factor.
+     * Note: While this method works, it is more efficient to use
+     * {@link TcGeneratorSyntheticOntology#setOntologyGenerator(IOntologyGenerator)} because for each member variable
+     * change, the graph has to be re-generated.
+     * @param totalNodesFactor The total nodes factor (must be greater than 2).
+     */
+    @Override
+    public void setTotalNodesFactor(int totalNodesFactor) {
+        if(totalNodesFactor < 2){
+            LOGGER.error("The totalNodesFactor must be >= 2. Doing nothing.");
+            return;
+        }
+        this.totalNodesFactor = totalNodesFactor;
+        this.ontologyGenerator = new OntologyGenerator(
+                numberOfClasses,
+                numberOfEdges,
+                getNumberOfInstances(),
+                getTcId(),
+                treeGenerator
+        );
+    }
+
+    public int getNumberOfInstances(){
+        return Arrays.stream(sizes).sum() * totalNodesFactor;
+    }
 
     public IOntologyGenerator getOntologyGenerator() {
         return ontologyGenerator;
@@ -51,7 +88,7 @@ public abstract class TcGeneratorSyntheticOntology extends TcGeneratorSyntheticC
      */
     Set<String> negatives = new HashSet<>();
 
-    public final Random random = new Random();
+    public final Random random = new Random(42);
 
     /**
      * Get the negatives.
@@ -79,4 +116,5 @@ public abstract class TcGeneratorSyntheticOntology extends TcGeneratorSyntheticC
                     .append("\n");
         }
     }
+
 }

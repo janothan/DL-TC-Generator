@@ -60,7 +60,6 @@ public class Tc06GeneratorSyntheticConstructedHard extends TcGeneratorSyntheticC
         Set<String> edgeIds = generateEdgeIds(totalEdges);
         final String targetEdge = edgeIds.iterator().next();
         final String targetNode = nodeIds.iterator().next();
-
         try (BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(fileToBeWritten), StandardCharsets.UTF_8))) {
             while (positives.size() < nodesOfInterest) {
                 final String randomSubject = Util.randomDrawFromSet(nodeIds);
