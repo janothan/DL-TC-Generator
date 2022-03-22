@@ -63,6 +63,7 @@ public abstract class GeneratorSynthetic implements IGenerator {
             LOGGER.info("Created directory: " + generatedDirectory.getAbsolutePath());
         }
         for (TcGeneratorSynthetic g : generatorSet) {
+            LOGGER.info("Processing " + g.getTcId());
             if (includeOnlyCollection != null
                     &&
                     !(

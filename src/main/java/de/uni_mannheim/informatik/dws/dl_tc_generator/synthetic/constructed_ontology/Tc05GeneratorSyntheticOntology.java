@@ -80,10 +80,64 @@ public class Tc05GeneratorSyntheticOntology extends TcGeneratorSyntheticOntology
             // forward positives x -> r1 -> z -> r2 -> targetInstance
             while(positives.size() < nodesOfInterest/2){
                 Triple t1 = ontologyGenerator.getRandomTripleWithObject(targetInstance);
-
-
+                Triple t2 = ontologyGenerator.getRandomTripleWithObjectWhereSubjectOfType(t1.subject, targetType);
+                positives.add(t1.subject);
+                graph.addObjectTriple(t1);
+                graph.addObjectTriple(t2);
+                writer.write(t1.subject + " " + t1.predicate + " " + t1.object + " .\n");
+                writer.write(t2.subject + " " + t2.predicate + " " + t2.object + " .\n");
             }
 
+            // backward positives x -> r1 -> z -> r2 -> targetInstance
+            while(positives.size() < nodesOfInterest){
+                Triple t1 = ontologyGenerator.getRandomTripleWithSubject(targetInstance);
+                Triple t2 = ontologyGenerator.getRandomTripleWithSubjectWhereObjectOfType(t1.object, targetType);
+                positives.add(t2.object);
+                graph.addObjectTriple(t1);
+                graph.addObjectTriple(t2);
+                writer.write(t1.subject + " " + t1.predicate + " " + t1.object + " .\n");
+                writer.write(t2.subject + " " + t2.predicate + " " + t2.object + " .\n");
+            }
+
+            typeInstances.removeAll(positives);
+            negatives = typeInstances;
+
+
+            // let's add random triples / write negatives
+            for(String node : ontologyGenerator.getInstances()) {
+
+                // randomly generate triples
+                // draw number of triples
+                int tripleNumber = random.nextInt(maxTriplesPerNode + 1);
+                for (int i = 0; i < tripleNumber; i++) {
+                    Triple t = ontologyGenerator.getRandomTripleWithSubject(node);
+
+                    // case 1: object is target instance
+                    if(t.object.equals(targetInstance)){
+                        i--;
+                        continue;
+                    }
+
+                    // case 2: object is connected to targetInstance
+                    for(Triple checkTriple : graph.getObjectTriplesInvolvingObject(targetInstance)) {
+                        if(checkTriple.subject.equals(t.object)){
+                            i--;
+                            continue;
+                        }
+                    }
+
+                    // case 3: targetInstance is connected to subject
+                    for(Triple checkTriple : graph.getObjectTriplesInvolvingSubject(targetInstance)){
+                        if(checkTriple.object.equals(t.subject)){
+                            i++;
+                            continue;
+                        }
+                    }
+
+                    graph.addObjectTriple(t);
+                    writer.write(t.subject + " " + t.predicate + " " + t.object + " .\n");
+                }
+            }
 
 
         } catch (IOException e) {

@@ -27,6 +27,7 @@ class TcGeneratorSyntheticOntologyTest {
     private static final String DIR_2 = "./synthetic_ontology_tc02";
     private static final String DIR_3 = "./synthetic_ontology_tc03";
     private static final String DIR_4 = "./synthetic_ontology_tc04";
+    private static final String DIR_5 = "./synthetic_ontology_tc05";
     private static final String DIR_6 = "./synthetic_ontology_tc06";
 
     /**
@@ -39,6 +40,7 @@ class TcGeneratorSyntheticOntologyTest {
         generatorList.add(new Tc02GeneratorSyntheticOntology(DIR_2));
         generatorList.add(new Tc03GeneratorSyntheticOntology(DIR_3));
         generatorList.add(new Tc04GeneratorSyntheticOntology(DIR_4));
+        generatorList.add(new Tc05GeneratorSyntheticOntology(DIR_5));
         generatorList.add(new Tc06GeneratorSyntheticOntology(DIR_6));
     }
 
@@ -67,6 +69,7 @@ class TcGeneratorSyntheticOntologyTest {
         Util.delete(DIR_2);
         Util.delete(DIR_3);
         Util.delete(DIR_4);
+        Util.delete(DIR_5);
         Util.delete(DIR_6);
     }
 

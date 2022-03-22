@@ -40,6 +40,15 @@ class TreeTest {
         assertEquals(2, allChildren.size());
         assertTrue(allChildren.contains("a2a"));
         assertTrue(allChildren.contains("a2b"));
+
+        Set<String> parents = t.getAllParentsOfNode("a2a");
+        assertEquals(2, parents.size());
+        assertTrue(parents.contains("t1a"));
+        assertTrue(parents.contains("root"));
+
+        parents = t.getAllParentsOfNode("t1b");
+        assertEquals(1, parents.size());
+        assertTrue(parents.contains("root"));
     }
 
 }

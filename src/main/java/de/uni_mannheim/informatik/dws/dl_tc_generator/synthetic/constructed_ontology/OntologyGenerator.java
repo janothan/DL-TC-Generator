@@ -328,11 +328,25 @@ public class OntologyGenerator {
         return new Triple(subject, property, objectInstanceId);
     }
 
+    public Triple getRandomTripleWithSubjectWhereObjectOfType(String subjectInstanceId, String objectTypeId){
+        Set<String> properties = getPropertiesWithDomainRange(
+                getInstanceType(subjectInstanceId), objectTypeId);
+        String property = Util.randomDrawFromSet(properties);
+        String object = getRandomObjectForProperty(property);
+        return new Triple(subjectInstanceId, property, object);
+    }
+
+    /**
+     * Domain and range are interpreted here as lower bounds!
+     * @param domain Lower domain bound.
+     * @param range Lower range bound.
+     * @return Set of properties.
+     */
     public Set<String> getPropertiesWithDomainRange(String domain, String range){
-        Set<String> rangeClasses = new HashSet<>(classTree.getAllChildrenOfNode(range));
+        Set<String> rangeClasses = new HashSet<>(classTree.getAllParentsOfNode(range));
         rangeClasses.add(range);
 
-        Set<String> domainClasses = new HashSet<>(classTree.getAllChildrenOfNode(domain));
+        Set<String> domainClasses = new HashSet<>(classTree.getAllParentsOfNode(domain));
         domainClasses.add(domain);
 
         Set<String> resultIds = new HashSet<>();

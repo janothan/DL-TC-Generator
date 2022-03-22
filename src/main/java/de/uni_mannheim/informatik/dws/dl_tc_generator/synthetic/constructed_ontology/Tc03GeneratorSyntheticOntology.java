@@ -71,7 +71,7 @@ public class Tc03GeneratorSyntheticOntology extends TcGeneratorSyntheticOntology
             final String targetClass = ontologyGenerator.getDomain(targetEdge);
 
             // making sure that we have enough negatives
-            ontologyGenerator.ensureEnoughInstancesOfType(targetClass, 2*nodesOfInterest);
+            ontologyGenerator.ensureEnoughInstancesOfType(targetClass, 2 * nodesOfInterest + 2);
 
             // some logging
             writeConfigToNewLog(fileToBeWritten, totalNodes, nodesOfInterest, totalEdges, maxTriplesPerNode);
@@ -95,6 +95,7 @@ public class Tc03GeneratorSyntheticOntology extends TcGeneratorSyntheticOntology
             // let's generate negatives
             while (negatives.size() < nodesOfInterest) {
                 String targetNode = Util.randomDrawFromSet(typeInstances);
+                typeInstances.remove(targetNode);
                 if (positives.contains(targetNode)) {
                     continue;
                 }

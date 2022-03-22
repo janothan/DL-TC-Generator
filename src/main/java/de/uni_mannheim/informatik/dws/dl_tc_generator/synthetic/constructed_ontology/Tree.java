@@ -76,7 +76,15 @@ public class Tree implements ITree {
 
     @Override
     public Set<String> getAllParentsOfNode(String nodeId) {
-        return null;
+        Set<String> result = new HashSet<>();
+        if(nodeId.equals(getRoot())){
+            result.add(nodeId);
+        }
+        for (String parent : getParentsOfNode(nodeId)) {
+            result.add(parent);
+            result.addAll(getAllParentsOfNode(parent));
+        }
+        return result;
     }
 
     public String getRoot() {
