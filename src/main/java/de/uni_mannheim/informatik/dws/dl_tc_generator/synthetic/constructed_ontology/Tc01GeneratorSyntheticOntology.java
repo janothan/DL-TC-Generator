@@ -43,10 +43,10 @@ public class Tc01GeneratorSyntheticOntology extends TcGeneratorSyntheticOntology
 
         try (BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(fileToBeWritten), StandardCharsets.UTF_8))) {
             // determine target edge
-            final String targetEdge = ontologyGenerator.getRandomPredicateId();
+            final String targetEdge = ontologyGenerator.getRandomPropertyId();
 
             // making sure that we have enough positives
-            ontologyGenerator.ensureSubjectNumberForPredicate(targetEdge, nodesOfInterest);
+            ontologyGenerator.ensureSubjectNumberForProperty(targetEdge, nodesOfInterest);
 
             final String targetClass = ontologyGenerator.getDomain(targetEdge);
 
@@ -62,7 +62,7 @@ public class Tc01GeneratorSyntheticOntology extends TcGeneratorSyntheticOntology
             // let's generate positives
             while (positives.size() < nodesOfInterest) {
                 String targetNode = Util.randomDrawFromSet(typeInstances);
-                String object = ontologyGenerator.getRandomObjectNodeForInstance(targetEdge);
+                String object = ontologyGenerator.getRandomObjectForProperty(targetEdge);
                 writer.write(targetNode + " " + targetEdge + " " + object + " .\n");
                 graph.addObjectTriple(targetNode, targetEdge, object);
                 positives.add(targetNode);
@@ -86,7 +86,7 @@ public class Tc01GeneratorSyntheticOntology extends TcGeneratorSyntheticOntology
 
                 for (int i = 0; i < tripleNumber; i++) {
 
-                    Triple triple = ontologyGenerator.getRandomPredicateObjectForInstance(instanceId);
+                    Triple triple = ontologyGenerator.getRandomPropertyObjectForInstance(instanceId);
                     if (triple.predicate.equals(targetEdge) && !positives.contains(triple.subject)) {
                         i--;
                     } else {
@@ -95,8 +95,7 @@ public class Tc01GeneratorSyntheticOntology extends TcGeneratorSyntheticOntology
                     }
                 }
             }
-        } catch (
-                IOException e) {
+        } catch (IOException e) {
             LOGGER.error("An error occurred while writing the file.", e);
         }
     }

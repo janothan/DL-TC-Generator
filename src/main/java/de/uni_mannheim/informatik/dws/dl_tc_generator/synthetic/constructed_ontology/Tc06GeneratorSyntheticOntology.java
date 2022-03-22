@@ -44,16 +44,16 @@ public class Tc06GeneratorSyntheticOntology extends TcGeneratorSyntheticOntology
 
         try (BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(fileToBeWritten), StandardCharsets.UTF_8))) {
 
-            final String targetEdge = ontologyGenerator.getRandomPredicateId();
+            final String targetEdge = ontologyGenerator.getRandomPropertyId();
 
             // making sure that we have enough positives
-            ontologyGenerator.ensureSubjectNumberForPredicate(targetEdge, nodesOfInterest);
+            ontologyGenerator.ensureSubjectNumberForProperty(targetEdge, nodesOfInterest);
 
             // making sure that we have enough negatives
             final String desiredType = ontologyGenerator.getDomain(targetEdge);
             ontologyGenerator.ensureEnoughInstancesOfType(desiredType, 2*nodesOfInterest);
 
-            final String targetInstance = ontologyGenerator.getRandomObjectNodeForInstance(targetEdge);
+            final String targetInstance = ontologyGenerator.getRandomObjectForProperty(targetEdge);
 
             writeConfigToNewLog(fileToBeWritten, totalNodes, nodesOfInterest, totalEdges, maxTriplesPerNode);
             configLog.append("Target class: ").append(desiredType).append("\n");
@@ -85,7 +85,7 @@ public class Tc06GeneratorSyntheticOntology extends TcGeneratorSyntheticOntology
                 if(positives.contains(negative)){
                     continue;
                 }
-                String someObject = ontologyGenerator.getRandomObjectNodeForInstance(targetEdge);
+                String someObject = ontologyGenerator.getRandomObjectForProperty(targetEdge);
                 if(someObject.equals(targetInstance)){
                     continue;
                 }
@@ -101,7 +101,7 @@ public class Tc06GeneratorSyntheticOntology extends TcGeneratorSyntheticOntology
                 int tripleNumber = random.nextInt(maxTriplesPerNode + 1);
 
                 for (int i = 0; i < tripleNumber; i++) {
-                    Triple triple = ontologyGenerator.getRandomPredicateObjectForInstance(instanceId);
+                    Triple triple = ontologyGenerator.getRandomPropertyObjectForInstance(instanceId);
                     if(triple.predicate.equals(targetEdge) && triple.object.equals(targetInstance)){
                         i--;
                     } else {

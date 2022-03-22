@@ -253,7 +253,7 @@ public class OntologyGenerator implements IOntologyGenerator {
     }
 
     @Override
-    public String getRandomPredicateId() {
+    public String getRandomPropertyId() {
         return Util.randomDrawFromSet(propertyIds);
     }
 
@@ -262,7 +262,7 @@ public class OntologyGenerator implements IOntologyGenerator {
      * @return Some randomly drawn predicate ID where the domain is equal to the range.
      */
     @Override
-    public String getRandomPredicateIdWhereDomainIsRange() {
+    public String getRandomPropertyIdWhereDomainIsRange() {
         Set<String> resultSet = new HashSet<>();
         for(String property : propertyIds){
             if(getDomain(property).equals(getRange(property))){
@@ -281,7 +281,7 @@ public class OntologyGenerator implements IOntologyGenerator {
     }
 
     @Override
-    public String getRandomPredicateForInstance(String instanceId) {
+    public String getRandomPropertyForInstance(String instanceId) {
         if (instanceSubjectProperties.get(instanceId) == null) {
             LOGGER.error("Did not find instance " + instanceId + " in instanceSubjectProperties.\n" +
                     "Program will fail.");
@@ -290,8 +290,8 @@ public class OntologyGenerator implements IOntologyGenerator {
     }
 
     @Override
-    public Triple getRandomPredicateObjectForInstance(String nodeId) {
-        String predicate = getRandomPredicateForInstance(nodeId);
+    public Triple getRandomPropertyObjectForInstance(String nodeId) {
+        String predicate = getRandomPropertyForInstance(nodeId);
         Set<String> instances = propertyRangeInstances.get(predicate);
         if (instances == null) {
             LOGGER.error("No property for instance id: " + nodeId);
@@ -308,12 +308,12 @@ public class OntologyGenerator implements IOntologyGenerator {
      * @return Random instance that fulfills range criterion.
      */
     @Override
-    public String getRandomObjectNodeForInstance(String edgeId) {
+    public String getRandomObjectForProperty(String edgeId) {
         return Util.randomDrawFromSet(propertyRangeInstances.get(edgeId));
     }
 
     @Override
-    public String getRandomSubjectNodeForPredicate(String edgeId) {
+    public String getRandomSubjectForProperty(String edgeId) {
         return Util.randomDrawFromSet(propertyDomainInstances.get(edgeId));
     }
 
@@ -353,7 +353,7 @@ public class OntologyGenerator implements IOntologyGenerator {
     }
 
     @Override
-    public void ensureObjectNumberForPredicate(String predicateId, int objectNumber){
+    public void ensureObjectNumberForProperty(String predicateId, int objectNumber){
         int target = objectNumber - propertyRangeInstances.get(predicateId).size();
         if(target <= 0){
             LOGGER.info("Enough objects for " + predicateId + ". Nothing to generate.");
@@ -370,7 +370,7 @@ public class OntologyGenerator implements IOntologyGenerator {
     }
 
     @Override
-    public void ensureSubjectNumberForPredicate(String predicateId, int subjectNumber) {
+    public void ensureSubjectNumberForProperty(String predicateId, int subjectNumber) {
         int target = subjectNumber - propertyDomainInstances.get(predicateId).size();
         if (target <= 0) {
             LOGGER.info("Enough subjects for " + predicateId + ". Nothing to generate.");
@@ -431,4 +431,71 @@ public class OntologyGenerator implements IOntologyGenerator {
     public double getDomainRangeP() {
         return domainRangeP;
     }
+
+    @Override
+    public void ensurePropertyWithRangeInstance(String instanceId, int desiredNumber) {
+        int actual = getPropertiesWhereInstanceIsRange(instanceId).size();
+        int target = desiredNumber - actual;
+        if(target <= 0) {
+            LOGGER.error("Enough properties with range '" + instanceId + "' exist.");
+        } else {
+            LOGGER.error("Generating " + target + " properties with range '" + instanceId + "'.");
+            for(int i = 0; i < target; i++){
+                String propertyId = "<P_EXTRA_RANGE_" + i + "_" +  Util.removeTags(instanceId) +  ">";
+                propertyIds.add(propertyId);
+                addPropertyRange(propertyId, getInstanceType(instanceId));
+                addPropertyDomain(propertyId, pickDomainRangeSkewed(domainRangeP));
+            }
+        }
+    }
+
+    @Override
+    public void ensurePropertyWithDomainInstance(String instanceId, int desiredNumber){
+        int actual = getPropertiesWhereInstanceIsDomain(instanceId).size();
+        int target = desiredNumber - actual;
+        if(target <= 0) {
+            LOGGER.error("Enough properties with domain '" + instanceId + "' exist.");
+        } else {
+            LOGGER.error("Generating " + target + " properties with range '" + instanceId + "'.");
+            for(int i = 0; i < target; i++) {
+                String propertyId = "<P_EXTRA_DOMAIN_" + i + "_" + Util.removeTags(instanceId) + ">";
+                propertyIds.add(propertyId);
+                addPropertyDomain(propertyId, getInstanceType(instanceId));
+                addPropertyRange(propertyId, pickDomainRangeSkewed(domainRangeP));
+            }
+        }
+    }
+
+    @Override
+    public Set<String> getPropertiesWhereInstanceIsDomain(String instanceId){
+        Set<String> result = new HashSet<>();
+        for(Map.Entry<String, Set<String>> entry : propertyDomainInstances.entrySet()){
+            if (entry.getValue().contains(instanceId)){
+                result.add(entry.getKey());
+            }
+        }
+        return result;
+    }
+
+    @Override
+    public Set<String> getPropertiesWhereInstanceIsRange(String instanceId){
+        Set<String> result = new HashSet<>();
+        for(Map.Entry<String, Set<String>> entry : propertyRangeInstances.entrySet()){
+            if (entry.getValue().contains(instanceId)){
+                result.add(entry.getKey());
+            }
+        }
+        return result;
+    }
+
+    @Override
+    public String getRandomPropertyWhereInstanceIsDomain(String instanceId){
+        return Util.randomDrawFromSet(getPropertiesWhereInstanceIsDomain(instanceId));
+    }
+
+    @Override
+    public String getRandomPropertyWhereInstanceIsRange(String instanceId){
+        return Util.randomDrawFromSet(getPropertiesWhereInstanceIsRange(instanceId));
+    }
+
 }

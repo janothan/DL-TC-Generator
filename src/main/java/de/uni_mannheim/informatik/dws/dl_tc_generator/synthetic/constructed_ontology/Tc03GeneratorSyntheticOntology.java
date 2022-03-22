@@ -62,11 +62,11 @@ public class Tc03GeneratorSyntheticOntology extends TcGeneratorSyntheticOntology
         try (BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(fileToBeWritten), StandardCharsets.UTF_8))) {
 
             // determine target edge
-            final String targetEdge = ontologyGenerator.getRandomPredicateIdWhereDomainIsRange();
+            final String targetEdge = ontologyGenerator.getRandomPropertyIdWhereDomainIsRange();
 
             // making sure that we have enough positives
-            ontologyGenerator.ensureSubjectNumberForPredicate(targetEdge, nodesOfInterest/2 + 1);
-            ontologyGenerator.ensureObjectNumberForPredicate(targetEdge, nodesOfInterest/2 + 1);
+            ontologyGenerator.ensureSubjectNumberForProperty(targetEdge, nodesOfInterest/2 + 1);
+            ontologyGenerator.ensureObjectNumberForProperty(targetEdge, nodesOfInterest/2 + 1);
 
             final String targetClass = ontologyGenerator.getDomain(targetEdge);
 
@@ -107,7 +107,7 @@ public class Tc03GeneratorSyntheticOntology extends TcGeneratorSyntheticOntology
                 int tripleNumber = random.nextInt(maxTriplesPerNode + 1);
 
                 for (int i = 0; i < tripleNumber; i++) {
-                    Triple triple = ontologyGenerator.getRandomPredicateObjectForInstance(instanceId);
+                    Triple triple = ontologyGenerator.getRandomPropertyObjectForInstance(instanceId);
                     if (triple.predicate.equals(targetEdge)) {
                         i--;
                     } else {

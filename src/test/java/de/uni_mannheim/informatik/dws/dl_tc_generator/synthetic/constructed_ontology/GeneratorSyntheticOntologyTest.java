@@ -35,6 +35,8 @@ class GeneratorSyntheticOntologyTest {
         testFileExistence(GENERATION_DIR, "tc02", groupName, 11);
         testFileExistence(GENERATION_DIR, "tc03", groupName, 10);
         testFileExistence(GENERATION_DIR, "tc03", groupName, 11);
+        testFileExistence(GENERATION_DIR, "tc04", groupName, 10);
+        testFileExistence(GENERATION_DIR, "tc04", groupName, 11);
         testFileExistence(GENERATION_DIR, "tc06", groupName, 10);
         testFileExistence(GENERATION_DIR, "tc06", groupName, 11);
 

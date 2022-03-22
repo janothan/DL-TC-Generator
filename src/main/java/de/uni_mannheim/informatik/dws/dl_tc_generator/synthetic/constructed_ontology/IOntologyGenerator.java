@@ -9,23 +9,23 @@ public interface IOntologyGenerator {
 
     String getRandomInstanceId();
 
-    String getRandomPredicateId();
+    String getRandomPropertyId();
 
     /**
      * {@code predicate.domain = predicate.range}
      * @return Some randomly drawn predicate ID where the domain is equal to the range.
      */
-    String getRandomPredicateIdWhereDomainIsRange();
+    String getRandomPropertyIdWhereDomainIsRange();
 
     String getRandomClassId();
 
-    String getRandomPredicateForInstance(String instanceId);
+    String getRandomPropertyForInstance(String instanceId);
 
-    Triple getRandomPredicateObjectForInstance(String nodeId);
+    Triple getRandomPropertyObjectForInstance(String nodeId);
 
-    String getRandomObjectNodeForInstance(String edgeId);
+    String getRandomObjectForProperty(String edgeId);
 
-    String getRandomSubjectNodeForPredicate(String edgeId);
+    String getRandomSubjectForProperty(String edgeId);
 
     Set<String> getClasses();
 
@@ -46,14 +46,14 @@ public interface IOntologyGenerator {
      * @param predicateId Predicate ID.
      * @param subjectNumber Number of desired unique subjects.
      */
-    void ensureSubjectNumberForPredicate(String predicateId, int subjectNumber);
+    void ensureSubjectNumberForProperty(String predicateId, int subjectNumber);
 
     /**
      * Ensure that there are at least {@code objectNumber} different objects for the provided {@code predicateId}.
      * @param predicateId Predicate ID.
      * @param objectNumber Number of desired unique objects.
      */
-    void ensureObjectNumberForPredicate(String predicateId, int objectNumber);
+    void ensureObjectNumberForProperty(String predicateId, int objectNumber);
 
     void ensureEnoughInstancesOfType(String classId, int desiredNumber);
 
@@ -62,4 +62,16 @@ public interface IOntologyGenerator {
     ITreeGenerator getTreeGenerator();
 
     Set<String> getPropertyRangeInstances(String property);
+
+    void ensurePropertyWithRangeInstance(String instanceId, int desiredNumber);
+
+    void ensurePropertyWithDomainInstance(String instanceId, int desiredNumber);
+
+    Set<String> getPropertiesWhereInstanceIsDomain(String instanceId);
+
+    Set<String> getPropertiesWhereInstanceIsRange(String instanceId);
+
+    String getRandomPropertyWhereInstanceIsDomain(String instanceId);
+
+    String getRandomPropertyWhereInstanceIsRange(String instanceId);
 }
