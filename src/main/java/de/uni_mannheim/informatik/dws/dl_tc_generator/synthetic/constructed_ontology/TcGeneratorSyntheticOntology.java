@@ -46,14 +46,14 @@ public abstract class TcGeneratorSyntheticOntology extends TcGeneratorSyntheticC
         setOntologyGenerator(og);
     }
 
-    IOntologyGenerator ontologyGenerator;
+    OntologyGenerator ontologyGenerator;
 
 
 
     /**
      * Set the total nodes factor.
      * Note: While this method works, it is more efficient to use
-     * {@link TcGeneratorSyntheticOntology#setOntologyGenerator(IOntologyGenerator)} because for each member variable
+     * {@link TcGeneratorSyntheticOntology#setOntologyGenerator(OntologyGenerator)} because for each member variable
      * change, the graph has to be re-generated.
      * @param totalNodesFactor The total nodes factor (must be greater than 2).
      */
@@ -77,11 +77,11 @@ public abstract class TcGeneratorSyntheticOntology extends TcGeneratorSyntheticC
         return Arrays.stream(sizes).sum() * totalNodesFactor;
     }
 
-    public IOntologyGenerator getOntologyGenerator() {
+    public OntologyGenerator getOntologyGenerator() {
         return ontologyGenerator;
     }
 
-    public void setOntologyGenerator(IOntologyGenerator ontologyGenerator) {
+    public void setOntologyGenerator(OntologyGenerator ontologyGenerator) {
         this.ontologyGenerator = ontologyGenerator;
     }
 

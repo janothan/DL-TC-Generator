@@ -24,8 +24,8 @@ class OntologyGeneratorTest {
         assertEquals(og.getTcId(), "test");
 
         for(String instance : og.getInstances()){
-            assertNotNull(og.getRandomPropertyForInstance(instance));
-            Triple t = og.getRandomPropertyObjectForInstance(instance);
+            assertNotNull(og.getRandomPropertyWhereInstanceIsDomain(instance));
+            Triple t = og.getRandomTripleWithSubject(instance);
             assertNotNull(t);
             assertNotNull(t.subject);
             assertTrue(og.getInstances().contains(t.subject));
@@ -34,7 +34,7 @@ class OntologyGeneratorTest {
             assertNotNull(t.object);
             assertTrue(og.getInstances().contains(t.object));
 
-            String predicate = og.getRandomPropertyForInstance(instance);
+            String predicate = og.getRandomPropertyWhereInstanceIsDomain(instance);
             assertNotNull(predicate);
 
             String type = og.getInstanceType(instance);
@@ -89,7 +89,7 @@ class OntologyGeneratorTest {
                 "Expected > 100 instances. Was: " + actualInstanceSize);
 
         for (String instance : og.getInstances()){
-            Triple t = og.getRandomPropertyObjectForInstance(instance);
+            Triple t = og.getRandomTripleWithSubject(instance);
             assertNotNull(t);
         }
     }

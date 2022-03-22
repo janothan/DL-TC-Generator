@@ -7,7 +7,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.*;
 
-public class OntologyGenerator implements IOntologyGenerator {
+public class OntologyGenerator {
 
 
     public OntologyGenerator(int numberOfClasses, int numberOfProperties, int numberOfInstances, String tcId,
@@ -247,12 +247,10 @@ public class OntologyGenerator implements IOntologyGenerator {
      */
     Map<String, String> instanceTypes;
 
-    @Override
     public String getRandomInstanceId() {
         return Util.randomDrawFromSet(instanceIds);
     }
 
-    @Override
     public String getRandomPropertyId() {
         return Util.randomDrawFromSet(propertyIds);
     }
@@ -261,7 +259,6 @@ public class OntologyGenerator implements IOntologyGenerator {
      * {@code predicate.domain = predicate.range}
      * @return Some randomly drawn predicate ID where the domain is equal to the range.
      */
-    @Override
     public String getRandomPropertyIdWhereDomainIsRange() {
         Set<String> resultSet = new HashSet<>();
         for(String property : propertyIds){
@@ -275,23 +272,17 @@ public class OntologyGenerator implements IOntologyGenerator {
         return Util.randomDrawFromSet(resultSet);
     }
 
-    @Override
     public String getRandomClassId() {
         return Util.randomDrawFromSet(classIds);
     }
 
-    @Override
-    public String getRandomPropertyForInstance(String instanceId) {
-        if (instanceSubjectProperties.get(instanceId) == null) {
-            LOGGER.error("Did not find instance " + instanceId + " in instanceSubjectProperties.\n" +
-                    "Program will fail.");
-        }
-        return Util.randomDrawFromSet(instanceSubjectProperties.get(instanceId));
-    }
-
-    @Override
-    public Triple getRandomPropertyObjectForInstance(String nodeId) {
-        String predicate = getRandomPropertyForInstance(nodeId);
+    /**
+     * Generate a triple where {@code nodeId} is in subject position.
+     * @param nodeId Subject node ID.
+     * @return Triple.
+     */
+    public Triple getRandomTripleWithSubject(String nodeId) {
+        String predicate = getRandomPropertyWhereInstanceIsDomain(nodeId);
         Set<String> instances = propertyRangeInstances.get(predicate);
         if (instances == null) {
             LOGGER.error("No property for instance id: " + nodeId);
@@ -302,57 +293,107 @@ public class OntologyGenerator implements IOntologyGenerator {
     }
 
     /**
+     * Returns an Instance ID where the instance is of type classId or child of classId -- i.e., types are
+     * transitively resolved.
+     * @param classId The type.
+     * @return InstanceID.
+     */
+    public String getRandomInstanceOfTypeTransitive(String classId){
+        return Util.randomDrawFromSet(getInstancesOfTypeTransitive(classId));
+    }
+
+    /**
+     * Generate a triple where {@code instanceId} is in subject position.
+     * @param instanceId Subject node ID.
+     * @return Triple.
+     */
+    public Triple getRandomTripleWithObject(String instanceId){
+        String property = getRandomPropertyWhereInstanceIsRange(instanceId);
+        String subject = getRandomInstanceOfTypeTransitive(getDomain(property));
+        return new Triple(subject, property,instanceId);
+    }
+
+    /**
+     * Generates triple s,p,o where o=objectInstanceId
+     * @param objectInstanceId Object instance id.
+     * @param subjectTypeId Subject type id.
+     * @return The triple.
+     */
+    public Triple getRandomTripleWithObjectWhereSubjectOfType(String objectInstanceId, String subjectTypeId){
+        Set<String> properties = getPropertiesWithDomainRange(
+                subjectTypeId, getInstanceType(objectInstanceId
+        ));
+        String property = Util.randomDrawFromSet(properties);
+        String subject = getRandomSubjectForProperty(property);
+        return new Triple(subject, property, objectInstanceId);
+    }
+
+    public Set<String> getPropertiesWithDomainRange(String domain, String range){
+        Set<String> rangeClasses = new HashSet<>(classTree.getAllChildrenOfNode(range));
+        rangeClasses.add(range);
+
+        Set<String> domainClasses = new HashSet<>(classTree.getAllChildrenOfNode(domain));
+        domainClasses.add(domain);
+
+        Set<String> resultIds = new HashSet<>();
+        for(Map.Entry<String, String> entry : propertyRanges.entrySet()){
+            if(rangeClasses.contains(entry.getValue()) &&
+                domainClasses.contains(propertyDomains.get(entry.getKey()))
+            ){
+                resultIds.add(entry.getKey());
+            }
+        }
+        return resultIds;
+    }
+
+
+    /**
      * Obtain a random range instance of the specified property.
      *
      * @param edgeId Property id.
      * @return Random instance that fulfills range criterion.
      */
-    @Override
     public String getRandomObjectForProperty(String edgeId) {
         return Util.randomDrawFromSet(propertyRangeInstances.get(edgeId));
     }
 
-    @Override
     public String getRandomSubjectForProperty(String edgeId) {
         return Util.randomDrawFromSet(propertyDomainInstances.get(edgeId));
     }
 
-    @Override
     public Set<String> getClasses() {
         return this.classIds;
     }
 
-    @Override
     public Set<String> getProperties() {
         return this.propertyIds;
     }
 
-    @Override
     public Set<String> getInstances() {
         return this.instanceIds;
     }
 
-    @Override
     public String getRange(String propertyId) {
         return propertyRanges.get(propertyId);
     }
 
-    @Override
     public String getDomain(String propertyId) {
         return propertyDomains.get(propertyId);
     }
 
-    @Override
     public Tree getClassTree() {
         return this.classTree;
     }
 
-    @Override
     public String getInstanceType(String instance) {
         return instanceTypes.get(instance);
     }
 
-    @Override
+    /**
+     * Ensure that there are at least {@code objectNumber} different objects for the provided {@code predicateId}.
+     * @param predicateId Predicate ID.
+     * @param objectNumber Number of desired unique objects.
+     */
     public void ensureObjectNumberForProperty(String predicateId, int objectNumber){
         int target = objectNumber - propertyRangeInstances.get(predicateId).size();
         if(target <= 0){
@@ -369,7 +410,11 @@ public class OntologyGenerator implements IOntologyGenerator {
         }
     }
 
-    @Override
+    /**
+     * Ensure that there are at least {@code subjectNumber} different subjects for the provided {@code predicateId}.
+     * @param predicateId Predicate ID.
+     * @param subjectNumber Number of desired unique subjects.
+     */
     public void ensureSubjectNumberForProperty(String predicateId, int subjectNumber) {
         int target = subjectNumber - propertyDomainInstances.get(predicateId).size();
         if (target <= 0) {
@@ -386,7 +431,6 @@ public class OntologyGenerator implements IOntologyGenerator {
         }
     }
 
-    @Override
     public void ensureEnoughInstancesOfType(String classId, int desiredNumber) {
         int target = desiredNumber - getInstancesOfTypeTransitive(classId).size();
         if (target <= 0) {
@@ -399,7 +443,6 @@ public class OntologyGenerator implements IOntologyGenerator {
         }
     }
 
-    @Override
     public Set<String> getInstancesOfTypeTransitive(String classId) {
         Set<String> targetClasses = new HashSet<>(classTree.getAllChildrenOfNode(classId));
         targetClasses.add(classId);
@@ -432,7 +475,6 @@ public class OntologyGenerator implements IOntologyGenerator {
         return domainRangeP;
     }
 
-    @Override
     public void ensurePropertyWithRangeInstance(String instanceId, int desiredNumber) {
         int actual = getPropertiesWhereInstanceIsRange(instanceId).size();
         int target = desiredNumber - actual;
@@ -449,7 +491,6 @@ public class OntologyGenerator implements IOntologyGenerator {
         }
     }
 
-    @Override
     public void ensurePropertyWithDomainInstance(String instanceId, int desiredNumber){
         int actual = getPropertiesWhereInstanceIsDomain(instanceId).size();
         int target = desiredNumber - actual;
@@ -466,7 +507,6 @@ public class OntologyGenerator implements IOntologyGenerator {
         }
     }
 
-    @Override
     public Set<String> getPropertiesWhereInstanceIsDomain(String instanceId){
         Set<String> result = new HashSet<>();
         for(Map.Entry<String, Set<String>> entry : propertyDomainInstances.entrySet()){
@@ -477,7 +517,6 @@ public class OntologyGenerator implements IOntologyGenerator {
         return result;
     }
 
-    @Override
     public Set<String> getPropertiesWhereInstanceIsRange(String instanceId){
         Set<String> result = new HashSet<>();
         for(Map.Entry<String, Set<String>> entry : propertyRangeInstances.entrySet()){
@@ -488,12 +527,10 @@ public class OntologyGenerator implements IOntologyGenerator {
         return result;
     }
 
-    @Override
     public String getRandomPropertyWhereInstanceIsDomain(String instanceId){
         return Util.randomDrawFromSet(getPropertiesWhereInstanceIsDomain(instanceId));
     }
 
-    @Override
     public String getRandomPropertyWhereInstanceIsRange(String instanceId){
         return Util.randomDrawFromSet(getPropertiesWhereInstanceIsRange(instanceId));
     }

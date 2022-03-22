@@ -101,7 +101,7 @@ public class Tc06GeneratorSyntheticOntology extends TcGeneratorSyntheticOntology
                 int tripleNumber = random.nextInt(maxTriplesPerNode + 1);
 
                 for (int i = 0; i < tripleNumber; i++) {
-                    Triple triple = ontologyGenerator.getRandomPropertyObjectForInstance(instanceId);
+                    Triple triple = ontologyGenerator.getRandomTripleWithSubject(instanceId);
                     if(triple.predicate.equals(targetEdge) && triple.object.equals(targetInstance)){
                         i--;
                     } else {
