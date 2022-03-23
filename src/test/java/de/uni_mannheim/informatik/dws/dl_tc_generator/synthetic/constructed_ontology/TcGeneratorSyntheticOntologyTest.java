@@ -7,6 +7,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -42,18 +43,18 @@ class TcGeneratorSyntheticOntologyTest {
     private static final List<TcGeneratorSyntheticOntology> generatorList = new ArrayList<>();
 
     static {
-        generatorList.add(new Tc01GeneratorSyntheticOntology(DIR_1));
-        generatorList.add(new Tc02GeneratorSyntheticOntology(DIR_2));
-        generatorList.add(new Tc03GeneratorSyntheticOntology(DIR_3));
-        generatorList.add(new Tc04GeneratorSyntheticOntology(DIR_4));
-        generatorList.add(new Tc05GeneratorSyntheticOntology(DIR_5));
-        generatorList.add(new Tc06GeneratorSyntheticOntology(DIR_6));
-        generatorList.add(new Tc07GeneratorSyntheticOntology(DIR_7));
-        generatorList.add(new Tc08GeneratorSyntheticOntology(DIR_8));
-        generatorList.add(new Tc09GeneratorSyntheticOntology(DIR_9));
-        generatorList.add(new Tc10GeneratorSyntheticOntology(DIR_10));
-        generatorList.add(new Tc11GeneratorSyntheticOntology(DIR_11));
-        generatorList.add(new Tc12GeneratorSyntheticOntology(DIR_12));
+        generatorList.add(new Tc01GeneratorSyntheticOntology(new File(DIR_1), 15, 20, 10, 5, 2, new int[]{10}));
+        generatorList.add(new Tc02GeneratorSyntheticOntology(new File(DIR_2), 15, 20, 10, 5, 2, new int[]{10}));
+        generatorList.add(new Tc03GeneratorSyntheticOntology(new File(DIR_3), 15, 20, 10, 5, 2, new int[]{10}));
+        generatorList.add(new Tc04GeneratorSyntheticOntology(new File(DIR_4), 15, 20, 10, 5, 2, new int[]{10}));
+        generatorList.add(new Tc05GeneratorSyntheticOntology(new File(DIR_5), 15, 20, 10, 5, 2, new int[]{10}));
+        generatorList.add(new Tc06GeneratorSyntheticOntology(new File(DIR_6), 15, 20, 10, 5, 2, new int[]{10}));
+        generatorList.add(new Tc07GeneratorSyntheticOntology(new File(DIR_7), 15, 20, 10, 5, 2, new int[]{10}));
+        generatorList.add(new Tc08GeneratorSyntheticOntology(new File(DIR_8), 15, 20, 10, 5, 2, new int[]{10}));
+        generatorList.add(new Tc09GeneratorSyntheticOntology(new File(DIR_9), 15, 20, 10, 5, 2, new int[]{10}));
+        generatorList.add(new Tc10GeneratorSyntheticOntology(new File(DIR_10), 15, 20, 10, 5, 2, new int[]{10}));
+        generatorList.add(new Tc11GeneratorSyntheticOntology(new File(DIR_11), 15, 20, 10, 5, 2, new int[]{10}));
+        generatorList.add(new Tc12GeneratorSyntheticOntology(new File(DIR_12), 15, 20, 10, 5, 2, new int[]{10}));
     }
 
     /**

@@ -2,6 +2,9 @@ package de.uni_mannheim.informatik.dws.dl_tc_generator;
 
 /**
  * Configuration Defaults.
+ * DBpedia statistics are taken from:
+ * <a href="https://arxiv.org/pdf/2003.00719.pdf">Heist, Nicolas; Hertling, Sven; Ringler, Daniel; Paulheim, Heiko. Knowledge
+ * Graphs on the Web - an Overview. 2020.</a>
  */
 public class Defaults {
 
@@ -19,22 +22,30 @@ public class Defaults {
     public static final int[] SIZES = {50, 500, 5000};
 
     /**
-     * The maximum number of edges a synthetic graph may have.
+     * DBpedia: AVG linking degree 21 -> 11 max triples (11 ingoing + 11 outgoing)
      */
-    public static final int NUMBER_OF_EDGES = 50;
+    public static final int MAX_TRIPLES_PER_NODE = 11;
+
+    /**
+     * The maximum number of edges a synthetic graph may have.
+     * DBpedia: 1355
+     */
+    public static final int NUMBER_OF_EDGES = 1355;
 
     /**
      * The number of classes that is desired (different from {@link Defaults#SIZES}!).
+     * DBpedia: 760
      */
-    public static final int NUMBER_OF_CLASSES = 20;
+    public static final int NUMBER_OF_CLASSES = 760;
 
     /**
      * Default number of sub-classes per class.
+     * DBpedia: 4.53
      */
-    public static final int CLASS_SPLITS = 3;
+    public static final int BRANCHING_FACTOR = 5;
 
     /**
      * The number of node types (nodes_of_interest * NODE_FACTOR)
      */
-    public static final int NODE_FACTOR = 10;
+    public static final int NODE_FACTOR = 15;
 }

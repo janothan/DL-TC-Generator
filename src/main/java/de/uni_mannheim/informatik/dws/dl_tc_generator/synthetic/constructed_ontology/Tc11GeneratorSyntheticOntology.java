@@ -42,6 +42,12 @@ public class Tc11GeneratorSyntheticOntology extends TcGeneratorSyntheticOntology
         super(directory);
     }
 
+    public Tc11GeneratorSyntheticOntology(File directory, int numberOfClasses, int numberOfEdges,
+                                          int totalNodesFactor, int maxTriplesPerNode, int branchingFactor,
+                                          int[] sizes) {
+        super(directory, numberOfClasses, numberOfEdges, totalNodesFactor, maxTriplesPerNode, branchingFactor, sizes);
+    }
+
     @Override
     public String getTcId() {
         return "tc11";
@@ -62,7 +68,12 @@ public class Tc11GeneratorSyntheticOntology extends TcGeneratorSyntheticOntology
      */
     @Override
     protected void writeGraphAndSetPositives(File fileToBeWritten, int totalNodes, int nodesOfInterest, int totalEdges, int maxTriplesPerNode) {
-        final String targetProperty = ontologyGenerator.getRandomPropertyWhereRangeAtLeastTwoSubtypes();
+        if (fileToBeWritten.exists()) {
+            LOGGER.error("The file to be written exists already. Aborting generation.");
+            return;
+        }
+
+        final String targetProperty = ontologyGenerator.getRandomPropertyWhereRangeHasAtLeastTwoSubtypes();
         final String targetClass = ontologyGenerator.getDomain(targetProperty);
         final String rangePropertySuperClass = ontologyGenerator.getRange(targetProperty);
 

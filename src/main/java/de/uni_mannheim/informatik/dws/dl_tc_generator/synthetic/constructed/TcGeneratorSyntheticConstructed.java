@@ -5,6 +5,8 @@ import de.uni_mannheim.informatik.dws.dl_tc_generator.synthetic.TcGeneratorSynth
 import java.io.File;
 import java.util.Random;
 
+import static de.uni_mannheim.informatik.dws.dl_tc_generator.Defaults.MAX_TRIPLES_PER_NODE;
+
 public abstract class TcGeneratorSyntheticConstructed extends TcGeneratorSynthetic {
 
 
@@ -20,9 +22,7 @@ public abstract class TcGeneratorSyntheticConstructed extends TcGeneratorSynthet
         super(directory);
     }
 
-    public static final int DEFAULT_MAX_TRIPLES_PER_NODE = 3;
-
-    int maxTriplesPerNode = DEFAULT_MAX_TRIPLES_PER_NODE;
+    int maxTriplesPerNode = MAX_TRIPLES_PER_NODE;
 
     public final Random random = new Random();
 

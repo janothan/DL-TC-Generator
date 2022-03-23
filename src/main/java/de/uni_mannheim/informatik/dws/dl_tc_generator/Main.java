@@ -2,6 +2,7 @@ package de.uni_mannheim.informatik.dws.dl_tc_generator;
 
 import de.uni_mannheim.informatik.dws.dl_tc_generator.by_query.GeneratorQuery;
 import de.uni_mannheim.informatik.dws.dl_tc_generator.synthetic.GeneratorSynthetic;
+import de.uni_mannheim.informatik.dws.dl_tc_generator.synthetic.constructed_ontology.GeneratorSyntheticOntology;
 import de.uni_mannheim.informatik.dws.dl_tc_generator.synthetic.random.GeneratorSyntheticRandom;
 import org.apache.commons.cli.*;
 
@@ -42,15 +43,37 @@ public class Main {
                 .hasArg(false)
                 .build());
 
+        options.addOption(Option.builder("c")
+                .longOpt("classes")
+                .desc("Only valid for synthetic generators. The parameter specifies " +
+                        "the number of classes to be used.")
+                .numberOfArgs(1)
+                .build());
+
+        options.addOption(Option.builder("m")
+                .longOpt("maxTriples")
+                .desc("Only valid for synthetic generators. The parameter specifies " +
+                        "the maximum number of triples per node.")
+                .numberOfArgs(1)
+                .build());
+
+        options.addOption(Option.builder("b")
+                .longOpt("branchingFactor")
+                .desc("Only valid for synthetic generators. The parameter specifies " +
+                        "the branching factor for the ontology class tree.")
+                .numberOfArgs(1)
+                .build());
+
         options.addOption(Option.builder("e")
                 .longOpt("edges")
-                .desc("Only valid for the synthetic generator. The parameter specifies " +
+                .desc("Only valid for synthetic generators. The parameter specifies " +
                         "the number of edges to be used.")
                 .numberOfArgs(1)
                 .build());
+
         options.addOption(Option.builder("n")
                 .longOpt("nodes")
-                .desc("Only valid for the synthetic generator. The total nodes factor determines " +
+                .desc("Only valid for synthetic generators. The total nodes factor determines " +
                         "the maximum number of nodes in a graph (totalNodesFactor * nodesOfInterest).")
                 .numberOfArgs(1)
                 .build()
@@ -63,6 +86,7 @@ public class Main {
                 .valueSeparator(' ') // separator to separate arguments
                 .build()
         );
+
         options.addOption(Option.builder("tcc")
                 .longOpt("tc_collection")
                 .desc("The test case collection such as 'tc01'; space separated.")
@@ -70,6 +94,7 @@ public class Main {
                 .valueSeparator(' ')
                 .build()
         );
+
         options.addOption(Option.builder("tc")
                 .longOpt("tc_group")
                 .desc("The test case group such as 'cities'; space separated.")
@@ -77,6 +102,7 @@ public class Main {
                 .valueSeparator(' ')
                 .build()
         );
+
         options.addOption(Option.builder("h")
                 .longOpt("help")
                 .desc("Print this help message.")
@@ -139,6 +165,93 @@ public class Main {
             String queryDirectory = null;
 
 
+            int numberOfEdges = Defaults.NUMBER_OF_EDGES;
+            if (cmd.hasOption("e")) {
+                if (!cmd.hasOption("q")) {
+                    try {
+                        numberOfEdges = Integer.parseInt(cmd.getOptionValue("e"));
+                    } catch (NumberFormatException nfe) {
+                        System.out.println("A number format exception occurred while parsing the values for -e. " +
+                                "ABORTING program.");
+                        return;
+                    }
+                } else {
+                    System.out.println("The parameter -e is only valid for the synthetic generator. ABORTING " +
+                            "program.");
+                    return;
+                }
+            }
+
+            int nodesFactor = Defaults.NODE_FACTOR;
+            if (cmd.hasOption("n")) {
+                if (!cmd.hasOption("q")) {
+                    try {
+                        nodesFactor = Integer.parseInt(cmd.getOptionValue("n"));
+                    } catch (NumberFormatException nfe) {
+                        System.out.println("A number format exception occurred while parsing the values for -n. " +
+                                "ABORTING program.");
+                        return;
+                    }
+                } else {
+                    System.out.println("The parameter -n is only valid for the synthetic generator. ABORTING " +
+                            "program.");
+                    return;
+                }
+            }
+
+            int numberOfClasses = Defaults.NUMBER_OF_CLASSES;
+            if (cmd.hasOption("c")) {
+                if (!cmd.hasOption("q")) {
+                    try {
+                        numberOfClasses = Integer.parseInt(cmd.getOptionValue("c"));
+                    } catch (NumberFormatException nfe) {
+                        System.out.println("A number format exception occurred while parsing the values for -c. " +
+                                "ABORTING program.");
+                        return;
+                    }
+                } else {
+                    System.out.println("The parameter -c is only valid for the synthetic generator. ABORTING " +
+                            "program.");
+                    return;
+                }
+            }
+
+            int maximumNumberOfTriples = Defaults.MAX_TRIPLES_PER_NODE;
+            if (cmd.hasOption("m")) {
+                if (!cmd.hasOption("q")) {
+                    try {
+                        numberOfClasses = Integer.parseInt(cmd.getOptionValue("c"));
+                    } catch (NumberFormatException nfe) {
+                        System.out.println("A number format exception occurred while parsing the values for -m. " +
+                                "ABORTING program.");
+                        return;
+                    }
+                } else {
+                    System.out.println("The parameter -m is only valid for the synthetic generator. " +
+                            "However, you also specified -q for the query generator. " +
+                            "ABORTING program.");
+                    return;
+                }
+            }
+
+            int branchingFactor = Defaults.BRANCHING_FACTOR;
+            if (cmd.hasOption("b")) {
+                if (!cmd.hasOption("q")) {
+                    try {
+                        branchingFactor = Integer.parseInt(cmd.getOptionValue("c"));
+                    } catch (NumberFormatException nfe) {
+                        System.out.println("A number format exception occurred while parsing the values for -b. " +
+                                "ABORTING program.");
+                        return;
+                    }
+                } else {
+                    System.out.println("The parameter -b is only valid for the synthetic generator. " +
+                            "However, you also specified -q for the query generator. " +
+                            "ABORTING program.");
+                    return;
+                }
+            }
+
             if (cmd.hasOption("q")) {
                 queryDirectory = cmd.getOptionValue("q");
                 System.out.println("Query directory provided. Using query-based test case generator.");
@@ -146,7 +259,9 @@ public class Main {
             } else {
                 System.out.println("Missing option -q for query directory. Therefore, synthetic datasets will be " +
                         "calculated.");
-                generator = new GeneratorSyntheticRandom(resultDirectory);
+                generator = new GeneratorSyntheticOntology(new File(resultDirectory),
+                        numberOfClasses, numberOfEdges,
+                        nodesFactor, maximumNumberOfTriples, branchingFactor, sizeArray);
             }
 
             if (sizeArray != null) {
@@ -164,7 +279,7 @@ public class Main {
                         return;
                     }
                 } else {
-                    System.out.println("Timeout can only be set of GeneratorQuery. ABORTING program.");
+                    System.out.println("Timeout (-t) can only be set of GeneratorQuery. ABORTING program.");
                     return;
                 }
             }
@@ -183,41 +298,7 @@ public class Main {
                         ((GeneratorQuery) generator).setIncludeOnlyTestCase(tcgValues);
                     }
                 } else {
-                    System.out.println("tc can only be set for GeneratorQuery. ABORTING program.");
-                    return;
-                }
-            }
-
-            if (cmd.hasOption("e")) {
-                if (generator instanceof GeneratorSynthetic) {
-                    try {
-                        int numberEdges = Integer.parseInt(cmd.getOptionValue("e"));
-                        ((GeneratorSynthetic) generator).setNumberOfEdges(numberEdges);
-                    } catch (NumberFormatException nfe) {
-                        System.out.println("A number format exception occurred while parsing the values for -e. " +
-                                "ABORTING program.");
-                        return;
-                    }
-                } else {
-                    System.out.println("The parameter -e is only valid for the synthetic generator. ABORTING " +
-                            "program.");
-                    return;
-                }
-            }
-
-            if (cmd.hasOption("n")) {
-                if (generator instanceof GeneratorSynthetic) {
-                    try {
-                        int nodesFactor = Integer.parseInt(cmd.getOptionValue("n"));
-                        ((GeneratorSynthetic) generator).setNodesFactor(nodesFactor);
-                    } catch (NumberFormatException nfe) {
-                        System.out.println("A number format exception occurred while parsing the values for -n. " +
-                                "ABORTING program.");
-                        return;
-                    }
-                } else {
-                    System.out.println("The parameter -n is only valid for the synthetic generator. ABORTING " +
-                            "program.");
+                    System.out.println("-tc can only be set for GeneratorQuery. ABORTING program.");
                     return;
                 }
             }

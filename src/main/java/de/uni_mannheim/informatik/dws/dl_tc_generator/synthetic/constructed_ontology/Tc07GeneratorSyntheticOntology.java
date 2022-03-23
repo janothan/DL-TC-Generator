@@ -38,6 +38,12 @@ public class Tc07GeneratorSyntheticOntology extends TcGeneratorSyntheticOntology
         super(directory);
     }
 
+    public Tc07GeneratorSyntheticOntology(File directory, int numberOfClasses, int numberOfEdges,
+                                          int totalNodesFactor, int maxTriplesPerNode, int branchingFactor,
+                                          int[] sizes) {
+        super(directory, numberOfClasses, numberOfEdges, totalNodesFactor, maxTriplesPerNode, branchingFactor, sizes);
+    }
+
     private static final Logger LOGGER = LoggerFactory.getLogger(Tc05GeneratorSyntheticConstructed.class);
 
     @Override
@@ -53,7 +59,7 @@ public class Tc07GeneratorSyntheticOntology extends TcGeneratorSyntheticOntology
         }
 
         try (BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(fileToBeWritten), StandardCharsets.UTF_8))) {
-            final String targetProperty = ontologyGenerator.getRandomPropertyWhereRangeAtLeastTwoSubtypes();
+            final String targetProperty = ontologyGenerator.getRandomPropertyWhereRangeHasAtLeastTwoSubtypes();
 
             final String targetClass = ontologyGenerator.getDomain(targetProperty);
             ontologyGenerator.ensureEnoughInstancesOfType(targetClass, 2 * nodesOfInterest);

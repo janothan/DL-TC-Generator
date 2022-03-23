@@ -29,11 +29,30 @@ public abstract class TcGeneratorSyntheticOntology extends TcGeneratorSyntheticC
         setDefaultOntologyGenerator();
     }
 
+    public TcGeneratorSyntheticOntology(File directory,
+                                        int numberOfClasses,
+                                        int numberOfEdges,
+                                        int totalNodesFactor,
+                                        int maxTriplesPerNode,
+                                        int branchingFactor,
+                                        int[] sizes){
+        super(directory);
+        setSizes(sizes);
+        setNumberOfEdges(numberOfEdges);
+        this.totalNodesFactor = totalNodesFactor;
+        setMaxTriplesPerNode(maxTriplesPerNode);
+        setOntologyGenerator(new OntologyGenerator(
+                numberOfClasses, numberOfEdges, getNumberOfInstances(),
+                getTcId(), new ConstantSplitTreeGenerator(branchingFactor)
+        ));
+    }
+
+
     private static final Logger LOGGER = LoggerFactory.getLogger(TcGeneratorSyntheticOntology.class);
 
     int numberOfClasses = Defaults.NUMBER_OF_CLASSES;
     int numberOfEdges = Defaults.NUMBER_OF_EDGES;
-    ITreeGenerator treeGenerator = new ConstantSplitTreeGenerator(Defaults.CLASS_SPLITS);
+    ITreeGenerator treeGenerator = new ConstantSplitTreeGenerator(Defaults.BRANCHING_FACTOR);
 
     private void setDefaultOntologyGenerator(){
         OntologyGenerator og = new OntologyGenerator(
@@ -110,9 +129,12 @@ public abstract class TcGeneratorSyntheticOntology extends TcGeneratorSyntheticC
         configLog.append("Nodes of interest: ").append(nodesOfInterest).append("\n");
         Class<? extends ITreeGenerator> c = ontologyGenerator.getTreeGenerator().getClass();
         configLog.append("Tree generator class: ").append(c.getSimpleName()).append("\n");
+        int avgBranchingFactor =
+                ((ConstantSplitTreeGenerator) ontologyGenerator.getTreeGenerator()).getAvgBranchingFactor();
+        configLog.append("AVG Branching factor: ").append(avgBranchingFactor).append("\n");
         if(c.getSimpleName().equals(ConstantSplitTreeGenerator.class.getSimpleName())){
             ConstantSplitTreeGenerator cstg = (ConstantSplitTreeGenerator) ontologyGenerator.getTreeGenerator();
-            configLog.append("Split number of ConstantSplitTreeGenerator: ").append(cstg.splitNumber)
+            configLog.append("Split number of ConstantSplitTreeGenerator: ").append(cstg.avgBranchingFactor)
                     .append("\n");
         }
     }

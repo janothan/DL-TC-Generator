@@ -48,7 +48,7 @@ class MainTest {
     @Test
     void mainTestSynthetic() {
         try {
-            Main.main(new String[]{"-d", RESULT_DIR_5, "-s", "10", "11", "-e", "10", "-n", "3"});
+            Main.main(new String[]{"-d", RESULT_DIR_5, "-s", "10", "11", "-e", "10", "-n", "3", "-c", "3"});
 
             File resultFile = new File(RESULT_DIR_5, "tc01/" + GeneratorSyntheticRandom.TC_GROUP_NAME + "/10" +
                     "/positives.txt");

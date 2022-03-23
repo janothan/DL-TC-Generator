@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
+import java.util.Iterator;
 import java.util.Set;
 
 /**
@@ -40,6 +41,12 @@ public class Tc03GeneratorSyntheticOntology extends TcGeneratorSyntheticOntology
 
     public Tc03GeneratorSyntheticOntology(String directory) {
         super(directory);
+    }
+
+    public Tc03GeneratorSyntheticOntology(File directory, int numberOfClasses, int numberOfEdges,
+                                          int totalNodesFactor, int maxTriplesPerNode, int branchingFactor,
+                                          int[] sizes) {
+        super(directory, numberOfClasses, numberOfEdges, totalNodesFactor, maxTriplesPerNode, branchingFactor, sizes);
     }
 
     @Override
@@ -79,23 +86,22 @@ public class Tc03GeneratorSyntheticOntology extends TcGeneratorSyntheticOntology
             configLog.append("Target class (class of positives): ").append(targetClass).append("\n");
 
             Set<String> typeInstances = ontologyGenerator.getInstancesOfTypeTransitive(targetClass);
+            Iterator<String> typeInstanceIterator = typeInstances.iterator();
 
             // let's generate positives
             while (positives.size() < nodesOfInterest) {
-                String positiveId1 = Util.randomDrawFromSet(typeInstances);
-                String positiveId2 = Util.randomDrawFromSet(typeInstances);
+                String positiveId1 = typeInstanceIterator.next();
+                String positiveId2 = typeInstanceIterator.next();
                 writer.write(positiveId1 + " " + targetEdge + " " + positiveId2 + " .\n");
                 graph.addObjectTriple(positiveId1, targetEdge, positiveId2);
                 positives.add(positiveId1);
                 positives.add(positiveId2);
             }
 
-            typeInstances.removeAll(positives);
 
             // let's generate negatives
             while (negatives.size() < nodesOfInterest) {
-                String targetNode = Util.randomDrawFromSet(typeInstances);
-                typeInstances.remove(targetNode);
+                String targetNode = typeInstanceIterator.next();
                 if (positives.contains(targetNode)) {
                     continue;
                 }

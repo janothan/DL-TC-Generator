@@ -44,6 +44,12 @@ public class Tc12GeneratorSyntheticOntology extends TcGeneratorSyntheticOntology
         super(directory);
     }
 
+    public Tc12GeneratorSyntheticOntology(File directory, int numberOfClasses, int numberOfEdges,
+                                          int totalNodesFactor, int maxTriplesPerNode, int branchingFactor,
+                                          int[] sizes) {
+        super(directory, numberOfClasses, numberOfEdges, totalNodesFactor, maxTriplesPerNode, branchingFactor, sizes);
+    }
+
     @Override
     public String getTcId() {
         return "tc12";
@@ -58,7 +64,7 @@ public class Tc12GeneratorSyntheticOntology extends TcGeneratorSyntheticOntology
             return;
         }
 
-        final String targetProperty = ontologyGenerator.getRandomPropertyWhereRangeAtLeastTwoSubtypes();
+        final String targetProperty = ontologyGenerator.getRandomPropertyWhereDomainHasAtLeastTwoSubtypes();
         final String targetClass = ontologyGenerator.getRange(targetProperty);
         final String domainPropertySuperClass = ontologyGenerator.getDomain(targetProperty);
 

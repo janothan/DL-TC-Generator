@@ -5,16 +5,16 @@ import java.util.*;
 public class ConstantSplitTreeGenerator implements ITreeGenerator {
 
 
-    final int splitNumber;
+    final int avgBranchingFactor;
 
     /**
      * Constructor
      *
-     * @param splitNumber The number of leaves per node. If no hierarchy is desired, set the {@code splitNumber}
+     * @param avgBranchingFactor The number of leaves per node. If no hierarchy is desired, set the {@code splitNumber}
      *                    to a very high number.
      */
-    public ConstantSplitTreeGenerator(int splitNumber) {
-        this.splitNumber = splitNumber;
+    public ConstantSplitTreeGenerator(int avgBranchingFactor) {
+        this.avgBranchingFactor = avgBranchingFactor;
     }
 
     @Override
@@ -29,7 +29,7 @@ public class ConstantSplitTreeGenerator implements ITreeGenerator {
             if(node.equals(rootNode)){
                 continue;
             }
-            if(currentCounter == splitNumber){
+            if(currentCounter == avgBranchingFactor){
                 currentWorkNode = workList.removeFirst();
                 result.addLeaf(currentWorkNode, node);
                 currentCounter = 0;
@@ -40,5 +40,9 @@ public class ConstantSplitTreeGenerator implements ITreeGenerator {
         }
 
         return result;
+    }
+
+    public int getAvgBranchingFactor() {
+        return avgBranchingFactor;
     }
 }

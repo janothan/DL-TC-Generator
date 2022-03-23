@@ -44,6 +44,12 @@ public class Tc10GeneratorSyntheticOntology extends TcGeneratorSyntheticOntology
         super(directory);
     }
 
+    public Tc10GeneratorSyntheticOntology(File directory, int numberOfClasses, int numberOfEdges,
+                                          int totalNodesFactor, int maxTriplesPerNode, int branchingFactor,
+                                          int[] sizes) {
+        super(directory, numberOfClasses, numberOfEdges, totalNodesFactor, maxTriplesPerNode, branchingFactor, sizes);
+    }
+
     private static final Logger LOGGER = LoggerFactory.getLogger(Tc05GeneratorSyntheticConstructed.class);
 
     @Override

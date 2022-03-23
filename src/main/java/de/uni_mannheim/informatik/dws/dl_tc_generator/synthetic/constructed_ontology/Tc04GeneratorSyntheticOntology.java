@@ -43,6 +43,12 @@ public class Tc04GeneratorSyntheticOntology extends TcGeneratorSyntheticOntology
         super(directory);
     }
 
+    public Tc04GeneratorSyntheticOntology(File directory, int numberOfClasses, int numberOfEdges,
+                                          int totalNodesFactor, int maxTriplesPerNode, int branchingFactor,
+                                          int[] sizes) {
+        super(directory, numberOfClasses, numberOfEdges, totalNodesFactor, maxTriplesPerNode, branchingFactor, sizes);
+    }
+
     /**
      * Logger
      */

@@ -40,12 +40,14 @@ public class OntologyGenerator {
         propertyDomainInstances = new HashMap<>();
         instanceSubjectProperties = new HashMap<>();
 
-        boolean isFirstProperty = true;
+        int firstProperties = 0;
         for (String propertyId : propertyIds) {
-            if (isFirstProperty) {
+            if (firstProperties < 3) {
+                // In cases where there are very few properties, having just one domain=root and range=root property
+                // is insufficient to avoid infinity loops.
                 addPropertyDomain(propertyId, classTree.getRoot());
                 addPropertyRange(propertyId, classTree.getRoot());
-                isFirstProperty = false;
+                firstProperties++;
             } else {
                 String randomDomain, randomRange;
                 if (domainRangeP >= 1.0 || domainRangeP < 0.0) {
@@ -64,7 +66,7 @@ public class OntologyGenerator {
 
     public OntologyGenerator(int numberOfClasses, int numberOfProperties, int numberOfInstances, String tcId,
                              ITreeGenerator treeGenerator) {
-        this(numberOfClasses, numberOfProperties, numberOfInstances, tcId, treeGenerator, DEFAULT_DOMAIN_RANGE_P, DEFAULT_IS_WAKLY_TYPED);
+        this(numberOfClasses, numberOfProperties, numberOfInstances, tcId, treeGenerator, DEFAULT_DOMAIN_RANGE_P, DEFAULT_IS_WEAKLY_TYPED);
     }
 
     public final static double DEFAULT_DOMAIN_RANGE_P = 0.25;
@@ -84,7 +86,7 @@ public class OntologyGenerator {
      */
     private final boolean isWeaklyTyped;
 
-    private static final boolean DEFAULT_IS_WAKLY_TYPED = true;
+    private static final boolean DEFAULT_IS_WEAKLY_TYPED = true;
 
 
     private void addInstance(String instance, String classId) {
@@ -433,7 +435,7 @@ public class OntologyGenerator {
      * Note that we require really two direct children (not 1 child which has again a child).
      * @return Property ID
      */
-    public String getRandomPropertyWhereRangeAtLeastTwoSubtypes(){
+    public String getRandomPropertyWhereRangeHasAtLeastTwoSubtypes(){
         return Util.randomDrawFromSet(getPropertiesWhereRangeHasAtLeastTwoSubtypes());
     }
 

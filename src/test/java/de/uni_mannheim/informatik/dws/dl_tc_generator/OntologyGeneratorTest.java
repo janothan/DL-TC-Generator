@@ -163,7 +163,7 @@ class OntologyGeneratorTest {
             }
         }
 
-        String propertyRange = og.getRandomPropertyWhereRangeAtLeastTwoSubtypes();
+        String propertyRange = og.getRandomPropertyWhereRangeHasAtLeastTwoSubtypes();
         String range = og.getRange(propertyRange);
         Set<String> rangeChildren = og.getClassTree().getChildrenOfNode(range);
         assertTrue(rangeChildren.size() >= 2);

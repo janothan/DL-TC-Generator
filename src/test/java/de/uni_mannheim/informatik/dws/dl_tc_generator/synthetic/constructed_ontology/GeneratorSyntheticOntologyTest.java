@@ -23,10 +23,14 @@ class GeneratorSyntheticOntologyTest {
 
     @Test
     void generateTestCases() {
-        GeneratorSyntheticOntology generator = new GeneratorSyntheticOntology(GENERATION_DIR);
-        generator.setSizes(new int[]{10, 11});
-        generator.setNumberOfEdges(15);
-        generator.setNodesFactor(10);
+        GeneratorSyntheticOntology generator = new GeneratorSyntheticOntology(
+                new File(GENERATION_DIR),
+                10,
+                10,
+                10,
+                5,
+                2,
+                new int[]{10,11});
         generator.generateTestCases();
         final String groupName = generator.getTcGroupName();
         testFileExistence(GENERATION_DIR, "tc01", groupName, 10);
