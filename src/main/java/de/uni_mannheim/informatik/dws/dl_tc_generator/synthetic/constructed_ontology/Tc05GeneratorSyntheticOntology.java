@@ -77,6 +77,10 @@ public class Tc05GeneratorSyntheticOntology extends TcGeneratorSyntheticOntology
 
             Set<String> typeInstances = ontologyGenerator.getInstancesOfTypeTransitive(targetType);
 
+            writeConfigToNewLog(fileToBeWritten, totalNodes, nodesOfInterest, totalEdges, maxTriplesPerNode);
+            configLog.append("Target instance: ").append(targetInstance).append("\n");
+            configLog.append("Target type: ").append(targetType).append("\n");
+
             // forward positives x -> r1 -> z -> r2 -> targetInstance
             while(positives.size() < nodesOfInterest/2){
                 Triple t1 = ontologyGenerator.getRandomTripleWithObject(targetInstance);

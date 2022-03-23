@@ -42,7 +42,7 @@ public class Tc08GeneratorSyntheticOntology extends TcGeneratorSyntheticOntology
 
     @Override
     public String getTcId() {
-        return "tc09";
+        return "tc08";
     }
 
     @Override
@@ -53,7 +53,7 @@ public class Tc08GeneratorSyntheticOntology extends TcGeneratorSyntheticOntology
         }
         try (BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(fileToBeWritten), StandardCharsets.UTF_8))) {
 
-            final String targetProperty = ontologyGenerator.getRandomPropertyWhereDomainHasMoreThanTwoSubtypes();
+            final String targetProperty = ontologyGenerator.getRandomPropertyWhereDomainHasAtLeastTwoSubtypes();
             final String targetClass = ontologyGenerator.getRange(targetProperty);
             ontologyGenerator.ensureEnoughInstancesOfType(targetClass, 2 * nodesOfInterest);
             Set<String> targetObjectInstances = ontologyGenerator.getInstancesOfTypeTransitive(targetClass);
@@ -65,6 +65,11 @@ public class Tc08GeneratorSyntheticOntology extends TcGeneratorSyntheticOntology
             String negativeUpperSubjectClass = domainTypeIterator.next();
 
             Iterator<String> objectIterator = targetObjectInstances.iterator();
+
+            writeConfigToNewLog(fileToBeWritten, totalNodes, nodesOfInterest, totalEdges, maxTriplesPerNode);
+            configLog.append("Target property: ").append(targetProperty).append("\n");
+            configLog.append("Positive subject class: ").append(positiveUpperSubjectClass).append("\n");
+            configLog.append("Negative subject class: ").append(negativeUpperSubjectClass).append("\n");
 
             // let's generate positives
             while(positives.size() < nodesOfInterest){

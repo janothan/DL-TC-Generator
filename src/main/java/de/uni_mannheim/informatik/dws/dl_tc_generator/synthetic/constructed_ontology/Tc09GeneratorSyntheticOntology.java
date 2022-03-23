@@ -1,5 +1,6 @@
 package de.uni_mannheim.informatik.dws.dl_tc_generator.synthetic.constructed_ontology;
 
+import de.uni_mannheim.informatik.dws.dl_tc_generator.Util;
 import de.uni_mannheim.informatik.dws.dl_tc_generator.synthetic.constructed.Tc05GeneratorSyntheticConstructed;
 import de.uni_mannheim.informatik.dws.jrdf2vec.walk_generation.data_structures.Triple;
 import org.slf4j.Logger;
@@ -17,33 +18,37 @@ import java.util.Set;
  * {
  *     {
  *         ?x a dbo:Person .
- *         ?x dbo:team ?y .
- *         ?y a dbo:BasketballTeam .
+ *         ?x dbo:award ?y1 .
+ *         ?x dbo:award ?y2 .
  *     }
- * }
+ *     FILTER
+ *     (
+ *         ?y1 != ?y2
+ *     )
+ * } LIMIT <number>
  * }
  */
-public class Tc07GeneratorSyntheticOntology extends TcGeneratorSyntheticOntology {
+public class Tc09GeneratorSyntheticOntology extends TcGeneratorSyntheticOntology {
 
 
-    public Tc07GeneratorSyntheticOntology(File directory, int[] sizes) {
+    public Tc09GeneratorSyntheticOntology(File directory, int[] sizes) {
         super(directory, sizes);
     }
 
-    public Tc07GeneratorSyntheticOntology(File directory) {
+    public Tc09GeneratorSyntheticOntology(File directory) {
         super(directory);
     }
 
-    public Tc07GeneratorSyntheticOntology(String directory) {
+    public Tc09GeneratorSyntheticOntology(String directory) {
         super(directory);
     }
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(Tc05GeneratorSyntheticConstructed.class);
 
     @Override
     public String getTcId() {
-        return "tc07";
+        return "tc09";
     }
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(Tc05GeneratorSyntheticConstructed.class);
 
     @Override
     protected void writeGraphAndSetPositives(File fileToBeWritten, int totalNodes, int nodesOfInterest, int totalEdges, int maxTriplesPerNode) {
@@ -53,47 +58,45 @@ public class Tc07GeneratorSyntheticOntology extends TcGeneratorSyntheticOntology
         }
 
         try (BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(fileToBeWritten), StandardCharsets.UTF_8))) {
-            final String targetProperty = ontologyGenerator.getRandomPropertyWhereRangeAtLeastTwoSubtypes();
-
+            final String targetProperty = ontologyGenerator.getRandomPropertyId();
             final String targetClass = ontologyGenerator.getDomain(targetProperty);
-            ontologyGenerator.ensureEnoughInstancesOfType(targetClass, 2 * nodesOfInterest);
-            Set<String> targetSubjectInstances = ontologyGenerator.getInstancesOfTypeTransitive(targetClass);
+            final String rangePropertyClass = ontologyGenerator.getRange(targetProperty);
 
-            Iterator<String> rangeTypeIterator =
-                    ontologyGenerator.classTree.getChildrenOfNode(ontologyGenerator.getRange(targetProperty)).iterator();
+            ontologyGenerator.ensureEnoughInstancesOfType(targetClass, 2*nodesOfInterest);
+            ontologyGenerator.ensureEnoughInstancesOfType(rangePropertyClass, 3*nodesOfInterest);
 
-            String positiveUpperObjectType = rangeTypeIterator.next();
-            String negativeUpperObjectType = rangeTypeIterator.next();
-
-            ontologyGenerator.ensureEnoughInstancesOfType(positiveUpperObjectType, nodesOfInterest);
-            ontologyGenerator.ensureEnoughInstancesOfType(negativeUpperObjectType, nodesOfInterest);
-
-            Iterator<String> subjectIterator = targetSubjectInstances.iterator();
+            final Set<String> targetInstances = ontologyGenerator.getInstancesOfTypeTransitive(targetClass);
+            final Set<String> rangeInstances = ontologyGenerator.getInstancesOfTypeTransitive(rangePropertyClass);
+            final Iterator<String> targetInstanceIterator = targetInstances.iterator();
 
             writeConfigToNewLog(fileToBeWritten, totalNodes, nodesOfInterest, totalEdges, maxTriplesPerNode);
             configLog.append("Target property: ").append(targetProperty).append("\n");
-            configLog.append("Positive object class: ").append(positiveUpperObjectType).append("\n");
-            configLog.append("Negative object class: ").append(negativeUpperObjectType).append("\n");
 
             // let's generate positives
-            while (positives.size() < nodesOfInterest) {
-                String subject = subjectIterator.next();
+            while(positives.size() < nodesOfInterest){
+                String object1 = Util.randomDrawFromSet(rangeInstances);
+                String object2 = Util.randomDrawFromSet(rangeInstances);
+                if(object1.equals(object2)){
+                    continue;
+                }
+                String subject = targetInstanceIterator.next();
                 positives.add(subject);
-                String object = ontologyGenerator.getRandomInstanceOfTypeTransitive(positiveUpperObjectType);
-                graph.addObjectTriple(new Triple(subject, targetProperty, object));
-                writer.write(subject + " " + targetProperty + " " + object + " .\n");
+                graph.addObjectTriple(new Triple(subject, targetProperty, object1));
+                graph.addObjectTriple(new Triple(subject, targetProperty, object2));
+                writer.write(subject + " " + targetProperty + " " + object1 + " .\n");
+                writer.write(subject + " " + targetProperty + " " + object2 + " .\n");
             }
 
             // let's generate negatives
-            while (negatives.size() < nodesOfInterest) {
-                String subject = subjectIterator.next();
+            while(negatives.size() < nodesOfInterest){
+                String object = Util.randomDrawFromSet(rangeInstances);
+                String subject = targetInstanceIterator.next();
                 negatives.add(subject);
-                String object = ontologyGenerator.getRandomInstanceOfTypeTransitive(negativeUpperObjectType);
                 graph.addObjectTriple(new Triple(subject, targetProperty, object));
                 writer.write(subject + " " + targetProperty + " " + object + " .\n");
             }
 
-            // let's generate random connections
+            // let's generate random triples
             for (String instanceId : ontologyGenerator.getInstances()) {
 
                 // draw number of triples
@@ -113,6 +116,6 @@ public class Tc07GeneratorSyntheticOntology extends TcGeneratorSyntheticOntology
         } catch (IOException e) {
             LOGGER.error("An error occurred while writing the file.", e);
         }
-
     }
+
 }

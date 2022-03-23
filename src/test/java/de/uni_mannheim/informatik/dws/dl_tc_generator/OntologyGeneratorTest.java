@@ -94,4 +94,40 @@ class OntologyGeneratorTest {
         }
     }
 
+    @Test
+    void getPropertyWhereDomainRangeHasMoreThanTwoSubtypes(){
+        final int instanceNumber = 3000;
+        final int classNumber = 10;
+        OntologyGenerator og = new OntologyGenerator(classNumber, 3, instanceNumber, "test",
+                new ConstantSplitTreeGenerator(2));
+
+        String propertyDomain = og.getRandomPropertyWhereDomainHasAtLeastTwoSubtypes();
+        String domain = og.getDomain(propertyDomain);
+        Set<String> domainChildren = og.getClassTree().getChildrenOfNode(domain);
+        assertTrue(domainChildren.size() >= 2);
+        for(String c1 : domainChildren){
+            for(String c2 : domainChildren){
+                if(c1.equals(c2)){
+                    continue;
+                }
+                assertFalse(og.getClassTree().isA(c1, c2));
+                assertFalse(og.getClassTree().isA(c2, c1));
+            }
+        }
+
+        String propertyRange = og.getRandomPropertyWhereRangeAtLeastTwoSubtypes();
+        String range = og.getRange(propertyRange);
+        Set<String> rangeChildren = og.getClassTree().getChildrenOfNode(range);
+        assertTrue(rangeChildren.size() >= 2);
+        for(String c1 : rangeChildren){
+            for (String c2 : rangeChildren) {
+                if(c1.equals(c2)){
+                    continue;
+                }
+                assertFalse(og.getClassTree().isA(c1, c2));
+                assertFalse(og.getClassTree().isA(c2, c1));
+            }
+        }
+    }
+
 }

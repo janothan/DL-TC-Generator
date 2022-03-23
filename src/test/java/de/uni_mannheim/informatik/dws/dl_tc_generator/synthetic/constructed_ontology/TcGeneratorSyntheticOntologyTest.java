@@ -31,6 +31,9 @@ class TcGeneratorSyntheticOntologyTest {
     private static final String DIR_6 = "./synthetic_ontology_tc06";
     private static final String DIR_7 = "./synthetic_ontology_tc07";
     private static final String DIR_8 = "./synthetic_ontology_tc08";
+    private static final String DIR_9 = "./synthetic_ontology_tc09";
+    private static final String DIR_10 = "./synthetic_ontology_tc10";
+    private static final String DIR_11 = "./synthetic_ontology_tc11";
 
     /**
      * A list of all synthetic generators which can be used in multiple test cases.
@@ -46,6 +49,9 @@ class TcGeneratorSyntheticOntologyTest {
         generatorList.add(new Tc06GeneratorSyntheticOntology(DIR_6));
         generatorList.add(new Tc07GeneratorSyntheticOntology(DIR_7));
         generatorList.add(new Tc08GeneratorSyntheticOntology(DIR_8));
+        generatorList.add(new Tc09GeneratorSyntheticOntology(DIR_9));
+        generatorList.add(new Tc10GeneratorSyntheticOntology(DIR_10));
+        generatorList.add(new Tc11GeneratorSyntheticOntology(DIR_11));
     }
 
     /**
@@ -77,6 +83,9 @@ class TcGeneratorSyntheticOntologyTest {
         Util.delete(DIR_6);
         Util.delete(DIR_7);
         Util.delete(DIR_8);
+        Util.delete(DIR_9);
+        Util.delete(DIR_10);
+        Util.delete(DIR_11);
     }
 
 }

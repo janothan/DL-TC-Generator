@@ -408,11 +408,11 @@ public class OntologyGenerator {
      * Note that we require really two direct children (not 1 child which has again a child).
      * @return Property ID
      */
-    public String getRandomPropertyWhereDomainHasMoreThanTwoSubtypes(){
-        return Util.randomDrawFromSet(getPropertiesWhereDomainHasMoreThanTwoSubtypes());
+    public String getRandomPropertyWhereDomainHasAtLeastTwoSubtypes(){
+        return Util.randomDrawFromSet(getPropertiesWhereDomainHasAtLeastTwoSubtypes());
     }
 
-    public Set<String> getPropertiesWhereDomainHasMoreThanTwoSubtypes(){
+    public Set<String> getPropertiesWhereDomainHasAtLeastTwoSubtypes(){
         Set<String> propertyCandidates = new HashSet<>();
         for ( Map.Entry<String, String> entry : propertyDomains.entrySet() ) {
             if(classTree.getChildrenOfNode(entry.getValue()).size() >= 2){
@@ -427,15 +427,15 @@ public class OntologyGenerator {
      * Note that we require really two direct children (not 1 child which has again a child).
      * @return Property ID
      */
-    public String getRandomPropertyWhereRangeHasMoreThanTwoSubtypes(){
-        return Util.randomDrawFromSet(getPropertiesWhereRangeHasMoreThanTwoSubtypes());
+    public String getRandomPropertyWhereRangeAtLeastTwoSubtypes(){
+        return Util.randomDrawFromSet(getPropertiesWhereRangeHasAtLeastTwoSubtypes());
     }
 
     /**
      *
      * @return Properties where getSubtypes(property.range) >= 2
      */
-    public Set<String> getPropertiesWhereRangeHasMoreThanTwoSubtypes(){
+    public Set<String> getPropertiesWhereRangeHasAtLeastTwoSubtypes(){
         Set<String> propertyCandidates = new HashSet<>();
         for ( Map.Entry<String, String> entry : propertyRanges.entrySet() ) {
             if(classTree.getChildrenOfNode(entry.getValue()).size() >= 2){
@@ -574,6 +574,9 @@ public class OntologyGenerator {
             if (entry.getValue().contains(instanceId)){
                 result.add(entry.getKey());
             }
+        }
+        if(result.size() == 0){
+            LOGGER.warn("There are no properties with domain including '" + instanceId + "'");
         }
         return result;
     }
