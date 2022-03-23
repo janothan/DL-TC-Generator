@@ -76,7 +76,7 @@ class OntologyGeneratorTest {
         assertEquals(iNumber, instanceNumber);
 
         assertEquals(classNumber, og.getClasses().size() );
-        String type = og.getClasses().iterator().next();
+        String type = Util.randomDrawFromSet(og.getClasses());
         assertNotNull(type);
 
         int typedInstancesNumber = og.getInstancesOfTypeTransitive(type).size();
@@ -91,6 +91,45 @@ class OntologyGeneratorTest {
         for (String instance : og.getInstances()){
             Triple t = og.getRandomTripleWithSubject(instance);
             assertNotNull(t);
+        }
+    }
+
+    /**
+     * Almost identical to {@link OntologyGeneratorTest#ensureEnoughInstancesOfType()}.
+     * Differences: Larger ontology, deeper class tree.
+     */
+    @Test
+    void ensureEnoughInstancesOfType2(){
+        final int instanceNumber = 1000;
+        final int classNumber = 100;
+        OntologyGenerator og = new OntologyGenerator(classNumber, 1, instanceNumber, "test",
+                new ConstantSplitTreeGenerator(2));
+        int iNumber = og.getInstances().size();
+        assertEquals(iNumber, instanceNumber);
+
+        assertEquals(classNumber, og.getClasses().size() );
+        String type = Util.randomDrawFromSet(og.getClasses());
+        assertNotNull(type);
+
+        int typedInstancesNumber = og.getInstancesOfTypeTransitive(type).size();
+        assertTrue(typedInstancesNumber <= 1000);
+
+        og.ensureEnoughInstancesOfType(type, 1500);
+        assertEquals(1500, og.getInstancesOfTypeTransitive(type).size());
+
+        int actualInstanceSize = og.getInstances().size();
+        assertTrue(actualInstanceSize >= 1500, // note that we may draw the root, so 100 is ok!
+                "Expected > 1500 instances. Was: " + actualInstanceSize);
+
+        for (String instance : og.getInstances()){
+            Triple t = og.getRandomTripleWithSubject(instance);
+            assertNotNull(t);
+
+            String property = og.getRandomPropertyWhereInstanceIsDomain(instance);
+            assertNotNull(property);
+
+            property = og.getRandomPropertyWhereInstanceIsRange(instance);
+            assertNotNull(property);
         }
     }
 
@@ -129,5 +168,6 @@ class OntologyGeneratorTest {
             }
         }
     }
+
 
 }

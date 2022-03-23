@@ -34,9 +34,9 @@ public class OntologyGenerator {
         }
 
         // build property domain and range
-        propertyRanges = new HashMap<>();
+        propertyRangeMap = new HashMap<>();
         propertyRangeInstances = new HashMap<>();
-        propertyDomains = new HashMap<>();
+        propertyDomainMap = new HashMap<>();
         propertyDomainInstances = new HashMap<>();
         instanceSubjectProperties = new HashMap<>();
 
@@ -91,7 +91,7 @@ public class OntologyGenerator {
         instanceIds.add(instance);
         instanceTypes.put(instance, classId);
 
-        Set<String> types = classTree.getAllChildrenOfNode(classId);
+        Set<String> types = classTree.getAllParentsOfNode(classId);
         types.add(classId);
 
         if (classInstancesNonTransitive.containsKey(classId)) {
@@ -106,7 +106,7 @@ public class OntologyGenerator {
             // we need to update:
             // - propertyDomainInstances
             // - instanceSubjectProperties
-            for (Map.Entry<String, String> entry : propertyDomains.entrySet()) {
+            for (Map.Entry<String, String> entry : propertyDomainMap.entrySet()) {
                 if (types.contains(entry.getValue())) {
                     updatePropertyDomain(entry.getKey());
                 }
@@ -114,7 +114,7 @@ public class OntologyGenerator {
         }
 
         if (propertyRangeInstances != null) {
-            for (Map.Entry<String, String> entry : propertyRanges.entrySet()) {
+            for (Map.Entry<String, String> entry : propertyRangeMap.entrySet()) {
                 if (types.contains(entry.getValue())) {
                     updatePropertyRange(entry.getKey());
                 }
@@ -151,7 +151,7 @@ public class OntologyGenerator {
     }
 
     private void addPropertyDomain(String property, String domain) {
-        propertyDomains.put(property, domain);
+        propertyDomainMap.put(property, domain);
         updatePropertyDomain(property);
     }
 
@@ -186,7 +186,7 @@ public class OntologyGenerator {
     }
 
     private void addPropertyRange(String property, String range) {
-        propertyRanges.put(property, range);
+        propertyRangeMap.put(property, range);
         updatePropertyRange(property);
     }
 
@@ -219,8 +219,15 @@ public class OntologyGenerator {
     Set<String> instanceIds;
     Tree classTree;
 
-    Map<String, String> propertyRanges;
-    Map<String, String> propertyDomains;
+    /**
+     * Map from the property to its range.
+     */
+    Map<String, String> propertyRangeMap;
+
+    /**
+     * Map from the property to its domain.
+     */
+    Map<String, String> propertyDomainMap;
 
     /**
      * {@code instance -> <all possible property ids where domain(property)=instance >}
@@ -350,16 +357,15 @@ public class OntologyGenerator {
         domainClasses.add(domain);
 
         Set<String> resultIds = new HashSet<>();
-        for(Map.Entry<String, String> entry : propertyRanges.entrySet()){
+        for(Map.Entry<String, String> entry : propertyRangeMap.entrySet()){
             if(rangeClasses.contains(entry.getValue()) &&
-                domainClasses.contains(propertyDomains.get(entry.getKey()))
+                domainClasses.contains(propertyDomainMap.get(entry.getKey()))
             ){
                 resultIds.add(entry.getKey());
             }
         }
         return resultIds;
     }
-
 
     /**
      * Obtain a random range instance of the specified property.
@@ -388,11 +394,11 @@ public class OntologyGenerator {
     }
 
     public String getRange(String propertyId) {
-        return propertyRanges.get(propertyId);
+        return propertyRangeMap.get(propertyId);
     }
 
     public String getDomain(String propertyId) {
-        return propertyDomains.get(propertyId);
+        return propertyDomainMap.get(propertyId);
     }
 
     public Tree getClassTree() {
@@ -414,7 +420,7 @@ public class OntologyGenerator {
 
     public Set<String> getPropertiesWhereDomainHasAtLeastTwoSubtypes(){
         Set<String> propertyCandidates = new HashSet<>();
-        for ( Map.Entry<String, String> entry : propertyDomains.entrySet() ) {
+        for ( Map.Entry<String, String> entry : propertyDomainMap.entrySet() ) {
             if(classTree.getChildrenOfNode(entry.getValue()).size() >= 2){
                 propertyCandidates.add(entry.getKey());
             }
@@ -437,7 +443,7 @@ public class OntologyGenerator {
      */
     public Set<String> getPropertiesWhereRangeHasAtLeastTwoSubtypes(){
         Set<String> propertyCandidates = new HashSet<>();
-        for ( Map.Entry<String, String> entry : propertyRanges.entrySet() ) {
+        for ( Map.Entry<String, String> entry : propertyRangeMap.entrySet() ) {
             if(classTree.getChildrenOfNode(entry.getValue()).size() >= 2){
                 propertyCandidates.add(entry.getKey());
             }
@@ -456,7 +462,7 @@ public class OntologyGenerator {
             LOGGER.info("Enough objects for " + predicateId + ". Nothing to generate.");
         } else {
             LOGGER.warn("Not enough objects for " + predicateId + ". Generating " + target + " additional nodes.");
-            String targetClass = propertyRanges.get(predicateId);
+            String targetClass = propertyRangeMap.get(predicateId);
             Set<String> desiredClasses = new HashSet<>(classTree.getAllChildrenOfNode(targetClass));
             desiredClasses.add(targetClass);
             for (int i = 0; i < target; i++) {
@@ -477,7 +483,7 @@ public class OntologyGenerator {
             LOGGER.info("Enough subjects for " + predicateId + ". Nothing to generate.");
         } else {
             LOGGER.warn("Not enough subjects for " + predicateId + ". Generating " + target + " additional nodes.");
-            String targetClass = propertyDomains.get(predicateId);
+            String targetClass = propertyDomainMap.get(predicateId);
             Set<String> desiredClasses = new HashSet<>(classTree.getAllChildrenOfNode(targetClass));
             desiredClasses.add(targetClass);
             for (int i = 0; i < target; i++) {
