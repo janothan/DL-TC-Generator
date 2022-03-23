@@ -39,6 +39,11 @@ public class Tree implements ITree {
     private final Map<String, Set<String>> nodeToParents;
 
 
+    /**
+     * Non transitive
+     * @param nodeId The node id.
+     * @return
+     */
     @Override
     public Set<String> getChildrenOfNode(String nodeId) {
         if (nodeId == null || !nodeIds.contains(nodeId)) {

@@ -403,9 +403,27 @@ public class OntologyGenerator {
         return instanceTypes.get(instance);
     }
 
+    /**
+     * Property where getChildrenOfNode(property.domain) > 2.
+     * Note that we require really two direct children (not 1 child which has again a child).
+     * @return Property ID
+     */
+    public String getRandomPropertyWhereDomainHasMoreThanTwoSubtypes(){
+        return Util.randomDrawFromSet(getPropertiesWhereDomainHasMoreThanTwoSubtypes());
+    }
+
+    public Set<String> getPropertiesWhereDomainHasMoreThanTwoSubtypes(){
+        Set<String> propertyCandidates = new HashSet<>();
+        for ( Map.Entry<String, String> entry : propertyDomains.entrySet() ) {
+            if(classTree.getChildrenOfNode(entry.getValue()).size() >= 2){
+                propertyCandidates.add(entry.getKey());
+            }
+        }
+        return propertyCandidates;
+    }
 
     /**
-     * Property where getChildrenOfNode(property) > 2.
+     * Property where getChildrenOfNode(property.range) > 2.
      * Note that we require really two direct children (not 1 child which has again a child).
      * @return Property ID
      */
