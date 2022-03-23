@@ -1,7 +1,6 @@
 package de.uni_mannheim.informatik.dws.dl_tc_generator.synthetic.constructed_ontology;
 
 import de.uni_mannheim.informatik.dws.dl_tc_generator.Util;
-import de.uni_mannheim.informatik.dws.dl_tc_generator.synthetic.constructed.Tc05GeneratorSyntheticConstructed;
 import de.uni_mannheim.informatik.dws.jrdf2vec.walk_generation.data_structures.Triple;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,6 +10,23 @@ import java.nio.charset.StandardCharsets;
 import java.util.Iterator;
 import java.util.Set;
 
+/**
+ * Positive query:
+ * {@code
+ * SELECT DISTINCT ?x WHERE
+ * {
+ * 	?x a dbo:Album .
+ *   	?x dbo:starring ?y1 .
+ *   	?x dbo:starring ?y2 .
+ * 	?y1 a dbo:Artist .
+ *   	?y2 a dbo:Artist .
+ *   	FILTER
+ *   	(
+ *     	?y1 != ?y2
+ *     ) .
+ * } LIMIT <number>
+ * }
+ */
 public class Tc11GeneratorSyntheticOntology extends TcGeneratorSyntheticOntology {
 
 
@@ -31,7 +47,7 @@ public class Tc11GeneratorSyntheticOntology extends TcGeneratorSyntheticOntology
         return "tc11";
     }
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(Tc05GeneratorSyntheticConstructed.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(Tc11GeneratorSyntheticOntology.class);
 
     /**
      * Developer remark: This TC is almost identical to TC9 with the difference that we use

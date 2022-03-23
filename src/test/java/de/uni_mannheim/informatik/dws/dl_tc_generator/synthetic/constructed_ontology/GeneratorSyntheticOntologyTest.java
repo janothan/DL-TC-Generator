@@ -51,6 +51,8 @@ class GeneratorSyntheticOntologyTest {
         testFileExistence(GENERATION_DIR, "tc10", groupName, 11);
         testFileExistence(GENERATION_DIR, "tc11", groupName, 10);
         testFileExistence(GENERATION_DIR, "tc11", groupName, 11);
+        testFileExistence(GENERATION_DIR, "tc12", groupName, 10);
+        testFileExistence(GENERATION_DIR, "tc12", groupName, 11);
 
         File mergedGraph = new File(GENERATION_DIR, "graph.nt");
         assertTrue(mergedGraph.exists());
