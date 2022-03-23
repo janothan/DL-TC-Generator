@@ -403,6 +403,30 @@ public class OntologyGenerator {
         return instanceTypes.get(instance);
     }
 
+
+    /**
+     * Property where getChildrenOfNode(property) > 2.
+     * Note that we require really two direct children (not 1 child which has again a child).
+     * @return Property ID
+     */
+    public String getRandomPropertyWhereRangeHasMoreThanTwoSubtypes(){
+        return Util.randomDrawFromSet(getPropertiesWhereRangeHasMoreThanTwoSubtypes());
+    }
+
+    /**
+     *
+     * @return Properties where getSubtypes(property.range) >= 2
+     */
+    public Set<String> getPropertiesWhereRangeHasMoreThanTwoSubtypes(){
+        Set<String> propertyCandidates = new HashSet<>();
+        for ( Map.Entry<String, String> entry : propertyRanges.entrySet() ) {
+            if(classTree.getChildrenOfNode(entry.getValue()).size() >= 2){
+                propertyCandidates.add(entry.getKey());
+            }
+        }
+        return propertyCandidates;
+    }
+
     /**
      * Ensure that there are at least {@code objectNumber} different objects for the provided {@code predicateId}.
      * @param predicateId Predicate ID.
@@ -521,6 +545,11 @@ public class OntologyGenerator {
         }
     }
 
+    /**
+     * Transitively resolved!
+     * @param instanceId Instance id.
+     * @return Set of properties.
+     */
     public Set<String> getPropertiesWhereInstanceIsDomain(String instanceId){
         Set<String> result = new HashSet<>();
         for(Map.Entry<String, Set<String>> entry : propertyDomainInstances.entrySet()){

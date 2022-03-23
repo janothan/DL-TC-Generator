@@ -35,7 +35,6 @@ public class Tc05GeneratorSyntheticConstructed extends TcGeneratorSyntheticConst
 
     private static final Logger LOGGER = LoggerFactory.getLogger(Tc05GeneratorSyntheticConstructed.class);
 
-
     @Override
     public String getTcId() {
         return "TC05";

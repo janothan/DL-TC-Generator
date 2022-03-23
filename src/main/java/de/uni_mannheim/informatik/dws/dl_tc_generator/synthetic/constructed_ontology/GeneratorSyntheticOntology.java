@@ -45,6 +45,11 @@ public class GeneratorSyntheticOntology extends GeneratorSynthetic {
                 Paths.get(generatedDirectory.getAbsolutePath(), "tc06", getTcGroupName()).toFile()
         )));
 
+        // TC07
+        generatorSet.add((new Tc07GeneratorSyntheticOntology(
+                Paths.get(generatedDirectory.getAbsolutePath(), "tc07", getTcGroupName()).toFile()
+        )));
+
         generatorSet.forEach(x -> x.setSizes(sizes));
         generatorSet.forEach(x -> x.setSeparator(separator));
     }

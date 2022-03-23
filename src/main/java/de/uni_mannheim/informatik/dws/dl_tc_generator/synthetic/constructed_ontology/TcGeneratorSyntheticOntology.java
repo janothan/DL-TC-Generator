@@ -48,8 +48,6 @@ public abstract class TcGeneratorSyntheticOntology extends TcGeneratorSyntheticC
 
     OntologyGenerator ontologyGenerator;
 
-
-
     /**
      * Set the total nodes factor.
      * Note: While this method works, it is more efficient to use

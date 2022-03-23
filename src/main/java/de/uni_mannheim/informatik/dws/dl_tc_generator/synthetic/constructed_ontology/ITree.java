@@ -16,4 +16,6 @@ public interface ITree {
     Set<String> getAllNodes();
 
     void addLeaf(String parent, String child);
+
+    boolean isA(String aId, String isBId);
 }

@@ -11,7 +11,7 @@ import java.util.*;
 public class Tree implements ITree {
 
 
-    public Tree(String rootNode){
+    public Tree(String rootNode) {
         this.root = rootNode;
         nodeIds = new HashSet<>();
         nodeIds.add(rootNode);
@@ -41,12 +41,12 @@ public class Tree implements ITree {
 
     @Override
     public Set<String> getChildrenOfNode(String nodeId) {
-        if(nodeId == null || !nodeIds.contains(nodeId)){
+        if (nodeId == null || !nodeIds.contains(nodeId)) {
             LOGGER.error("nodeId does not exist. Returning null.");
             return new HashSet<>();
         }
         Set<String> result = nodeToChildren.get(nodeId);
-        if(result == null){
+        if (result == null) {
             return new HashSet<>();
         } else return result;
     }
@@ -54,7 +54,7 @@ public class Tree implements ITree {
     @Override
     public Set<String> getAllChildrenOfNode(String nodeId) {
         Set<String> result = new HashSet<>();
-        for(String child : this.getChildrenOfNode(nodeId)){
+        for (String child : this.getChildrenOfNode(nodeId)) {
             result.add(child);
             result.addAll(getAllChildrenOfNode(child));
         }
@@ -64,12 +64,12 @@ public class Tree implements ITree {
 
     @Override
     public Set<String> getParentsOfNode(String nodeId) {
-        if(nodeId == null || !nodeIds.contains(nodeId)){
+        if (nodeId == null || !nodeIds.contains(nodeId)) {
             LOGGER.error("nodeId does not exist. Returning null.");
             return new HashSet<>();
         }
         Set<String> result = nodeToParents.get(nodeId);
-        if(result == null){
+        if (result == null) {
             return new HashSet<>();
         } else return result;
     }
@@ -77,7 +77,7 @@ public class Tree implements ITree {
     @Override
     public Set<String> getAllParentsOfNode(String nodeId) {
         Set<String> result = new HashSet<>();
-        if(nodeId.equals(getRoot())){
+        if (nodeId.equals(getRoot())) {
             result.add(nodeId);
         }
         for (String parent : getParentsOfNode(nodeId)) {
@@ -101,7 +101,7 @@ public class Tree implements ITree {
         this.nodeIds.add(parent);
         this.nodeIds.add(child);
 
-        if(this.nodeToChildren.containsKey(parent)){
+        if (this.nodeToChildren.containsKey(parent)) {
             this.nodeToChildren.get(parent).add(child);
         } else {
             Set<String> childSet = new HashSet<>();
@@ -109,7 +109,7 @@ public class Tree implements ITree {
             this.nodeToChildren.put(parent, childSet);
         }
 
-        if(this.nodeToParents.containsKey(child)){
+        if (this.nodeToParents.containsKey(child)) {
             this.nodeToParents.get(child).add(parent);
         } else {
             Set<String> parentSet = new HashSet<>();
@@ -119,19 +119,31 @@ public class Tree implements ITree {
     }
 
     @Override
-    public String toString(){
+    public String toString() {
         StringBuilder builder = new StringBuilder();
         builder.append("Nodes:\n");
-        for(String node : this.nodeIds){
+        for (String node : this.nodeIds) {
             builder.append("- ").append(node).append("\n");
         }
         builder.append("\nConnections:\n");
-        for(Map.Entry<String, Set<String>> entry: nodeToChildren.entrySet()){
-            for(String child : entry.getValue()){
-                    builder.append("- ").append(entry.getKey()).append(" -> ").append(child).append("\n");
-                }
+        for (Map.Entry<String, Set<String>> entry : nodeToChildren.entrySet()) {
+            for (String child : entry.getValue()) {
+                builder.append("- ").append(entry.getKey()).append(" -> ").append(child).append("\n");
             }
-        return builder.toString();
         }
+        return builder.toString();
+    }
+
+    /**
+     * Checks if aID is a bID.
+     * @param aId a id
+     * @param isBId b id
+     * @return true if a is a b else false.
+     */
+    public boolean isA(String aId, String isBId){
+        Set<String> bChildren = getAllChildrenOfNode(isBId);
+        bChildren.add(isBId);
+        return bChildren.contains(aId);
+    }
 
 }
