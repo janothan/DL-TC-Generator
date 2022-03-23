@@ -121,15 +121,24 @@ class OntologyGeneratorTest {
         assertTrue(actualInstanceSize >= 1500, // note that we may draw the root, so 100 is ok!
                 "Expected > 1500 instances. Was: " + actualInstanceSize);
 
+        // now we test whether the indices have been correctly updated.
         for (String instance : og.getInstances()){
             Triple t = og.getRandomTripleWithSubject(instance);
             assertNotNull(t);
 
             String property = og.getRandomPropertyWhereInstanceIsDomain(instance);
             assertNotNull(property);
+            String propertyDomain = og.getDomain(property);
+            Set<String> domainTypes = new HashSet<>(og.getClassTree().getAllChildrenOfNode(propertyDomain));
+            domainTypes.add(propertyDomain);
+            assertTrue(domainTypes.contains(og.getInstanceType(instance)));
 
             property = og.getRandomPropertyWhereInstanceIsRange(instance);
             assertNotNull(property);
+            String propertyRange = og.getRange(property);
+            Set<String> rangeTypes = new HashSet<>(og.getClassTree().getAllChildrenOfNode(propertyRange));
+            rangeTypes.add(propertyRange);
+            assertTrue(rangeTypes.contains(og.getInstanceType(instance)));
         }
     }
 
