@@ -8,9 +8,18 @@ import org.slf4j.LoggerFactory;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.Iterator;
-import java.util.NoSuchElementException;
 import java.util.Set;
 
+/**
+ * Positive Query:
+ * {@code
+ *      SELECT DISTINCT ?x WHERE
+ *      {
+ *          ?x a dbo:Person .
+ *          ?x dbo:birthPlace dbr:New_York_City .
+ *      } LIMIT <number>
+ * }
+ */
 public class Tc06GeneratorSyntheticOntology extends TcGeneratorSyntheticOntology {
 
 
@@ -54,8 +63,8 @@ public class Tc06GeneratorSyntheticOntology extends TcGeneratorSyntheticOntology
 
             final String targetEdge = ontologyGenerator.getRandomPropertyId();
 
-            // making sure that we have enough positives
-            ontologyGenerator.ensureSubjectNumberForProperty(targetEdge, nodesOfInterest);
+            // making sure that we have enough positives and negatives
+            //ontologyGenerator.ensureSubjectNumberForProperty(targetEdge, nodesOfInterest*2);
 
             // making sure that we have enough negatives
             final String desiredType = ontologyGenerator.getDomain(targetEdge);
@@ -88,12 +97,11 @@ public class Tc06GeneratorSyntheticOntology extends TcGeneratorSyntheticOntology
             }
 
             typeInstances.removeAll(positives);
-            typeInstanceIterator = typeInstances.iterator();
 
             // let's generate hard negatives
             LOGGER.info("Generating negatives.");
             while (negatives.size() < nodesOfInterest) {
-                String negative = typeInstanceIterator.next();
+                String negative = Util.randomDrawFromSet(typeInstances); // we cannot use the iterator here!
                 if (positives.contains(negative) || negatives.contains(negative)) {
                     continue;
                 }
@@ -104,6 +112,7 @@ public class Tc06GeneratorSyntheticOntology extends TcGeneratorSyntheticOntology
                 writer.write(negative + " " + targetEdge + " " + someObject + " .\n");
                 graph.addObjectTriple(negative, targetEdge, someObject);
                 negatives.add(negative);
+                typeInstances.remove(negative);
             }
 
             // let's generate random connections

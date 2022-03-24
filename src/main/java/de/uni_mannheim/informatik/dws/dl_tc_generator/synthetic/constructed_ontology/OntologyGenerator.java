@@ -38,7 +38,6 @@ public class OntologyGenerator {
         propertyRangeInstances = new HashMap<>();
         propertyDomainMap = new HashMap<>();
         propertyDomainInstances = new HashMap<>();
-        instanceSubjectProperties = new HashMap<>();
 
         int firstProperties = 0;
         for (String propertyId : propertyIds) {
@@ -110,7 +109,7 @@ public class OntologyGenerator {
             // - instanceSubjectProperties
             for (Map.Entry<String, String> entry : propertyDomainMap.entrySet()) {
                 if (types.contains(entry.getValue())) {
-                    updatePropertyDomain(entry.getKey());
+                    updatePropertyDomain(entry.getKey(), instance);
                 }
             }
         }
@@ -118,7 +117,7 @@ public class OntologyGenerator {
         if (propertyRangeInstances != null) {
             for (Map.Entry<String, String> entry : propertyRangeMap.entrySet()) {
                 if (types.contains(entry.getValue())) {
-                    updatePropertyRange(entry.getKey());
+                    updatePropertyRange(entry.getKey(), instance);
                 }
             }
         }
@@ -158,7 +157,7 @@ public class OntologyGenerator {
     }
 
     /**
-     * Update indices for the provided property.
+     * Build indices for the provided property. Very expensive.
      *
      * @param property The property that is to be updated.
      */
@@ -166,14 +165,33 @@ public class OntologyGenerator {
         final String domain = getDomain(property);
         Set<String> instances = getClassInstancesTransitive(domain);
         propertyDomainInstances.put(property, instances);
-        for (String instance : instances) {
-            if (instanceSubjectProperties.containsKey(instance)) {
-                instanceSubjectProperties.get(instance).add(property);
-            } else {
-                Set<String> properties = new HashSet<>();
-                properties.add(property);
-                instanceSubjectProperties.put(instance, properties);
-            }
+    }
+
+    /**
+     * Update indices for the provided property.
+     *
+     * @param property The property that is to be updated.
+     * @param instance The instance that is to be added.
+     */
+    private void updatePropertyDomain(String property, String instance) {
+        Set<String> instances = propertyDomainInstances.get(property);
+        if(instances != null) {
+            instances.add(instance);
+        } else {
+            instances = new HashSet<>();
+            instances.add(instance);
+            propertyDomainInstances.put(property, instances);
+        }
+    }
+
+    private void updatePropertyRange(String property, String instance) {
+        Set<String> instances = propertyRangeInstances.get(property);
+        if(instances != null){
+            instances.add(instance);
+        } else {
+            instances = new HashSet<>();
+            instances.add(instance);
+            propertyRangeInstances.put(property, instances);
         }
     }
 
@@ -232,11 +250,6 @@ public class OntologyGenerator {
      * Map from the property to its domain.
      */
     Map<String, String> propertyDomainMap;
-
-    /**
-     * {@code instance -> <all possible property ids where domain(property)=instance >}
-     */
-    Map<String, Set<String>> instanceSubjectProperties;
 
     /**
      * {@code property -> <all possible range INSTANCE ids>}
@@ -502,9 +515,11 @@ public class OntologyGenerator {
         if (target <= 0) {
             LOGGER.info("Enough instances for class " + classId + ". Nothing to generate.");
         } else {
+            Set<String> desiredClasses = new HashSet<>(classTree.getAllChildrenOfNode(classId));
+            desiredClasses.add(classId);
             for (int i = 0; i < target; i++) {
-                addInstance("<EXTRA_I_FOR_CLASS_" + Util.removeTags(classId) + "_" + i + ">",
-                        classId);
+                String type = Util.randomDrawFromSet(desiredClasses);
+                addInstance("<EXTRA_I_FOR_CLASS_" + Util.removeTags(classId) + "_" + i + ">", type);
             }
         }
     }
