@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * de.uni_mannheim.informatik.dws.dl_tc_generator.Main class for command line.
+ * Main class for a simple command line interface.
  */
 public class Main {
 
@@ -72,7 +72,7 @@ public class Main {
                 .build());
 
         options.addOption(Option.builder("n")
-                .longOpt("nodes")
+                .longOpt("nodeFactor")
                 .desc("Only valid for synthetic generators. The total nodes factor determines " +
                         "the maximum number of nodes in a graph (totalNodesFactor * nodesOfInterest).")
                 .numberOfArgs(1)
@@ -113,13 +113,13 @@ public class Main {
             CommandLineParser parser = new DefaultParser();
             CommandLine cmd = parser.parse(options, args);
 
-            if (cmd.hasOption("h")) {
+            if (cmd.hasOption("h") || cmd.getOptions().length == 0) {
                 HelpFormatter formatter = new HelpFormatter();
                 formatter.printHelp("ant", options);
                 return;
             }
 
-            int[] sizeArray = null;
+            int[] sizeArray = Defaults.SIZES;
             if (cmd.hasOption("s")) {
                 String[] sValues = cmd.getOptionValues("s");
                 List<Integer> sizeList = new ArrayList<>();

@@ -78,6 +78,7 @@ public class Tc01GeneratorSyntheticOntology extends TcGeneratorSyntheticOntology
             }
 
             typeInstances.removeAll(positives);
+            typeInstanceIterator = typeInstances.iterator();
 
             // let's generate negatives
             LOGGER.info("Generating negatives.");

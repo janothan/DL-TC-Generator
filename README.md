@@ -22,11 +22,11 @@ DBpedia SPARQL GS (see above) is a real gold standard but it is not perfect. The
 standard option allows for generating synthetic "lab-grown" graphs for precisely
 evaluating knowledge graph embeddings.
 
-There are two flavors: Random graph generation (very expensive) and constructed
-graph generation.
+There are three flavors: Random graph generation (very expensive), constructed
+graph generation (in easy and hard), and ontology-based graph generation.
 
-You can find the current version of the constructed gold standard 
-[the results directory](/results/synthetic_constructed).
+You can find the current version of the constructed gold standards 
+[the results directory](/results/).
 
 
 ## Structure of the Results Folder and Terminology

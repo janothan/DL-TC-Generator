@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 import java.util.Set;
 
 public class Tc06GeneratorSyntheticOntology extends TcGeneratorSyntheticOntology {
@@ -58,7 +59,7 @@ public class Tc06GeneratorSyntheticOntology extends TcGeneratorSyntheticOntology
 
             // making sure that we have enough negatives
             final String desiredType = ontologyGenerator.getDomain(targetEdge);
-            ontologyGenerator.ensureEnoughInstancesOfType(desiredType, 2*nodesOfInterest);
+            ontologyGenerator.ensureEnoughInstancesOfType(desiredType, 2 * nodesOfInterest);
 
             final String targetInstance = ontologyGenerator.getRandomObjectForProperty(targetEdge);
 
@@ -72,7 +73,7 @@ public class Tc06GeneratorSyntheticOntology extends TcGeneratorSyntheticOntology
 
             // let's generate positives
             LOGGER.info("Generating positives.");
-            while(positives.size() < nodesOfInterest) {
+            while (positives.size() < nodesOfInterest) {
                 String positive = typeInstanceIterator.next();
                 writer.write(positive + " " + targetEdge + " " + targetInstance + " .\n");
                 graph.addObjectTriple(positive, targetEdge, targetInstance);
@@ -80,23 +81,24 @@ public class Tc06GeneratorSyntheticOntology extends TcGeneratorSyntheticOntology
             }
 
             // make sure that we can generate hard negatives!
-            if(ontologyGenerator.getPropertyRangeInstances(targetEdge).size() == 1){
+            if (ontologyGenerator.getPropertyRangeInstances(targetEdge).size() == 1) {
                 ontologyGenerator.ensureEnoughInstancesOfType(
                         ontologyGenerator.getRange(targetEdge),
-                        10);
+                        nodesOfInterest);
             }
 
             typeInstances.removeAll(positives);
+            typeInstanceIterator = typeInstances.iterator();
 
             // let's generate hard negatives
             LOGGER.info("Generating negatives.");
             while (negatives.size() < nodesOfInterest) {
                 String negative = typeInstanceIterator.next();
-                if(positives.contains(negative) || negatives.contains(negative)){
+                if (positives.contains(negative) || negatives.contains(negative)) {
                     continue;
                 }
                 String someObject = ontologyGenerator.getRandomObjectForProperty(targetEdge);
-                if(someObject.equals(targetInstance)){
+                if (someObject.equals(targetInstance)) {
                     continue;
                 }
                 writer.write(negative + " " + targetEdge + " " + someObject + " .\n");
@@ -113,7 +115,7 @@ public class Tc06GeneratorSyntheticOntology extends TcGeneratorSyntheticOntology
 
                 for (int i = 0; i < tripleNumber; i++) {
                     Triple triple = ontologyGenerator.getRandomTripleWithSubject(instanceId);
-                    if(triple.predicate.equals(targetEdge) && triple.object.equals(targetInstance)){
+                    if (triple.predicate.equals(targetEdge) && triple.object.equals(targetInstance)) {
                         i--;
                     } else {
                         writer.write(triple.subject + " " + triple.predicate + " " + triple.object + " . \n");
