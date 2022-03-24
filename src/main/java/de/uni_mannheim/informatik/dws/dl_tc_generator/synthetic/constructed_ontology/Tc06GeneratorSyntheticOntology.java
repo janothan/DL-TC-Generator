@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
+import java.util.Iterator;
 import java.util.Set;
 
 public class Tc06GeneratorSyntheticOntology extends TcGeneratorSyntheticOntology {
@@ -67,10 +68,12 @@ public class Tc06GeneratorSyntheticOntology extends TcGeneratorSyntheticOntology
             configLog.append("Target instance: ").append(targetInstance).append("\n");
 
             Set<String> typeInstances = ontologyGenerator.getInstancesOfTypeTransitive(desiredType);
+            Iterator<String> typeInstanceIterator = typeInstances.iterator();
 
             // let's generate positives
+            LOGGER.info("Generating positives.");
             while(positives.size() < nodesOfInterest) {
-                String positive = Util.randomDrawFromSet(typeInstances);
+                String positive = typeInstanceIterator.next();
                 writer.write(positive + " " + targetEdge + " " + targetInstance + " .\n");
                 graph.addObjectTriple(positive, targetEdge, targetInstance);
                 positives.add(positive);
@@ -86,9 +89,10 @@ public class Tc06GeneratorSyntheticOntology extends TcGeneratorSyntheticOntology
             typeInstances.removeAll(positives);
 
             // let's generate hard negatives
+            LOGGER.info("Generating negatives.");
             while (negatives.size() < nodesOfInterest) {
-                String negative = Util.randomDrawFromSet(typeInstances);
-                if(positives.contains(negative)){
+                String negative = typeInstanceIterator.next();
+                if(positives.contains(negative) || negatives.contains(negative)){
                     continue;
                 }
                 String someObject = ontologyGenerator.getRandomObjectForProperty(targetEdge);
@@ -101,6 +105,7 @@ public class Tc06GeneratorSyntheticOntology extends TcGeneratorSyntheticOntology
             }
 
             // let's generate random connections
+            LOGGER.info("Generating random connections.");
             for (String instanceId : ontologyGenerator.getInstances()) {
 
                 // draw number of triples

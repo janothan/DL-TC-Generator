@@ -86,6 +86,7 @@ public class Tc12GeneratorSyntheticOntology extends TcGeneratorSyntheticOntology
         try (BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(fileToBeWritten), StandardCharsets.UTF_8))) {
 
             // let's generate positives
+            LOGGER.info("Generating positives.");
             while (positives.size() < nodesOfInterest) {
                 String subject1 = Util.randomDrawFromSet(domainInstances);
                 String subject2 = Util.randomDrawFromSet(domainInstances);
@@ -101,6 +102,7 @@ public class Tc12GeneratorSyntheticOntology extends TcGeneratorSyntheticOntology
             }
 
             // let's generate negatives
+            LOGGER.info("Generating negatives.");
             while (negatives.size() < nodesOfInterest) {
                 String subject = Util.randomDrawFromSet(domainInstances);
                 String object = targetInstanceIterator.next();
@@ -110,6 +112,7 @@ public class Tc12GeneratorSyntheticOntology extends TcGeneratorSyntheticOntology
             }
 
             // let's generate random triples
+            LOGGER.info("Generating random connections.");
             for (String instanceId : ontologyGenerator.getInstances()) {
 
                 // draw number of triples

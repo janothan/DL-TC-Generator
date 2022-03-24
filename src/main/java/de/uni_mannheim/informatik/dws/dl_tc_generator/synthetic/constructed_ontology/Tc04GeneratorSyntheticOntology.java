@@ -90,6 +90,7 @@ public class Tc04GeneratorSyntheticOntology extends TcGeneratorSyntheticOntology
             configLog.append("Target instance: ").append(targetInstance).append("\n");
 
             // let's generate positives part 1: target is subject
+            LOGGER.info("Generating positives (part 1 of 2).");
             while (positives.size() < nodesOfInterest / 2 + 1) {
                 String propertyId = ontologyGenerator.getRandomPropertyWhereInstanceIsDomain(targetInstance);
                 String positive = ontologyGenerator.getRandomObjectForProperty(propertyId);
@@ -103,6 +104,7 @@ public class Tc04GeneratorSyntheticOntology extends TcGeneratorSyntheticOntology
             }
 
             // let's generate positives part 2: target is object
+            LOGGER.info("Generating positives (part 2 of 2).");
             while (positives.size() < nodesOfInterest) {
                 String propertyId = ontologyGenerator.getRandomPropertyWhereInstanceIsRange(targetInstance);
                 String positive = ontologyGenerator.getRandomSubjectForProperty(propertyId);
@@ -114,6 +116,7 @@ public class Tc04GeneratorSyntheticOntology extends TcGeneratorSyntheticOntology
                 positives.add(positive);
             }
 
+            LOGGER.info("Generating random connections.");
             for (String instanceId : ontologyGenerator.getInstances()) {
 
                 if (instanceId.equals(targetInstance)) {
@@ -137,6 +140,7 @@ public class Tc04GeneratorSyntheticOntology extends TcGeneratorSyntheticOntology
             }
 
             // set negatives
+            LOGGER.info("Determining negatives.");
             Set<String> graphNodes = ontologyGenerator.getInstances();
             negatives = new HashSet<>(graphNodes);
             negatives.removeAll(positives);

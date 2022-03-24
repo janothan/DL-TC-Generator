@@ -79,6 +79,7 @@ public class Tc09GeneratorSyntheticOntology extends TcGeneratorSyntheticOntology
             configLog.append("Target property: ").append(targetProperty).append("\n");
 
             // let's generate positives
+            LOGGER.info("Generating positives.");
             while(positives.size() < nodesOfInterest){
                 String object1 = Util.randomDrawFromSet(rangeInstances);
                 String object2 = Util.randomDrawFromSet(rangeInstances);
@@ -94,6 +95,7 @@ public class Tc09GeneratorSyntheticOntology extends TcGeneratorSyntheticOntology
             }
 
             // let's generate negatives
+            LOGGER.info("Generating negatives.");
             while(negatives.size() < nodesOfInterest){
                 String object = Util.randomDrawFromSet(rangeInstances);
                 String subject = targetInstanceIterator.next();
@@ -103,6 +105,7 @@ public class Tc09GeneratorSyntheticOntology extends TcGeneratorSyntheticOntology
             }
 
             // let's generate random triples
+            LOGGER.info("Generating random connections.");
             for (String instanceId : ontologyGenerator.getInstances()) {
 
                 // draw number of triples

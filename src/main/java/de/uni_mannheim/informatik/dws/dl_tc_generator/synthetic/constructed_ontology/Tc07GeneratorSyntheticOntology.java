@@ -82,6 +82,7 @@ public class Tc07GeneratorSyntheticOntology extends TcGeneratorSyntheticOntology
             configLog.append("Negative object class: ").append(negativeUpperObjectType).append("\n");
 
             // let's generate positives
+            LOGGER.info("Generating positives.");
             while (positives.size() < nodesOfInterest) {
                 String subject = subjectIterator.next();
                 positives.add(subject);
@@ -91,6 +92,7 @@ public class Tc07GeneratorSyntheticOntology extends TcGeneratorSyntheticOntology
             }
 
             // let's generate negatives
+            LOGGER.info("Generating negatives.");
             while (negatives.size() < nodesOfInterest) {
                 String subject = subjectIterator.next();
                 negatives.add(subject);
@@ -100,6 +102,7 @@ public class Tc07GeneratorSyntheticOntology extends TcGeneratorSyntheticOntology
             }
 
             // let's generate random connections
+            LOGGER.info("Generating random connections.");
             for (String instanceId : ontologyGenerator.getInstances()) {
 
                 // draw number of triples

@@ -87,9 +87,13 @@ public class Tc05GeneratorSyntheticOntology extends TcGeneratorSyntheticOntology
             configLog.append("Target type: ").append(targetType).append("\n");
 
             // forward positives x -> r1 -> z -> r2 -> targetInstance
+            LOGGER.info("Generating positives (part 1 of 2).");
             while(positives.size() < nodesOfInterest/2){
                 Triple t1 = ontologyGenerator.getRandomTripleWithObject(targetInstance);
                 Triple t2 = ontologyGenerator.getRandomTripleWithObjectWhereSubjectOfType(t1.subject, targetType);
+                if(positives.contains(t1.subject)){
+                    continue;
+                }
                 positives.add(t1.subject);
                 graph.addObjectTriple(t1);
                 graph.addObjectTriple(t2);
@@ -98,9 +102,13 @@ public class Tc05GeneratorSyntheticOntology extends TcGeneratorSyntheticOntology
             }
 
             // backward positives x -> r1 -> z -> r2 -> targetInstance
+            LOGGER.info("Generating positives (part 2 of 2).");
             while(positives.size() < nodesOfInterest){
                 Triple t1 = ontologyGenerator.getRandomTripleWithSubject(targetInstance);
                 Triple t2 = ontologyGenerator.getRandomTripleWithSubjectWhereObjectOfType(t1.object, targetType);
+                if(positives.contains(t2.object)){
+                    continue;
+                }
                 positives.add(t2.object);
                 graph.addObjectTriple(t1);
                 graph.addObjectTriple(t2);
@@ -109,10 +117,12 @@ public class Tc05GeneratorSyntheticOntology extends TcGeneratorSyntheticOntology
             }
 
             typeInstances.removeAll(positives);
+
+            LOGGER.info("Setting negatives.");
             negatives = typeInstances;
 
-
             // let's add random triples / write negatives
+            LOGGER.info("Generating random connections.");
             for(String node : ontologyGenerator.getInstances()) {
 
                 // randomly generate triples

@@ -89,6 +89,7 @@ public class Tc03GeneratorSyntheticOntology extends TcGeneratorSyntheticOntology
             Iterator<String> typeInstanceIterator = typeInstances.iterator();
 
             // let's generate positives
+            LOGGER.info("Generating positives.");
             while (positives.size() < nodesOfInterest) {
                 String positiveId1 = typeInstanceIterator.next();
                 String positiveId2 = typeInstanceIterator.next();
@@ -98,8 +99,8 @@ public class Tc03GeneratorSyntheticOntology extends TcGeneratorSyntheticOntology
                 positives.add(positiveId2);
             }
 
-
             // let's generate negatives
+            LOGGER.info("Generating negatives.");
             while (negatives.size() < nodesOfInterest) {
                 String targetNode = typeInstanceIterator.next();
                 if (positives.contains(targetNode)) {
@@ -108,8 +109,8 @@ public class Tc03GeneratorSyntheticOntology extends TcGeneratorSyntheticOntology
                 negatives.add(targetNode);
             }
 
+            LOGGER.info("Generating random connections.");
             for (String instanceId : ontologyGenerator.getInstances()) {
-
                 // draw number of triples
                 int tripleNumber = random.nextInt(maxTriplesPerNode + 1);
 
