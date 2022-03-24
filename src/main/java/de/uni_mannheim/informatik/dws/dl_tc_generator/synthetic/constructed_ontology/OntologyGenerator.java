@@ -207,9 +207,11 @@ public class OntologyGenerator {
             Set<String> instances = classInstancesNonTransitive.get(classIdLocal);
             if (instances == null) {
                 LOGGER.warn("No class instances found for class '" + classIdLocal + "'. " +
-                        "This may happen in situations where there are many classes and few instances.");
+                        "This may happen in situations where there are many classes and few instances. " +
+                        "The current number of classes: " + classTree.getAllNodes().size());
+            } else {
+                result.addAll(instances);
             }
-            result.addAll(instances);
         }
         return result;
     }

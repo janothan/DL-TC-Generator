@@ -43,7 +43,17 @@ class TcGeneratorSyntheticOntologyTest {
     private static final List<TcGeneratorSyntheticOntology> generatorList = new ArrayList<>();
 
     static {
-        generatorList.add(new Tc01GeneratorSyntheticOntology(new File(DIR_1), 15, 20, 10, 5, 2, new int[]{10}));
+        Tc01GeneratorSyntheticOntology generator1 = new Tc01GeneratorSyntheticOntology(new File(DIR_1), 15, 20, 10, 5
+                , 2, new int[]{10});
+
+        // testing the constructor
+        assertEquals(20, generator1.getNumberOfEdges());
+        assertEquals(15, generator1.getNumberOfClasses());
+        assertEquals(10, generator1.getTotalNodesFactor());
+        assertEquals(5, generator1.getMaxTriplesPerNode());
+        assertEquals(2, generator1.getBranchingFactor());
+
+        generatorList.add(generator1);
         generatorList.add(new Tc02GeneratorSyntheticOntology(new File(DIR_2), 15, 20, 10, 5, 2, new int[]{10}));
         generatorList.add(new Tc03GeneratorSyntheticOntology(new File(DIR_3), 15, 20, 10, 5, 2, new int[]{10}));
         generatorList.add(new Tc04GeneratorSyntheticOntology(new File(DIR_4), 15, 20, 10, 5, 2, new int[]{10}));
@@ -63,7 +73,6 @@ class TcGeneratorSyntheticOntologyTest {
     @Test
     void testAllSyntheticGenerators() {
         for (TcGeneratorSynthetic generator : generatorList) {
-            generator.setNumberOfEdges(10);
             testGenerator(generator, 100, 200);
         }
     }

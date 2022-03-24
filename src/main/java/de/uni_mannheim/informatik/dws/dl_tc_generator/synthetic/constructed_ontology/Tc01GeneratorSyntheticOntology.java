@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
+import java.util.Iterator;
 import java.util.Set;
 
 /**
@@ -64,10 +65,12 @@ public class Tc01GeneratorSyntheticOntology extends TcGeneratorSyntheticOntology
             configLog.append("Target class (class of positives): ").append(targetClass).append("\n");
 
             Set<String> typeInstances = ontologyGenerator.getInstancesOfTypeTransitive(targetClass);
+            Iterator<String> typeInstanceIterator = typeInstances.iterator();
 
             // let's generate positives
+            LOGGER.info("Generating positives.");
             while (positives.size() < nodesOfInterest) {
-                String targetNode = Util.randomDrawFromSet(typeInstances);
+                String targetNode = typeInstanceIterator.next();
                 String object = ontologyGenerator.getRandomObjectForProperty(targetEdge);
                 writer.write(targetNode + " " + targetEdge + " " + object + " .\n");
                 graph.addObjectTriple(targetNode, targetEdge, object);
@@ -77,14 +80,16 @@ public class Tc01GeneratorSyntheticOntology extends TcGeneratorSyntheticOntology
             typeInstances.removeAll(positives);
 
             // let's generate negatives
+            LOGGER.info("Generating negatives.");
             while (negatives.size() < nodesOfInterest) {
-                String targetNode = Util.randomDrawFromSet(typeInstances);
+                String targetNode = typeInstanceIterator.next();
                 if (positives.contains(targetNode)) {
                     continue;
                 }
                 negatives.add(targetNode);
             }
 
+            LOGGER.info("Generating random connections.");
             for (String instanceId : ontologyGenerator.getInstances()) {
 
                 // draw number of triples

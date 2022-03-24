@@ -40,6 +40,9 @@ public abstract class TcGeneratorSyntheticOntology extends TcGeneratorSyntheticC
         setSizes(sizes);
         setNumberOfEdges(numberOfEdges);
         this.totalNodesFactor = totalNodesFactor;
+        this.numberOfClasses = numberOfClasses;
+        this.numberOfEdges = numberOfEdges;
+        this.treeGenerator = new ConstantSplitTreeGenerator(branchingFactor);
         setMaxTriplesPerNode(maxTriplesPerNode);
         setOntologyGenerator(new OntologyGenerator(
                 numberOfClasses, numberOfEdges, getNumberOfInstances(),
@@ -47,17 +50,16 @@ public abstract class TcGeneratorSyntheticOntology extends TcGeneratorSyntheticC
         ));
     }
 
-
     private static final Logger LOGGER = LoggerFactory.getLogger(TcGeneratorSyntheticOntology.class);
 
     int numberOfClasses = Defaults.NUMBER_OF_CLASSES;
     int numberOfEdges = Defaults.NUMBER_OF_EDGES;
-    ITreeGenerator treeGenerator = new ConstantSplitTreeGenerator(Defaults.BRANCHING_FACTOR);
+    ConstantSplitTreeGenerator treeGenerator = new ConstantSplitTreeGenerator(Defaults.BRANCHING_FACTOR);
 
     private void setDefaultOntologyGenerator(){
         OntologyGenerator og = new OntologyGenerator(
-                numberOfClasses,
-                numberOfEdges,
+                Defaults.NUMBER_OF_CLASSES,
+                Defaults.NUMBER_OF_EDGES,
                 getNumberOfInstances(),
                 getTcId(),
                 treeGenerator
@@ -88,6 +90,30 @@ public abstract class TcGeneratorSyntheticOntology extends TcGeneratorSyntheticC
                 getTcId(),
                 treeGenerator
         );
+    }
+
+    /**
+     * Set the size classes.
+     * Note: While this method works, it is more efficient to use
+     * {@link TcGeneratorSyntheticOntology#setOntologyGenerator(OntologyGenerator)} because for each member variable
+     * change, the graph has to be re-generated.
+     * @param sizes The desired size classes.
+     */
+    @Override
+    public void setSizes(int[] sizes) {
+        if(sizes == null || sizes.length == 0){
+            LOGGER.error("Invalid size parameter.");
+        }
+        this.sizes = sizes;
+        if(this.ontologyGenerator != null) {
+            this.ontologyGenerator = new OntologyGenerator(
+                    numberOfClasses,
+                    numberOfEdges,
+                    getNumberOfInstances(),
+                    getTcId(),
+                    treeGenerator
+            );
+        }
     }
 
     public int getNumberOfInstances(){
@@ -139,4 +165,16 @@ public abstract class TcGeneratorSyntheticOntology extends TcGeneratorSyntheticC
         }
     }
 
+    public int getBranchingFactor() {
+        return this.treeGenerator.avgBranchingFactor;
+    }
+
+    public int getNumberOfClasses() {
+        return numberOfClasses;
+    }
+
+    @Override
+    public int getNumberOfEdges() {
+        return numberOfEdges;
+    }
 }

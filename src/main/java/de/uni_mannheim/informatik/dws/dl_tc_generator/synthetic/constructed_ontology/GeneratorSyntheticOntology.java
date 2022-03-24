@@ -27,6 +27,8 @@ public class GeneratorSyntheticOntology extends GeneratorSynthetic {
                                       int[] sizeClasses) {
         super(directory);
         generatorSet = new HashSet<>();
+        setNumberOfEdges(numberOfEdges); // since the set is empty, this is not performance critical
+        this.nodesFactor = totalNodesFactor;
         setSizes(sizeClasses);
 
         // TC01
@@ -167,6 +169,7 @@ public class GeneratorSyntheticOntology extends GeneratorSynthetic {
     }
 
     public void setNumberOfEdges(int numberOfEdges){
+        this.numberOfEdges = numberOfEdges;
         generatorSet.forEach(x -> x.setNumberOfEdges(numberOfEdges) );
     }
 

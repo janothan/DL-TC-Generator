@@ -11,22 +11,21 @@ import java.util.Set;
 
 /**
  * Query pattern:
- *
+ * <p>
  * {@code
  * SELECT DISTINCT ?x WHERE
  * {
- *     {
- *         ?x a dbo:City .
- *         ?x ?y dbr:United_States .
- *     }
- *     UNION
- *     {
- *         ?x a dbo:City .
- *         dbr:United_States ?z  ?x .
- *     }
+ * {
+ * ?x a dbo:City .
+ * ?x ?y dbr:United_States .
+ * }
+ * UNION
+ * {
+ * ?x a dbo:City .
+ * dbr:United_States ?z  ?x .
  * }
  * }
- *
+ * }
  */
 public class Tc04GeneratorSyntheticOntology extends TcGeneratorSyntheticOntology {
 
@@ -67,7 +66,6 @@ public class Tc04GeneratorSyntheticOntology extends TcGeneratorSyntheticOntology
         }
 
         try (BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(fileToBeWritten), StandardCharsets.UTF_8))) {
-
             // determine target instance
             final String targetInstance = ontologyGenerator.getRandomInstanceId();
 
@@ -76,30 +74,49 @@ public class Tc04GeneratorSyntheticOntology extends TcGeneratorSyntheticOntology
             ontologyGenerator.ensurePropertyWithDomainInstance(targetInstance, 1);
             ontologyGenerator.ensurePropertyWithRangeInstance(targetInstance, 1);
 
+            // we need to ensure that there are enough instances to be put as domain/range
+            // (to avoid infinity loops)
+            for (String someRangeProperty : ontologyGenerator.getPropertiesWhereInstanceIsRange(targetInstance)) {
+                ontologyGenerator.ensureEnoughInstancesOfType(ontologyGenerator.getDomain(someRangeProperty),
+                        nodesOfInterest / 2 + 1);
+            }
+
+            for (String someDomainProperty : ontologyGenerator.getPropertiesWhereInstanceIsDomain(targetInstance)) {
+                ontologyGenerator.ensureEnoughInstancesOfType(ontologyGenerator.getRange(someDomainProperty),
+                        nodesOfInterest / 2 + 1);
+            }
+
             writeConfigToNewLog(fileToBeWritten, totalNodes, nodesOfInterest, totalEdges, maxTriplesPerNode);
             configLog.append("Target instance: ").append(targetInstance).append("\n");
 
-            // let's generate positives: target is subject
-            while (positives.size() < nodesOfInterest/2+1) {
+            // let's generate positives part 1: target is subject
+            while (positives.size() < nodesOfInterest / 2 + 1) {
                 String propertyId = ontologyGenerator.getRandomPropertyWhereInstanceIsDomain(targetInstance);
                 String positive = ontologyGenerator.getRandomObjectForProperty(propertyId);
+                if (positives.contains(positive)) {
+                    continue;
+                }
+
                 writer.write(targetInstance + " " + propertyId + " " + positive + " .\n");
                 graph.addObjectTriple(new Triple(targetInstance, propertyId, positive));
                 positives.add(positive);
             }
 
-            // let's generate positives: target is object
+            // let's generate positives part 2: target is object
             while (positives.size() < nodesOfInterest) {
                 String propertyId = ontologyGenerator.getRandomPropertyWhereInstanceIsRange(targetInstance);
                 String positive = ontologyGenerator.getRandomSubjectForProperty(propertyId);
-                writer.write( positive + " " + propertyId + " " + targetInstance + " .\n");
+                if (positives.contains(positive)) {
+                    continue;
+                }
+                writer.write(positive + " " + propertyId + " " + targetInstance + " .\n");
                 graph.addObjectTriple(new Triple(positive, propertyId, targetInstance));
                 positives.add(positive);
             }
 
             for (String instanceId : ontologyGenerator.getInstances()) {
 
-                if(instanceId.equals(targetInstance)){
+                if (instanceId.equals(targetInstance)) {
                     // we have enough triples
                     continue;
                 }
