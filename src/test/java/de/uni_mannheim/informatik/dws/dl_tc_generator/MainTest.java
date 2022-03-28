@@ -2,7 +2,6 @@ package de.uni_mannheim.informatik.dws.dl_tc_generator;
 
 import de.uni_mannheim.informatik.dws.dl_tc_generator.synthetic.GeneratorSynthetic;
 import de.uni_mannheim.informatik.dws.dl_tc_generator.synthetic.constructed_ontology.GeneratorSyntheticOntology;
-import de.uni_mannheim.informatik.dws.dl_tc_generator.synthetic.random.GeneratorSyntheticRandom;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -49,7 +48,16 @@ class MainTest {
     @Test
     void mainTestSynthetic() {
         try {
-            Main.main(new String[]{"-d", RESULT_DIR_5, "-s", "10", "11", "-e", "10", "-n", "3", "-c", "3"});
+            Main.main(new String[]{"-d", RESULT_DIR_5, "-s", "10", "11", "-e", "10", "-n", "3", "-c", "5", "-b", "2"});
+
+            // parameter parsing test
+            assertEquals(2, Main.sizeArray.length);
+            assertEquals(10, Main.sizeArray[0]);
+            assertEquals(11, Main.sizeArray[1]);
+            assertEquals(10, Main.numberOfEdges);
+            assertEquals(3, Main.nodesFactor);
+            assertEquals(5, Main.numberOfClasses);
+            assertEquals(2, Main.branchingFactor);
 
             File resultFile = new File(RESULT_DIR_5, "tc01/" + GeneratorSyntheticOntology.TC_GROUP_NAME + "/10" +
                     "/positives.txt");
@@ -59,7 +67,7 @@ class MainTest {
             resultFile = new File(RESULT_DIR_5, "tc02/" + GeneratorSyntheticOntology.TC_GROUP_NAME + "/11/positives.txt");
             assertTrue(resultFile.exists());
 
-            GeneratorSynthetic generator = ((GeneratorSynthetic) Main.getGenerator());
+            GeneratorSynthetic generator = ((GeneratorSyntheticOntology) Main.getGenerator());
             assertEquals(10, generator.getNumberOfEdges());
             assertEquals(3, generator.getNodesFactor());
             assertEquals(10, generator.getSizes()[0]);
@@ -77,6 +85,10 @@ class MainTest {
         String testQueryFileStr = testQueryFile.getAbsolutePath();
         final String tcSelector = "tc01";
         Main.main(new String[]{"-d", RESULT_DIR_3, "-q", testQueryFileStr, "-tcc", tcSelector, "-s", "50"});
+
+        // parameter test
+        assertEquals(1, Main.sizeArray.length);
+        assertEquals(50, Main.sizeArray[0]);
 
         try {
             File resultDir = new File(RESULT_DIR_3);

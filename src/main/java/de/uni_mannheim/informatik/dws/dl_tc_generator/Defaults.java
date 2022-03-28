@@ -9,6 +9,8 @@ package de.uni_mannheim.informatik.dws.dl_tc_generator;
 public class Defaults {
 
 
+    public static final String DEFAULT_RESULT_DIR = "./results";
+
     public static final TrainTestSplit TRAIN_TEST_SPLIT = new TrainTestSplit(0.2, 0.8);
 
     /**

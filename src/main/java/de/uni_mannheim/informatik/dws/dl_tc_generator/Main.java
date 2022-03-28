@@ -10,18 +10,31 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import static de.uni_mannheim.informatik.dws.dl_tc_generator.Defaults.DEFAULT_RESULT_DIR;
+
 /**
  * Main class for a simple command line interface.
  */
 public class Main {
 
 
-    public static final String DEFAULT_RESULT_DIR = "./results";
-
     /**
      * Generator (static variable for testing).
      */
     private static IGenerator generator = null;
+
+    static int[] sizeArray = Defaults.SIZES;
+
+    static int nodesFactor = Defaults.NODE_FACTOR;
+
+    static int numberOfClasses = Defaults.NUMBER_OF_CLASSES;
+
+    static int maximumNumberOfTriples = Defaults.MAX_TRIPLES_PER_NODE;
+
+    static int branchingFactor = Defaults.BRANCHING_FACTOR;
+
+    static int numberOfEdges = Defaults.NUMBER_OF_EDGES;
+
 
     public static void main(String[] args) {
         Options options = new Options();
@@ -119,7 +132,6 @@ public class Main {
                 return;
             }
 
-            int[] sizeArray = Defaults.SIZES;
             if (cmd.hasOption("s")) {
                 String[] sValues = cmd.getOptionValues("s");
                 List<Integer> sizeList = new ArrayList<>();
@@ -162,10 +174,8 @@ public class Main {
                 System.out.println("Using default result directory for the query results: " + DEFAULT_RESULT_DIR);
             }
 
-            String queryDirectory = null;
+            String queryDirectory;
 
-
-            int numberOfEdges = Defaults.NUMBER_OF_EDGES;
             if (cmd.hasOption("e")) {
                 if (!cmd.hasOption("q")) {
                     try {
@@ -182,7 +192,6 @@ public class Main {
                 }
             }
 
-            int nodesFactor = Defaults.NODE_FACTOR;
             if (cmd.hasOption("n")) {
                 if (!cmd.hasOption("q")) {
                     try {
@@ -199,7 +208,6 @@ public class Main {
                 }
             }
 
-            int numberOfClasses = Defaults.NUMBER_OF_CLASSES;
             if (cmd.hasOption("c")) {
                 if (!cmd.hasOption("q")) {
                     try {
@@ -216,11 +224,10 @@ public class Main {
                 }
             }
 
-            int maximumNumberOfTriples = Defaults.MAX_TRIPLES_PER_NODE;
             if (cmd.hasOption("m")) {
                 if (!cmd.hasOption("q")) {
                     try {
-                        numberOfClasses = Integer.parseInt(cmd.getOptionValue("c"));
+                        numberOfClasses = Integer.parseInt(cmd.getOptionValue("m"));
                     } catch (NumberFormatException nfe) {
                         System.out.println("A number format exception occurred while parsing the values for -m. " +
                                 "ABORTING program.");
@@ -234,11 +241,10 @@ public class Main {
                 }
             }
 
-            int branchingFactor = Defaults.BRANCHING_FACTOR;
             if (cmd.hasOption("b")) {
                 if (!cmd.hasOption("q")) {
                     try {
-                        branchingFactor = Integer.parseInt(cmd.getOptionValue("c"));
+                        branchingFactor = Integer.parseInt(cmd.getOptionValue("b"));
                     } catch (NumberFormatException nfe) {
                         System.out.println("A number format exception occurred while parsing the values for -b. " +
                                 "ABORTING program.");
@@ -259,6 +265,19 @@ public class Main {
             } else {
                 System.out.println("Missing option -q for query directory. Therefore, synthetic datasets will be " +
                         "calculated.");
+                System.out.println("The following synthetic parameters are used:\n" +
+                        "- resultDirectory: " + resultDirectory + "\n" +
+                        "- numberOfClasses: " + numberOfClasses + "\n" +
+                        "- numberOfEdges: " + numberOfEdges + "\n" +
+                        "- nodesFactor: " + nodesFactor + "\n" +
+                        "- maximumNumberOfTriples: " + maximumNumberOfTriples + "\n" +
+                        "- branchingFactor: " + branchingFactor + "\n" +
+                        "- sizes:");
+                for(int size : sizeArray){
+                    System.out.print(" " + size);
+                }
+                System.out.print("\n");
+
                 generator = new GeneratorSyntheticOntology(new File(resultDirectory),
                         numberOfClasses, numberOfEdges,
                         nodesFactor, maximumNumberOfTriples, branchingFactor, sizeArray);
