@@ -271,8 +271,8 @@ public class Main {
                         "- numberOfEdges: " + numberOfEdges + "\n" +
                         "- nodesFactor: " + nodesFactor + "\n" +
                         "- maximumNumberOfTriples: " + maximumNumberOfTriples + "\n" +
-                        "- branchingFactor: " + branchingFactor + "\n" +
-                        "- sizes:");
+                        "- branchingFactor: " + branchingFactor);
+                System.out.print("- sizes:");
                 for(int size : sizeArray){
                     System.out.print(" " + size);
                 }
