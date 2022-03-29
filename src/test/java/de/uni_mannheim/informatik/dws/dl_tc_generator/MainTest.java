@@ -1,7 +1,9 @@
 package de.uni_mannheim.informatik.dws.dl_tc_generator;
 
 import de.uni_mannheim.informatik.dws.dl_tc_generator.synthetic.GeneratorSynthetic;
+import de.uni_mannheim.informatik.dws.dl_tc_generator.synthetic.TcGeneratorSynthetic;
 import de.uni_mannheim.informatik.dws.dl_tc_generator.synthetic.constructed_ontology.GeneratorSyntheticOntology;
+import de.uni_mannheim.informatik.dws.dl_tc_generator.synthetic.constructed_ontology.TcGeneratorSyntheticOntology;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -67,11 +69,25 @@ class MainTest {
             resultFile = new File(RESULT_DIR_5, "tc02/" + GeneratorSyntheticOntology.TC_GROUP_NAME + "/11/positives.txt");
             assertTrue(resultFile.exists());
 
-            GeneratorSynthetic generator = ((GeneratorSyntheticOntology) Main.getGenerator());
+            GeneratorSyntheticOntology generator = ((GeneratorSyntheticOntology) Main.getGenerator());
             assertEquals(10, generator.getNumberOfEdges());
             assertEquals(3, generator.getNodesFactor());
             assertEquals(10, generator.getSizes()[0]);
             assertEquals(11, generator.getSizes()[1]);
+
+            for ( TcGeneratorSynthetic tcGenerator : generator.getGeneratorSet() ){
+                TcGeneratorSyntheticOntology soTcGenerator =  (TcGeneratorSyntheticOntology) tcGenerator;
+                assertEquals(5, soTcGenerator.getNumberOfClasses());
+                assertEquals(3, soTcGenerator.getTotalNodesFactor());
+                assertEquals(2, soTcGenerator.getSizes().length);
+                assertEquals(10, soTcGenerator.getSizes()[0]);
+                assertEquals(11, soTcGenerator.getSizes()[1]);
+                assertEquals(2, soTcGenerator.getBranchingFactor());
+                assertTrue(soTcGenerator.getOntologyGenerator().getClasses().size() >= 5);
+                assertTrue(soTcGenerator.getOntologyGenerator().getInstances().size() >= 3 * (10 + 11));
+            }
+
+
         } catch (Exception e){
             fail(e);
         }
