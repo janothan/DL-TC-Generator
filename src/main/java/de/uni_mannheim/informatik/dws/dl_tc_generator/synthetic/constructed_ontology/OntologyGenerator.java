@@ -636,6 +636,10 @@ public class OntologyGenerator {
         return Util.randomDrawFromSet(getPropertiesWhereInstanceIsRange(instanceId));
     }
 
+    /**
+     * Write the generated ontology to file.
+     * @param fileToWrite The file that is to be written.
+     */
     public void serializeOntology(File fileToWrite) {
         final String type = " <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> ";
         final String classPostfix = type + "<http://www.w3.org/2002/07/owl#Class> .\n";

@@ -157,11 +157,11 @@ public class Tc05GeneratorSyntheticOntology extends TcGeneratorSyntheticOntology
                     writer.write(t.subject + " " + t.predicate + " " + t.object + " .\n");
                 }
             }
-
-
         } catch (IOException e) {
             LOGGER.error("An error occurred while writing the file.", e);
         }
+        // serialize the ontology
+        ontologyGenerator.serializeOntology(new File(fileToBeWritten.getParentFile(), "ontology.nt"));
     }
 
 }

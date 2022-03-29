@@ -15,11 +15,11 @@ import java.util.Set;
  * {@code
  * SELECT DISTINCT ?x WHERE
  * {
- *     {
- *         ?x a dbo:Person .
- *         ?x dbo:team ?y .
- *         ?y a dbo:BasketballTeam .
- *     }
+ * {
+ * ?x a dbo:Person .
+ * ?x dbo:team ?y .
+ * ?y a dbo:BasketballTeam .
+ * }
  * }
  * }
  */
@@ -110,7 +110,7 @@ public class Tc07GeneratorSyntheticOntology extends TcGeneratorSyntheticOntology
 
                 for (int i = 0; i < tripleNumber; i++) {
                     Triple triple = ontologyGenerator.getRandomTripleWithSubject(instanceId);
-                    if ( triple.predicate.equals(targetProperty) ) {
+                    if (triple.predicate.equals(targetProperty)) {
                         i--;
                     } else {
                         writer.write(triple.subject + " " + triple.predicate + " " + triple.object + " . \n");
@@ -122,6 +122,7 @@ public class Tc07GeneratorSyntheticOntology extends TcGeneratorSyntheticOntology
         } catch (IOException e) {
             LOGGER.error("An error occurred while writing the file.", e);
         }
-
+        // serialize the ontology
+        ontologyGenerator.serializeOntology(new File(fileToBeWritten.getParentFile(), "ontology.nt"));
     }
 }

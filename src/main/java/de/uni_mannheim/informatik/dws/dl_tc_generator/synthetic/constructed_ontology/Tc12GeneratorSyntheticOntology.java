@@ -133,6 +133,8 @@ public class Tc12GeneratorSyntheticOntology extends TcGeneratorSyntheticOntology
                 IOException e) {
             LOGGER.error("An error occurred while writing the file.", e);
         }
+        // serialize the ontology
+        ontologyGenerator.serializeOntology(new File(fileToBeWritten.getParentFile(), "ontology.nt"));
     }
 
 }

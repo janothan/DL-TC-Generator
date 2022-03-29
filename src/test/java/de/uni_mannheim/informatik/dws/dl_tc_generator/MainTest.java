@@ -19,6 +19,7 @@ class MainTest {
     private static final String RESULT_DIR_3 = "./result-dir-3";
     private static final String RESULT_DIR_4 = "./result-dir-4";
     private static final String RESULT_DIR_5 = "./result-dir-5";
+    private static final String RESULT_DIR_6 = "./result-dir-6";
     private static final String RESULT_DIR_NOT_WRITTEN = "./result-dir-never-exists";
 
     @BeforeAll
@@ -46,10 +47,21 @@ class MainTest {
         }
     }
 
+    /**
+     * Originally a bug.
+     */
+    @Test
+    void mainTestSynthetic2() {
+        Main.main(new String[]{"-b", "5", "-c", "76", "-d", RESULT_DIR_6, "-e", "13", "-m",
+                "11", "-n", "10", "-s", "100"});
+        assertEquals(76, Main.numberOfClasses);
+    }
+
     @Test
     void mainTestSynthetic() {
         try {
-            Main.main(new String[]{"-d", RESULT_DIR_5, "-s", "10", "11", "-e", "10", "-n", "3", "-c", "5", "-b", "2"});
+            Main.main(new String[]{"-d", RESULT_DIR_5, "-s", "10", "11", "-e", "10", "-n", "3",
+                    "-c", "5", "-b", "2", "-m", "13"});
 
             // parameter parsing test
             assertEquals(2, Main.sizeArray.length);
@@ -59,6 +71,7 @@ class MainTest {
             assertEquals(3, Main.nodesFactor);
             assertEquals(5, Main.numberOfClasses);
             assertEquals(2, Main.branchingFactor);
+            assertEquals(13, Main.maximumNumberOfTriples);
 
             File resultFile = new File(RESULT_DIR_5, "tc01/" + GeneratorSyntheticOntology.TC_GROUP_NAME + "/10" +
                     "/positives.txt");
@@ -224,5 +237,6 @@ class MainTest {
         Util.delete(RESULT_DIR_3);
         Util.delete(RESULT_DIR_4);
         Util.delete(RESULT_DIR_5);
+        Util.delete(RESULT_DIR_6);
     }
 }

@@ -227,7 +227,7 @@ public class Main {
             if (cmd.hasOption("m")) {
                 if (!cmd.hasOption("q")) {
                     try {
-                        numberOfClasses = Integer.parseInt(cmd.getOptionValue("m"));
+                        maximumNumberOfTriples = Integer.parseInt(cmd.getOptionValue("m"));
                     } catch (NumberFormatException nfe) {
                         System.out.println("A number format exception occurred while parsing the values for -m. " +
                                 "ABORTING program.");
