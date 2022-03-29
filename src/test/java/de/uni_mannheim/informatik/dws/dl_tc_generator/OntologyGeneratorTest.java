@@ -3,8 +3,11 @@ package de.uni_mannheim.informatik.dws.dl_tc_generator;
 import de.uni_mannheim.informatik.dws.dl_tc_generator.synthetic.constructed_ontology.ConstantSplitTreeGenerator;
 import de.uni_mannheim.informatik.dws.dl_tc_generator.synthetic.constructed_ontology.OntologyGenerator;
 import de.uni_mannheim.informatik.dws.jrdf2vec.walk_generation.data_structures.Triple;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
+import java.io.File;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -12,6 +15,13 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class OntologyGeneratorTest {
 
+
+    private static final File ontologyFile = new File("./test_ontology.nt");
+
+    @BeforeAll
+    static void setUp(){
+        cleanUp();
+    }
 
     @Test
     void blindTest(){
@@ -143,6 +153,31 @@ class OntologyGeneratorTest {
     }
 
     @Test
+    void serializeOntology(){
+        final int instanceNumber = 10;
+        final int classNumber = 10;
+        final int propertyNumber = 10;
+
+        OntologyGenerator og = new OntologyGenerator(classNumber, propertyNumber, instanceNumber, "test",
+                new ConstantSplitTreeGenerator(2));
+
+        og.serializeOntology(ontologyFile);
+        assertTrue(ontologyFile.exists());
+
+        String read = Util.readUtf8(ontologyFile);
+
+        for(String classId : og.getClasses()){
+            assertTrue(read.contains(classId));
+        }
+        for(String propertyId : og.getProperties()){
+            assertTrue(read.contains(propertyId));
+        }
+        for(String instanceId : og.getInstances()){
+            assertTrue(read.contains(instanceId));
+        }
+    }
+
+    @Test
     void getPropertyWhereDomainRangeHasMoreThanTwoSubtypes(){
         final int instanceNumber = 3000;
         final int classNumber = 10;
@@ -178,5 +213,9 @@ class OntologyGeneratorTest {
         }
     }
 
+    @AfterAll
+    static void cleanUp(){
+        Util.delete(ontologyFile);
+    }
 
 }

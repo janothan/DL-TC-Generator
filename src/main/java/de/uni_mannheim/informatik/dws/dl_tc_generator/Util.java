@@ -143,21 +143,25 @@ public class Util {
         }
     }
 
-    public static void delete(String filePath) {
-        File file = new File(filePath);
-        if (!file.exists()) {
+
+    public static void delete(File deleteFile) {
+        if (!deleteFile.exists()) {
             return;
         }
-        if (file.isFile()) {
-            if (file.delete()) {
-                LOGGER.info("Delete file: '" + file.getName() + "'");
+        if (deleteFile.isFile()) {
+            if (deleteFile.delete()) {
+                LOGGER.info("Delete file: '" + deleteFile.getName() + "'");
             }
         }
         try {
-            FileUtils.deleteDirectory(file);
+            FileUtils.deleteDirectory(deleteFile);
         } catch (IOException e) {
-            LOGGER.warn("An exception occurred while trying to remove directory: '" + file.getAbsolutePath() + "'");
+            LOGGER.warn("An exception occurred while trying to remove directory: '" + deleteFile.getAbsolutePath() + "'");
         }
+    }
+
+    public static void delete(String filePath) {
+        delete(new File(filePath));
     }
 
     /**

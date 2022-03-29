@@ -5,6 +5,8 @@ import de.uni_mannheim.informatik.dws.jrdf2vec.walk_generation.data_structures.T
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 public class OntologyGenerator {
@@ -175,7 +177,7 @@ public class OntologyGenerator {
      */
     private void updatePropertyDomain(String property, String instance) {
         Set<String> instances = propertyDomainInstances.get(property);
-        if(instances != null) {
+        if (instances != null) {
             instances.add(instance);
         } else {
             instances = new HashSet<>();
@@ -186,7 +188,7 @@ public class OntologyGenerator {
 
     private void updatePropertyRange(String property, String instance) {
         Set<String> instances = propertyRangeInstances.get(property);
-        if(instances != null){
+        if (instances != null) {
             instances.add(instance);
         } else {
             instances = new HashSet<>();
@@ -281,16 +283,17 @@ public class OntologyGenerator {
 
     /**
      * {@code predicate.domain = predicate.range}
+     *
      * @return Some randomly drawn predicate ID where the domain is equal to the range.
      */
     public String getRandomPropertyIdWhereDomainIsRange() {
         Set<String> resultSet = new HashSet<>();
-        for(String property : propertyIds){
-            if(getDomain(property).equals(getRange(property))){
+        for (String property : propertyIds) {
+            if (getDomain(property).equals(getRange(property))) {
                 resultSet.add(property);
             }
         }
-        if(resultSet.size() == 0){
+        if (resultSet.size() == 0) {
             LOGGER.error("There is no property where property.range = property.domain!");
         }
         return Util.randomDrawFromSet(resultSet);
@@ -302,6 +305,7 @@ public class OntologyGenerator {
 
     /**
      * Generate a triple where {@code nodeId} is in subject position.
+     *
      * @param nodeId Subject node ID.
      * @return Triple.
      */
@@ -319,40 +323,43 @@ public class OntologyGenerator {
     /**
      * Returns an Instance ID where the instance is of type classId or child of classId -- i.e., types are
      * transitively resolved.
+     *
      * @param classId The type.
      * @return InstanceID.
      */
-    public String getRandomInstanceOfTypeTransitive(String classId){
+    public String getRandomInstanceOfTypeTransitive(String classId) {
         return Util.randomDrawFromSet(getInstancesOfTypeTransitive(classId));
     }
 
     /**
      * Generate a triple where {@code instanceId} is in subject position.
+     *
      * @param instanceId Subject node ID.
      * @return Triple.
      */
-    public Triple getRandomTripleWithObject(String instanceId){
+    public Triple getRandomTripleWithObject(String instanceId) {
         String property = getRandomPropertyWhereInstanceIsRange(instanceId);
         String subject = getRandomInstanceOfTypeTransitive(getDomain(property));
-        return new Triple(subject, property,instanceId);
+        return new Triple(subject, property, instanceId);
     }
 
     /**
      * Generates triple s,p,o where o=objectInstanceId
+     *
      * @param objectInstanceId Object instance id.
-     * @param subjectTypeId Subject type id.
+     * @param subjectTypeId    Subject type id.
      * @return The triple.
      */
-    public Triple getRandomTripleWithObjectWhereSubjectOfType(String objectInstanceId, String subjectTypeId){
+    public Triple getRandomTripleWithObjectWhereSubjectOfType(String objectInstanceId, String subjectTypeId) {
         Set<String> properties = getPropertiesWithDomainRange(
                 subjectTypeId, getInstanceType(objectInstanceId
-        ));
+                ));
         String property = Util.randomDrawFromSet(properties);
         String subject = getRandomSubjectForProperty(property);
         return new Triple(subject, property, objectInstanceId);
     }
 
-    public Triple getRandomTripleWithSubjectWhereObjectOfType(String subjectInstanceId, String objectTypeId){
+    public Triple getRandomTripleWithSubjectWhereObjectOfType(String subjectInstanceId, String objectTypeId) {
         Set<String> properties = getPropertiesWithDomainRange(
                 getInstanceType(subjectInstanceId), objectTypeId);
         String property = Util.randomDrawFromSet(properties);
@@ -362,11 +369,12 @@ public class OntologyGenerator {
 
     /**
      * Domain and range are interpreted here as lower bounds!
+     *
      * @param domain Lower domain bound.
-     * @param range Lower range bound.
+     * @param range  Lower range bound.
      * @return Set of properties.
      */
-    public Set<String> getPropertiesWithDomainRange(String domain, String range){
+    public Set<String> getPropertiesWithDomainRange(String domain, String range) {
         Set<String> rangeClasses = new HashSet<>(classTree.getAllParentsOfNode(range));
         rangeClasses.add(range);
 
@@ -374,10 +382,10 @@ public class OntologyGenerator {
         domainClasses.add(domain);
 
         Set<String> resultIds = new HashSet<>();
-        for(Map.Entry<String, String> entry : propertyRangeMap.entrySet()){
-            if(rangeClasses.contains(entry.getValue()) &&
-                domainClasses.contains(propertyDomainMap.get(entry.getKey()))
-            ){
+        for (Map.Entry<String, String> entry : propertyRangeMap.entrySet()) {
+            if (rangeClasses.contains(entry.getValue()) &&
+                    domainClasses.contains(propertyDomainMap.get(entry.getKey()))
+            ) {
                 resultIds.add(entry.getKey());
             }
         }
@@ -429,16 +437,17 @@ public class OntologyGenerator {
     /**
      * Property where getChildrenOfNode(property.domain) > 2.
      * Note that we require really two direct children (not 1 child which has again a child).
+     *
      * @return Property ID
      */
-    public String getRandomPropertyWhereDomainHasAtLeastTwoSubtypes(){
+    public String getRandomPropertyWhereDomainHasAtLeastTwoSubtypes() {
         return Util.randomDrawFromSet(getPropertiesWhereDomainHasAtLeastTwoSubtypes());
     }
 
-    public Set<String> getPropertiesWhereDomainHasAtLeastTwoSubtypes(){
+    public Set<String> getPropertiesWhereDomainHasAtLeastTwoSubtypes() {
         Set<String> propertyCandidates = new HashSet<>();
-        for ( Map.Entry<String, String> entry : propertyDomainMap.entrySet() ) {
-            if(classTree.getChildrenOfNode(entry.getValue()).size() >= 2){
+        for (Map.Entry<String, String> entry : propertyDomainMap.entrySet()) {
+            if (classTree.getChildrenOfNode(entry.getValue()).size() >= 2) {
                 propertyCandidates.add(entry.getKey());
             }
         }
@@ -448,20 +457,20 @@ public class OntologyGenerator {
     /**
      * Property where getChildrenOfNode(property.range) > 2.
      * Note that we require really two direct children (not 1 child which has again a child).
+     *
      * @return Property ID
      */
-    public String getRandomPropertyWhereRangeHasAtLeastTwoSubtypes(){
+    public String getRandomPropertyWhereRangeHasAtLeastTwoSubtypes() {
         return Util.randomDrawFromSet(getPropertiesWhereRangeHasAtLeastTwoSubtypes());
     }
 
     /**
-     *
      * @return Properties where getSubtypes(property.range) >= 2
      */
-    public Set<String> getPropertiesWhereRangeHasAtLeastTwoSubtypes(){
+    public Set<String> getPropertiesWhereRangeHasAtLeastTwoSubtypes() {
         Set<String> propertyCandidates = new HashSet<>();
-        for ( Map.Entry<String, String> entry : propertyRangeMap.entrySet() ) {
-            if(classTree.getChildrenOfNode(entry.getValue()).size() >= 2){
+        for (Map.Entry<String, String> entry : propertyRangeMap.entrySet()) {
+            if (classTree.getChildrenOfNode(entry.getValue()).size() >= 2) {
                 propertyCandidates.add(entry.getKey());
             }
         }
@@ -470,12 +479,13 @@ public class OntologyGenerator {
 
     /**
      * Ensure that there are at least {@code objectNumber} different objects for the provided {@code predicateId}.
-     * @param predicateId Predicate ID.
+     *
+     * @param predicateId  Predicate ID.
      * @param objectNumber Number of desired unique objects.
      */
-    public void ensureObjectNumberForProperty(String predicateId, int objectNumber){
+    public void ensureObjectNumberForProperty(String predicateId, int objectNumber) {
         int target = objectNumber - propertyRangeInstances.get(predicateId).size();
-        if(target <= 0){
+        if (target <= 0) {
             LOGGER.info("Enough objects for " + predicateId + ". Nothing to generate.");
         } else {
             LOGGER.warn("Not enough objects for " + predicateId + ". Generating " + target + " additional nodes.");
@@ -491,7 +501,8 @@ public class OntologyGenerator {
 
     /**
      * Ensure that there are at least {@code subjectNumber} different subjects for the provided {@code predicateId}.
-     * @param predicateId Predicate ID.
+     *
+     * @param predicateId   Predicate ID.
      * @param subjectNumber Number of desired unique subjects.
      */
     public void ensureSubjectNumberForProperty(String predicateId, int subjectNumber) {
@@ -559,12 +570,12 @@ public class OntologyGenerator {
     public void ensurePropertyWithRangeInstance(String instanceId, int desiredNumber) {
         int actual = getPropertiesWhereInstanceIsRange(instanceId).size();
         int target = desiredNumber - actual;
-        if(target <= 0) {
+        if (target <= 0) {
             LOGGER.error("Enough properties with range '" + instanceId + "' exist.");
         } else {
             LOGGER.error("Generating " + target + " properties with range '" + instanceId + "'.");
-            for(int i = 0; i < target; i++){
-                String propertyId = "<P_EXTRA_RANGE_" + i + "_" +  Util.removeTags(instanceId) +  ">";
+            for (int i = 0; i < target; i++) {
+                String propertyId = "<P_EXTRA_RANGE_" + i + "_" + Util.removeTags(instanceId) + ">";
                 propertyIds.add(propertyId);
                 addPropertyRange(propertyId, getInstanceType(instanceId));
                 addPropertyDomain(propertyId, pickDomainRangeSkewed(domainRangeP));
@@ -572,14 +583,14 @@ public class OntologyGenerator {
         }
     }
 
-    public void ensurePropertyWithDomainInstance(String instanceId, int desiredNumber){
+    public void ensurePropertyWithDomainInstance(String instanceId, int desiredNumber) {
         int actual = getPropertiesWhereInstanceIsDomain(instanceId).size();
         int target = desiredNumber - actual;
-        if(target <= 0) {
+        if (target <= 0) {
             LOGGER.error("Enough properties with domain '" + instanceId + "' exist.");
         } else {
             LOGGER.error("Generating " + target + " properties with range '" + instanceId + "'.");
-            for(int i = 0; i < target; i++) {
+            for (int i = 0; i < target; i++) {
                 String propertyId = "<P_EXTRA_DOMAIN_" + i + "_" + Util.removeTags(instanceId) + ">";
                 propertyIds.add(propertyId);
                 addPropertyDomain(propertyId, getInstanceType(instanceId));
@@ -590,38 +601,73 @@ public class OntologyGenerator {
 
     /**
      * Transitively resolved!
+     *
      * @param instanceId Instance id.
      * @return Set of properties.
      */
-    public Set<String> getPropertiesWhereInstanceIsDomain(String instanceId){
+    public Set<String> getPropertiesWhereInstanceIsDomain(String instanceId) {
         Set<String> result = new HashSet<>();
-        for(Map.Entry<String, Set<String>> entry : propertyDomainInstances.entrySet()){
-            if (entry.getValue().contains(instanceId)){
+        for (Map.Entry<String, Set<String>> entry : propertyDomainInstances.entrySet()) {
+            if (entry.getValue().contains(instanceId)) {
                 result.add(entry.getKey());
             }
         }
-        if(result.size() == 0){
+        if (result.size() == 0) {
             LOGGER.warn("There are no properties with domain including '" + instanceId + "'");
         }
         return result;
     }
 
-    public Set<String> getPropertiesWhereInstanceIsRange(String instanceId){
+    public Set<String> getPropertiesWhereInstanceIsRange(String instanceId) {
         Set<String> result = new HashSet<>();
-        for(Map.Entry<String, Set<String>> entry : propertyRangeInstances.entrySet()){
-            if (entry.getValue().contains(instanceId)){
+        for (Map.Entry<String, Set<String>> entry : propertyRangeInstances.entrySet()) {
+            if (entry.getValue().contains(instanceId)) {
                 result.add(entry.getKey());
             }
         }
         return result;
     }
 
-    public String getRandomPropertyWhereInstanceIsDomain(String instanceId){
+    public String getRandomPropertyWhereInstanceIsDomain(String instanceId) {
         return Util.randomDrawFromSet(getPropertiesWhereInstanceIsDomain(instanceId));
     }
 
-    public String getRandomPropertyWhereInstanceIsRange(String instanceId){
+    public String getRandomPropertyWhereInstanceIsRange(String instanceId) {
         return Util.randomDrawFromSet(getPropertiesWhereInstanceIsRange(instanceId));
+    }
+
+    public void serializeOntology(File fileToWrite) {
+        final String type = " <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> ";
+        final String classPostfix = type + "<http://www.w3.org/2002/07/owl#Class> .\n";
+        final String propertyPostfix =  type + "<http://www.w3.org/2002/07/owl#ObjectProperty> .\n" ;
+        final String domain = " <http://www.w3.org/2000/01/rdf-schema#domain> ";
+        final String range = " <http://www.w3.org/2000/01/rdf-schema#range> ";
+        final String subClass = " <http://www.w3.org/2000/01/rdf-schema#subClassOf> ";
+
+        try (BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(fileToWrite), StandardCharsets.UTF_8))) {
+            // classes
+            for (String classId : classIds) {
+                writer.write(classId + classPostfix);
+            }
+            // class inheritance
+            for (String classId : classIds) {
+                for(String parent : classTree.getParentsOfNode(classId)) {
+                    writer.write(classId + subClass + parent + " .\n");
+                }
+            }
+            // properties with domain and range
+            for (String propertyId : propertyIds) {
+                writer.write((propertyId + propertyPostfix));
+                writer.write(propertyId + domain + getDomain(propertyId) + " .\n");
+                writer.write(propertyId + range + getDomain(propertyId) + " .\n");
+            }
+            // instances
+            for (String instance : instanceIds) {
+                writer.write(instance + type + getInstanceType(instance) + " .\n");
+            }
+        } catch (IOException e) {
+            LOGGER.error("Failed to serialize the ontology.", e);
+        }
     }
 
 }

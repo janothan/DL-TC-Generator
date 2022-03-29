@@ -1,6 +1,5 @@
 package de.uni_mannheim.informatik.dws.dl_tc_generator;
 
-import de.uni_mannheim.informatik.dws.dl_tc_generator.synthetic.GeneratorSynthetic;
 import de.uni_mannheim.informatik.dws.dl_tc_generator.synthetic.TcGeneratorSynthetic;
 import de.uni_mannheim.informatik.dws.dl_tc_generator.synthetic.constructed_ontology.GeneratorSyntheticOntology;
 import de.uni_mannheim.informatik.dws.dl_tc_generator.synthetic.constructed_ontology.TcGeneratorSyntheticOntology;
@@ -86,7 +85,6 @@ class MainTest {
                 assertTrue(soTcGenerator.getOntologyGenerator().getClasses().size() >= 5);
                 assertTrue(soTcGenerator.getOntologyGenerator().getInstances().size() >= 3 * (10 + 11));
             }
-
 
         } catch (Exception e){
             fail(e);
