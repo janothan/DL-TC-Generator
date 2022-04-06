@@ -11,6 +11,8 @@ public class Defaults {
 
     public static final String DEFAULT_RESULT_DIR = "./results";
 
+    public static final String DEFAULT_DGL_KE_DIR = "dgl-ke-graph";
+
     public static final TrainTestSplit TRAIN_TEST_SPLIT = new TrainTestSplit(0.2, 0.8);
 
     /**

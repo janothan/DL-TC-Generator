@@ -1,5 +1,6 @@
 package de.uni_mannheim.informatik.dws.dl_tc_generator.synthetic.constructed_ontology;
 
+import de.uni_mannheim.informatik.dws.dl_tc_generator.Defaults;
 import de.uni_mannheim.informatik.dws.dl_tc_generator.Util;
 import de.uni_mannheim.informatik.dws.dl_tc_generator.synthetic.constructed_hard.GeneratorSyntheticConstructedHard;
 import org.junit.jupiter.api.AfterAll;
@@ -83,7 +84,8 @@ class GeneratorSyntheticOntologyTest {
         File tcOntology = Paths.get(resultDir.getAbsolutePath(), tcName, tcGroupName, "ontology.nt").toFile();
         assertTrue(tcOntology.exists(), "File not found: " + tcOntology.getAbsolutePath());
         assertTrue(tcOntology.isFile());
-
+        File dglkeFile = Paths.get(resultDir.getAbsolutePath(), tcName, tcGroupName, Defaults.DEFAULT_DGL_KE_DIR).toFile();
+        assertTrue(dglkeFile.exists());
     }
 
     @Test

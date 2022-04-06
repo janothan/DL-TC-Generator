@@ -11,7 +11,7 @@ public class ConstantSplitTreeGenerator implements ITreeGenerator {
      * Constructor
      *
      * @param avgBranchingFactor The number of leaves per node. If no hierarchy is desired, set the {@code splitNumber}
-     *                    to a very high number.
+     *                           to a very high number.
      */
     public ConstantSplitTreeGenerator(int avgBranchingFactor) {
         this.avgBranchingFactor = avgBranchingFactor;
@@ -25,18 +25,18 @@ public class ConstantSplitTreeGenerator implements ITreeGenerator {
         String currentWorkNode = rootNode;
         LinkedList<String> workList = new LinkedList<>();
 
-        for (String node : nodes){
-            if(node.equals(rootNode)){
+        for (String node : nodes) {
+            if (node.equals(rootNode)) {
                 continue;
             }
-            if(currentCounter == avgBranchingFactor){
+            if (currentCounter == avgBranchingFactor) {
                 currentWorkNode = workList.removeFirst();
-                result.addLeaf(currentWorkNode, node);
                 currentCounter = 0;
             }
             result.addLeaf(currentWorkNode, node);
-            workList.add(node);
             currentCounter++;
+            workList.add(node);
+
         }
 
         return result;

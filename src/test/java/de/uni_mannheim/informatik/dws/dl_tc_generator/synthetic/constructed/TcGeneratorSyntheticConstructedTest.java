@@ -1,5 +1,6 @@
 package de.uni_mannheim.informatik.dws.dl_tc_generator.synthetic.constructed;
 
+import de.uni_mannheim.informatik.dws.dl_tc_generator.Defaults;
 import de.uni_mannheim.informatik.dws.dl_tc_generator.Util;
 import de.uni_mannheim.informatik.dws.dl_tc_generator.synthetic.TcGeneratorSynthetic;
 import org.junit.jupiter.api.AfterAll;
@@ -78,7 +79,7 @@ public class TcGeneratorSyntheticConstructedTest {
         File generatedDirectory = generator.getDirectory();
         assertTrue(generatedDirectory.exists());
         assertTrue(generatedDirectory.isDirectory());
-        File graphFile= new File(generatedDirectory, "graph.nt");
+        File graphFile = new File(generatedDirectory, "graph.nt");
         assertTrue(graphFile.exists());
         assertTrue(graphFile.isFile());
 

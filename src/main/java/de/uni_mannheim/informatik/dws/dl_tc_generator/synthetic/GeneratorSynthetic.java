@@ -78,6 +78,7 @@ public abstract class GeneratorSynthetic implements IGenerator {
         }
         LOGGER.info("Merging graphs...");
         mergeGraphsToOne(generatedDirectory);
+        DglKeUtil.generateDglKeGraphDirectory(generatedDirectory);
     }
 
     /**
