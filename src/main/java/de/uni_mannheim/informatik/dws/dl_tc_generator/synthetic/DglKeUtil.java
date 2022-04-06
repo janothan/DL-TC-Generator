@@ -1,6 +1,5 @@
 package de.uni_mannheim.informatik.dws.dl_tc_generator.synthetic;
 
-import de.uni_mannheim.informatik.dws.dl_tc_generator.Defaults;
 import de.uni_mannheim.informatik.dws.jrdf2vec.walk_generation.data_structures.Triple;
 import de.uni_mannheim.informatik.dws.jrdf2vec.walk_generation.data_structures.TripleDataSetMemory;
 import org.slf4j.Logger;
@@ -73,13 +72,13 @@ public class DglKeUtil {
                     ) {
                         // writing entities file
                         for(Map.Entry<String, Integer> entry: entityIds.entrySet()){
-                            entitiesWriter.write(entry.getKey() + "\t" + entry.getValue());
+                            entitiesWriter.write(entry.getValue() + "\t" + entry.getKey());
                             entitiesWriter.write("\n");
                         }
 
                         // writing relations file
                         for(Map.Entry<String, Integer> entry: relationIds.entrySet()){
-                            relationsWriter.write(entry.getKey() + "\t" + entry.getValue());
+                            relationsWriter.write(entry.getValue() + "\t" + entry.getKey());
                             relationsWriter.write("\n");
                         }
 
