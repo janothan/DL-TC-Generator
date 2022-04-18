@@ -1,0 +1,11 @@
+File to be written: /work-ceph/jportisc/experiments/rdf2vec_variants/dl_test_set/synthetic_ontology_2022-04-07/./results/tc09/synthetic_ontology/graph.nt
+# of Instances : 12589
+# of Classes : 760
+# of Properties: 1355
+Max triples per node: 11
+Nodes of interest: 1000
+Tree generator class: ConstantSplitTreeGenerator
+AVG Branching factor: 5
+Split number of ConstantSplitTreeGenerator: 5
+Target property: <P_tc09_1339>
+
