@@ -10,8 +10,6 @@ For the evaluation, [this framework](https://github.com/janothan/dl-evaluation-f
 
 ### Overview
 
-#### Version v1
-
 | Version | Name               | Location                                              | Based On        | Size Classes  | Other Parameters                                                                                                                                         |
 |---------|--------------------|-------------------------------------------------------|-----------------|---------------|----------------------------------------------------------------------------------------------------------------------------------------------------------|
 | v1      | dbpedia            | [/results/v1/dbpedia](/results/v1/dbpedia)            | DBpedia 2021-09 | 50, 500, 5000 | -                                                                                                                                                        |
