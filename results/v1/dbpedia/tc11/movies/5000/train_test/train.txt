@@ -1,2 +1,8 @@
-http://dbpedia.org/resource/Wiggly,_Wiggly_Christmas__!__1	1
-http://dbpedia.org/resource/Aa_Chithrashalabham_Parannotte	0
+http://dbpedia.org/resource/Luna_Sea_3D_in_Los_Angeles__Luna_Sea_3D_in_Los_Angeles__1	1
+http://dbpedia.org/resource/Big_Red_Car__Here_Comes_the_Big_Red_Car__1	1
+http://dbpedia.org/resource/Tubelight_(2017_Hindi_film)__Tubelight__1	1
+http://dbpedia.org/resource/G-Force_(film)__G-Force__1	1
+http://dbpedia.org/resource/Snowden_on_Ice	0
+http://dbpedia.org/resource/Thundering_Frontier	0
+http://dbpedia.org/resource/Man_on_Fire_(1957_film)	0
+http://dbpedia.org/resource/Garuda_(2004_film)	0

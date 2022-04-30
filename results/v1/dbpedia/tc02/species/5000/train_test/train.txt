@@ -1,2 +1,10 @@
-http://dbpedia.org/resource/Euryarchaeota	1
-http://dbpedia.org/resource/Blepharotes_coriarius	0
+http://dbpedia.org/resource/Crenarchaeota	1
+http://dbpedia.org/resource/Chromista	1
+http://dbpedia.org/resource/Sphingobacteria_(phylum)	1
+http://dbpedia.org/resource/Gracilicutes	1
+http://dbpedia.org/resource/Vendobionta	1
+http://dbpedia.org/resource/Callimetopus_palawanus	0
+http://dbpedia.org/resource/Mesoeuxoa	0
+http://dbpedia.org/resource/Sybra_obliquelineaticollis	0
+http://dbpedia.org/resource/Odontocera_flavicauda	0
+http://dbpedia.org/resource/Serincia	0
