@@ -1,5 +1,5 @@
 # DL-TC-Generator
-[![License](https://img.shields.io/github/license/janothan/DL-TC-Generator)](https://github.com/janothan/DL-TC-Generator/blob/master/LICENSE)
+[![Java Build](https://github.com/janothan/DL-TC-Generator/actions/workflows/java_build.yml/badge.svg)](https://github.com/janothan/DL-TC-Generator/actions/workflows/java_build.yml) [![License](https://img.shields.io/github/license/janothan/DL-TC-Generator)](https://github.com/janothan/DL-TC-Generator/blob/master/LICENSE)
 
 This maven project can generate a description logics gold standard to evaluate
 knowledge graph embeddings in terms of their ability to learn specific
