@@ -8,7 +8,7 @@ jobs:
     strategy:
       matrix:
         os: [windows-latest, macos-latest, ubuntu-latest]
-        java: ['16', '17']
+        java: ['17']
     name: Build on ${{ matrix.os }} with Java ${{ matrix.java }}
     steps:
     - uses: actions/checkout@v2
